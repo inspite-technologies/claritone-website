@@ -1,0 +1,158 @@
+<div class="min-h-screen bg-background-light dark:bg-background-dark font-display">
+    <div class="max-w-[1200px] mx-auto px-4 lg:px-10 py-8">
+        <!-- Breadcrumb -->
+        <div class="flex flex-wrap gap-2 py-4">
+            <a routerLink="/"
+                class="text-[#616f89] dark:text-gray-400 text-sm font-medium leading-normal flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+                Home <span class="material-symbols-outlined text-xs">chevron_right</span>
+            </a>
+            <a routerLink="/products"
+                class="text-[#616f89] dark:text-gray-400 text-sm font-medium leading-normal flex items-center gap-1 hover:text-primary transition-colors cursor-pointer">
+                Hearing Aids <span class="material-symbols-outlined text-xs">chevron_right</span>
+            </a>
+            <span class="text-[#111318] dark:text-white text-sm font-medium leading-normal">Compare Models</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="flex flex-wrap justify-between gap-3 py-6">
+            <div class="flex min-w-72 flex-col gap-3">
+                <h1 class="text-[#111318] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">
+                    Compare Hearing Aid Models
+                </h1>
+                <p class="text-[#616f89] dark:text-gray-400 text-lg font-normal leading-normal max-w-2xl">
+                    Find the perfect fit for your lifestyle and hearing needs by comparing our top-rated devices
+                    side-by-side.
+                </p>
+            </div>
+        </div>
+
+        <!-- Loading/Error States -->
+        <div *ngIf="loading" class="flex justify-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+
+        <div *ngIf="!loading && error" class="text-center py-20">
+            <p class="text-red-500 text-lg">{{ error }}</p>
+        </div>
+
+        <div *ngIf="!loading && !error && products.length === 0" class="text-center py-20">
+            <p class="text-slate-500 text-lg">No products available to compare.</p>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="mt-8 @container overflow-x-auto pb-4" *ngIf="!loading && !error && products.length > 0">
+            <div
+                class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm min-w-max">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50/50 dark:bg-gray-800/50">
+                            <!-- Feature Header -->
+                            <th
+                                class="px-6 py-8 text-left text-[#111318] dark:text-white min-w-[200px] text-lg font-bold sticky left-0 bg-gray-50 dark:bg-gray-800 z-10 border-r border-gray-100 dark:border-gray-700">
+                                Features</th>
+
+                            <!-- Dynamic Product Headers -->
+                            <th *ngFor="let product of products"
+                                class="px-6 py-8 text-center min-w-[240px] align-top relative">
+                                <!-- Expert Choice Badge -->
+                                <div *ngIf="product.isExpertChoice"
+                                    class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg z-20">
+                                    Expert Choice
+                                </div>
+
+                                <div class="flex flex-col items-center gap-4 h-full p-4 rounded-xl transition-colors"
+                                    [ngClass]="{'border-x border-primary/20 bg-primary/5 -mx-px': product.isExpertChoice}">
+
+                                    <div class="h-32 w-32 bg-gray-100 dark:bg-gray-800 rounded-xl bg-center bg-no-repeat bg-contain shadow-sm"
+                                        [style.background-image]="'url(' + product.image + ')'"
+                                        [style.transform]="product.isExpertChoice ? 'scaleX(-1)' : 'none'"></div>
+
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-medium uppercase tracking-wider"
+                                            [ngClass]="product.isExpertChoice ? 'text-primary' : 'text-gray-500'">{{
+                                            product.category }}</span>
+                                        <span class="text-[#111318] dark:text-white text-lg font-bold mt-1">{{
+                                            product.name }}</span>
+                                        <span class="text-primary text-xl font-bold mt-2">{{
+                                            formatPrice(product.price) }}</span>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                        <!-- Dynamic Feature Rows -->
+                        <tr *ngFor="let feature of comparisonFeatures">
+                            <td
+                                class="px-6 py-5 text-[#111318] dark:text-white text-sm font-semibold bg-gray-50/30 dark:bg-gray-800/30 sticky left-0 bg-gray-50/95 dark:bg-gray-800/95 backdrop-blur-sm z-10 border-r border-gray-100 dark:border-gray-700">
+                                {{ feature.label }}
+                            </td>
+
+                            <td *ngFor="let product of products" class="px-6 py-5 text-center text-sm"
+                                [ngClass]="{'bg-primary/5 font-medium text-gray-900 dark:text-white': product.isExpertChoice, 'text-gray-600 dark:text-gray-400': !product.isExpertChoice}">
+
+                                <!-- Special formatting for specific fields if needed -->
+                                <ng-container *ngIf="feature.key !== 'connectivity'; else connectivityTemplate">
+                                    {{ product.featuresObject[feature.key] || '-' }}
+                                </ng-container>
+
+                                <ng-template #connectivityTemplate>
+                                    <div class="flex flex-col items-center">
+                                        <span class="material-symbols-outlined text-primary mb-1">
+                                            {{ product.featuresObject[feature.key]?.includes('iOS') ? 'smartphone' :
+                                            (product.featuresObject[feature.key]?.includes('Multi') ?
+                                            'universal_currency_alt'
+                                            : 'bluetooth') }}
+                                        </span>
+                                        <span [class.font-semibold]="product.isExpertChoice">{{
+                                            product.featuresObject[feature.key] }}</span>
+                                    </div>
+                                </ng-template>
+                            </td>
+                        </tr>
+
+                        <!-- Actions Row -->
+                        <tr>
+                            <td class="px-6 py-8 bg-gray-50/30 dark:bg-gray-800/30 sticky left-0 z-10"></td>
+                            <td *ngFor="let product of products" class="px-6 py-8 text-center"
+                                [ngClass]="{'bg-primary/5': product.isExpertChoice}">
+                                <div class="flex flex-col gap-3">
+                                    <button (click)="addToCart(product)"
+                                        class="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-colors cursor-pointer"
+                                        [ngClass]="{'shadow-lg shadow-primary/30': product.isExpertChoice}">
+                                        <span class="material-symbols-outlined text-lg">shopping_cart</span> Add to Cart
+                                    </button>
+                                    <button routerLink="/products"
+                                        class="w-full py-2.5 rounded-lg text-sm font-bold transition-colors cursor-pointer border"
+                                        [ngClass]="product.isExpertChoice ? 'bg-white dark:bg-gray-900 border-primary/20 text-primary hover:bg-primary/5' : 'bg-gray-100 dark:bg-gray-800 border-transparent text-[#111318] dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700'">
+                                        View Details
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="mt-12 bg-primary/10 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex-1">
+                <h3 class="text-2xl font-bold text-[#111318] dark:text-white mb-2">Still not sure which one is right for
+                    you?</h3>
+                <p class="text-[#616f89] dark:text-gray-400">Our hearing specialists are ready to help you find the
+                    perfect match based on your lifestyle and audiogram.</p>
+            </div>
+            <div class="flex gap-4">
+                <button
+                    class="px-6 py-3 bg-white dark:bg-gray-900 text-[#111318] dark:text-white rounded-xl font-bold border border-gray-200 dark:border-gray-800 flex items-center gap-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <span class="material-symbols-outlined">call</span> Schedule a Call
+                </button>
+                <button routerLink="/hearing-test"
+                    class="px-6 py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 flex items-center gap-2 cursor-pointer hover:bg-red-700 transition-colors">
+                    <span class="material-symbols-outlined">quiz</span> Take Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">My Wishlist</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-4 text-lg">{{ wishlistItems.length }} item(s) you've saved for later</p>
+            <div class="mt-4 w-24 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+
+        <!-- Empty Wishlist State -->
+        <div *ngIf="wishlistItems.length === 0" class="text-center py-24 bg-white dark:bg-slate-800 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 shadow-sm">
+            <div class="relative inline-block mb-6">
+                <span class="material-symbols-outlined text-9xl text-slate-200 dark:text-slate-700">favorite</span>
+                <span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-slate-400 dark:text-slate-500">search</span>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-3">Your wishlist is empty</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-10 max-w-md mx-auto">Discover our premium range of hearing aids and save your favorites here.</p>
+            <a routerLink="/products"
+                class="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-red-700 transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-red-500/20 cursor-pointer">
+                <span class="material-symbols-outlined">explore</span>
+                Explore Products
+            </a>
+        </div>
+
+        <!-- Wishlist Grid -->
+        <div *ngIf="wishlistItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div *ngFor="let product of wishlistItems"
+                class="group bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col">
+                
+                <!-- Product Image & Actions -->
+                <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-900/50 p-8">
+                    <img [src]="product.image" [alt]="product.name" 
+                         class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transform group-hover:scale-110 transition-transform duration-700">
+                    
+                    <button (click)="removeItem(product.id)"
+                        class="absolute top-4 right-4 p-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl text-slate-400 hover:text-red-500 hover:bg-white dark:hover:bg-slate-700 transition-all shadow-md group/remove cursor-pointer">
+                        <span class="material-symbols-outlined transform group-hover/remove:rotate-90 transition-transform">close</span>
+                    </button>
+
+                    <div class="absolute bottom-4 left-4">
+                        <span class="px-3 py-1 bg-primary text-white text-xs font-bold rounded-lg uppercase tracking-wider">{{ product.brand }}</span>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-6 flex flex-col flex-1">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-primary transition-colors">
+                                {{ product.name }}
+                            </h3>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 mb-4 leading-relaxed">
+                            {{ product.description }}
+                        </p>
+                        <div class="flex items-center gap-2 mb-6 text-2xl font-black text-slate-900 dark:text-white">
+                            {{ formatPrice(product.price) }}
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a [routerLink]="['/products', product.id]"
+                           class="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white py-4 rounded-2xl font-bold text-center hover:bg-slate-200 dark:hover:bg-slate-600 transition-all active:scale-95 cursor-pointer">
+                            View Details
+                        </a>
+                        <button (click)="addToCart(product)"
+                            class="flex-1 bg-primary text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-red-700 transition-all transform active:scale-95 shadow-lg shadow-red-500/20 cursor-pointer">
+                            <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                            Add'o Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations Section -->
+        <div *ngIf="wishlistItems.length > 0" class="mt-24">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">You might also like</h2>
+                <a routerLink="/products" class="text-primary font-bold hover:underline flex items-center gap-1">
+                    View All Products <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+            <!-- Dynamic placeholder for now -->
+            <div class="h-64 rounded-3xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700">
+                <p class="text-slate-500 italic">Recommendations loading based on your interests...</p>
+            </div>
+        </div>
+    </div>
+</div>

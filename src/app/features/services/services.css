@@ -1,0 +1,8 @@
+.service-card:hover .service-icon {
+    background-color: #E31E24;
+    color: white;
+}
+
+.service-card:hover {
+    transform: translateY(-0.5rem);
+}

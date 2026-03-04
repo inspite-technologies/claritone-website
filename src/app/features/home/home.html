@@ -1,0 +1,405 @@
+<section class="relative h-[480px] md:h-[580px] overflow-hidden bg-slate-100 dark:bg-slate-900">
+    <!-- Slides Container -->
+    <div class="relative h-full w-full">
+        <div *ngFor="let banner of banners; let i = index"
+            class="absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out"
+            [ngClass]="i === currentIndex ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'">
+
+            <!-- Background Image with Overlay -->
+            <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
+                [ngStyle]="{'background-image': 'url(' + banner.image + ')'}">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-white/70 via-white/20 to-transparent dark:from-slate-950/70 dark:via-slate-950/20 dark:to-transparent border-none">
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="relative h-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 flex items-center z-20">
+                <div class="max-w-2xl" [class.animate-slide-up]="i === currentIndex">
+                    <span
+                        class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary dark:bg-primary/20 dark:text-red-400 text-[10px] font-black mb-6 tracking-[0.3em] uppercase">
+                        {{ banner.subtitle }}
+                    </span>
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] mb-6 text-slate-900 dark:text-white tracking-tight uppercase"
+                        [innerHTML]="banner.title">
+                    </h1>
+                    <div class="relative mb-10">
+                        <p
+                            class="text-2xl md:text-3xl lg:text-4xl text-slate-800 dark:text-slate-200 leading-relaxed font-cursive opacity-90">
+                            {{ banner.description }}
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-5">
+                        <button
+                            class="bg-primary text-white px-8 py-4 rounded-xl font-bold text-base hover:bg-red-700 transition-all flex items-center justify-center cursor-pointer shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95"
+                            [routerLink]="banner.ctaLink">
+                            {{ banner.ctaText }}
+                            <span class="material-symbols-outlined ml-2 text-xl">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Quick Service Cards Section -->
+<section class="relative z-40 py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1: Rapid Hearing Test -->
+        <div
+            class="service-card bg-tan rounded-[3rem] p-12 h-[320px] flex flex-col justify-between group cursor-default">
+            <div class="z-10 relative">
+                <div
+                    class="icon-wrapper w-16 h-16 bg-white rounded-full flex items-center justify-center mb-8 shadow-sm">
+                    <span
+                        class="material-symbols-outlined text-slate-800 text-4xl group-hover:text-white transition-colors duration-500">hearing</span>
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900 leading-tight">Rapid Hearing<br>Test</h3>
+            </div>
+            <div class="z-10 relative">
+                <button routerLink="/hearing-test"
+                    class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-[11px] tracking-[0.2em] hover:bg-primary transition-all uppercase cursor-pointer active:scale-90">
+                    Try Now
+                </button>
+            </div>
+            <div
+                class="absolute right-6 bottom-6 text-black/5 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-12 group-hover:text-black/10">
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 3C7.03 3 3 7.03 3 12c0 2.22.81 4.25 2.15 5.81l.01.01c.14.16.29.31.45.45l.01.01C7.22 20.17 9.48 21 12 21c2.53 0 4.8-.84 6.39-2.25l-.01-.01c.16-.14.31-.29.45-.45l.01-.01C20.19 16.71 21 14.47 21 12c0-4.97-4.03-9-9-9zm0 16c-1.89 0-3.62-.64-5.01-1.72.63-1.3 2.14-2.28 4.01-2.28 1.86 0 3.37.98 4 2.28-1.39 1.08-3.12 1.72-4.99 1.72zm5.99-2.73c-.57-1.39-2.03-2.27-3.99-2.27s-3.42.88-3.99 2.27C8.16 17.51 7 15.9 7 12c0-2.76 2.24-5 5-5s5 2.24 5 5c0 3.91-1.16 5.51-3.01 6.27z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Card 2: Book Appointment -->
+        <div
+            class="service-card bg-mint rounded-[3rem] p-12 h-[320px] flex flex-col justify-between group cursor-default">
+            <div class="z-10 relative">
+                <div
+                    class="icon-wrapper w-16 h-16 bg-white rounded-full flex items-center justify-center mb-8 shadow-sm">
+                    <span
+                        class="material-symbols-outlined text-slate-800 text-4xl group-hover:text-white transition-colors duration-500">calendar_month</span>
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900 leading-tight">Book<br>Appointment</h3>
+            </div>
+            <div class="z-10 relative">
+                <button routerLink="/outlets"
+                    class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-[11px] tracking-[0.2em] hover:bg-primary transition-all uppercase cursor-pointer active:scale-90">
+                    Book Now
+                </button>
+            </div>
+            <div
+                class="absolute right-6 bottom-6 text-black/5 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-12 group-hover:text-black/10">
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Card 3: Video Consultation -->
+        <div
+            class="service-card bg-blue-light rounded-[3rem] p-12 h-[320px] flex flex-col justify-between group cursor-default">
+            <div class="z-10 relative">
+                <div
+                    class="icon-wrapper w-16 h-16 bg-white rounded-full flex items-center justify-center mb-8 shadow-sm">
+                    <span
+                        class="material-symbols-outlined text-slate-800 text-4xl group-hover:text-white transition-colors duration-500">videocam</span>
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900 leading-tight">Video<br>Consultation</h3>
+            </div>
+            <div class="z-10 relative">
+                <button routerLink="/services"
+                    class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-[11px] tracking-[0.2em] hover:bg-primary transition-all uppercase cursor-pointer active:scale-90">
+                    Connect
+                </button>
+            </div>
+            <div
+                class="absolute right-6 bottom-6 text-black/5 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-12 group-hover:text-black/10">
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-12 md:py-16 bg-slate-50 dark:bg-slate-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="mb-12 text-center">
+            <h2 class="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">Our Hearing Solutions</h2>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-light">Explore our range of
+                professionally designed hearing aid styles to find the perfect fit for your lifestyle and hearing needs.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- BTE -->
+            <div
+                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
+                <div
+                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                    <img alt="BTE Hearing Aid"
+                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPVo_g-5yjglFkgSAtGZKMaYcgq5CvOb-8ByG5poQl66J_YMcF4jT6z4meRfYdA421LzFofsHPFSW7RLD6MN3SBpwKHmKTUATD5en88bJHmi4XeIx-nwDtuJuSdKzThMBnffCNCx3xeg1p5LhRQQVzFC0CbdjCd7ZtGgGd86fBgSR7UF682CtT5i1abPY1u8BH2fr1CM9szthm3c5ZM3srnASQy3pSkr_QqL3wGH6_XlDxgP2QGFL46_aGLdBhkoan6wOzyiIy81Y" />
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Behind-the-Ear (BTE)</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Powerful
+                        amplification for all degrees of hearing loss, offering maximum control and durability.</p>
+                </div>
+                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
+                    routerLink="/products">
+                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- ITE -->
+            <div
+                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
+                <div
+                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                    <img alt="ITE Hearing Aid"
+                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        src="in%20the%20ear.jpg" />
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">In-the-Ear (ITE)</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Custom-molded
+                        for a perfect and secure fit, providing comfort and clarity in any environment.</p>
+                </div>
+                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
+                    routerLink="/products">
+                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- RIC -->
+            <div
+                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
+                <div
+                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                    <img alt="RIC Hearing Aid"
+                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2M0CKDcltaWd8dw8PK84pM3bFofRAq6PmrISAlAgjNg-5F1nCbZZRBWgX5TyCCQ3oniZl_Drn90u9_kMiLgEFGrYeT4VpJXq-mXryZLLr4y6n5X2S2dbxDhjrqhBmwRDqSYIBjTGixA4S5-3ZFkpZDPwwTH_qeibI9APTPvzHSSw9VhM-3gXQR7rCJSMGAHObnE-yZygyK-UQF574jq9Z2pd5sFaT6Rm_EIYOBcW4M_rfAZjD5Xbz6nVw9wRCN-WFDNXGAYsNlYk" />
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Receiver-in-Canal (RIC)</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Discreet
+                        design with natural sound quality, perfect for those who prioritize aesthetics and sound
+                        fidelity.</p>
+                </div>
+                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
+                    routerLink="/products">
+                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- IIC -->
+            <div
+                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
+                <div
+                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                    <img alt="Invisible Hearing Aid"
+                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        src="invisible.jpg" />
+                </div>
+                <div class="flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Invisible (IIC)</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Fully
+                        invisible in the ear canal, providing the ultimate in discretion without compromising
+                        performance.</p>
+                </div>
+                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
+                    routerLink="/products">
+                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="lg:w-1/2">
+                <img alt="Professional Consultation" class="rounded-3xl shadow-2xl w-full h-full object-cover"
+                    src="hero-claritone.jpg" />
+            </div>
+            <div class="lg:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-slate-900 dark:text-white">Comprehensive Hearing
+                    Care</h2>
+                <div class="space-y-8">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-primary/10 p-3 rounded-xl text-primary">
+                            <span class="material-symbols-outlined">hearing</span>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Precision Hearing Tests
+                            </h4>
+                            <p class="text-slate-600 dark:text-slate-400">Diagnostic audiometry performed by certified
+                                experts using state-of-the-art equipment.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-secondary/10 p-3 rounded-xl text-secondary">
+                            <span class="material-symbols-outlined">psychology</span>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Expert Consultation</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Personalized advice to help you choose the
+                                right device for your specific needs.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-green-500/10 p-3 rounded-xl text-green-600">
+                            <span class="material-symbols-outlined">build</span>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Maintenance &amp; Repair
+                            </h4>
+                            <p class="text-slate-600 dark:text-slate-400">Professional cleaning and servicing to ensure
+                                your hearing aids last for years.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-orange-500/10 p-3 rounded-xl text-orange-600">
+                            <span class="material-symbols-outlined">verified</span>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-bold mb-1 text-slate-900 dark:text-white">Quality Assurance</h4>
+                            <p class="text-slate-600 dark:text-slate-400">ISO certified processes and genuine spare
+                                parts from global leading brands.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="relative py-12 md:py-16 text-white text-center overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[20000ms] hover:scale-105"
+        style="background-image: url('emotional.jpg');">
+    </div>
+    <!-- Professional Dark Overlay -->
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px]"></div>
+
+    <div class="relative max-w-3xl mx-auto px-6 z-10">
+        <span class="material-symbols-outlined text-3xl mb-4 text-primary opacity-90">format_quote</span>
+        <p class="text-lg md:text-2xl font-light italic mb-6 leading-relaxed text-slate-100">
+            "Coming to Claritone was the best decision I made. I can finally enjoy the laughter of my grandchildren
+            again. The service was impeccable."
+        </p>
+        <div class="flex flex-col items-center">
+            <span class="font-medium text-sm tracking-wider uppercase text-white mb-1">Robert Thompson</span>
+            <div class="flex items-center space-x-3 text-white/60 text-[10px] font-medium uppercase tracking-widest">
+                <div class="h-px w-6 bg-white/20"></div>
+                <span>Patient for 5 years</span>
+                <div class="h-px w-6 bg-white/20"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-24 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+            <div class="max-w-2xl">
+                <span
+                    class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary dark:bg-primary/20 dark:text-red-400 text-xs font-bold mb-4 tracking-[0.2em] uppercase">
+                    Find Us
+                </span>
+                <h2
+                    class="text-4xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white uppercase tracking-tight">
+                    Our Locations</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400 font-light">Visit us at any of our 15+ centers
+                    nationwide for expert hearing care.</p>
+            </div>
+            <button
+                class="group flex items-center gap-2 bg-slate-900 hover:bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm tracking-wider uppercase transition-all duration-300 shadow-lg hover:shadow-primary/30"
+                routerLink="/outlets">
+                View All Locations
+                <span
+                    class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Location 1 -->
+            <div
+                class="group bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:border-primary/30 transition-all duration-500 relative overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150">
+                </div>
+
+                <div class="relative z-10">
+                    <div
+                        class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                        <span class="material-symbols-outlined text-2xl">location_on</span>
+                    </div>
+                    <h4
+                        class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                        Downtown Medical Plaza</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                        123 Health Ave, Suite 400<br />Central Business District
+                    </p>
+                    <div class="flex items-center text-sm font-bold text-slate-900 dark:text-slate-200">
+                        <span class="material-symbols-outlined text-primary text-lg mr-2">call</span>
+                        +1 (555) 012-3456
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location 2 -->
+            <div
+                class="group bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:border-primary/30 transition-all duration-500 relative overflow-hidden">
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150">
+                </div>
+
+                <div class="relative z-10">
+                    <div
+                        class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                        <span class="material-symbols-outlined text-2xl">location_on</span>
+                    </div>
+                    <h4
+                        class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                        Northside Wellness Center</h4>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+                        789 Park Lane, Ground Floor<br />Riverside District
+                    </p>
+                    <div class="flex items-center text-sm font-bold text-slate-900 dark:text-slate-200">
+                        <span class="material-symbols-outlined text-primary text-lg mr-2">call</span>
+                        +1 (555) 012-7890
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location 3 -->
+            <div
+                class="group bg-primary p-8 rounded-3xl shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-500 relative overflow-hidden transform md:-translate-y-4">
+                <div
+                    class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150">
+                </div>
+
+                <div class="relative z-10">
+                    <div
+                        class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6 text-white backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-2xl">location_city</span>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Eastwood Clinic</h4>
+                    <p class="text-white/80 text-sm mb-6 leading-relaxed font-light">
+                        456 Sunrise Blvd<br />Eastside Shopping Village
+                    </p>
+                    <div
+                        class="flex items-center text-sm font-bold text-white bg-white/10 w-fit px-4 py-2 rounded-xl backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-white text-lg mr-2">call</span>
+                        +1 (555) 012-5555
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

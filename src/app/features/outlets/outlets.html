@@ -1,0 +1,284 @@
+<header class="bg-white dark:bg-slate-900 py-12 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+            <nav aria-label="Breadcrumb" class="flex mb-4">
+                <ol class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400">
+                    <li><a class="hover:text-primary cursor-pointer" routerLink="/">Home</a></li>
+                    <li><span class="material-symbols-outlined text-xs">chevron_right</span></li>
+                    <li class="font-medium text-slate-900 dark:text-white">Our Outlets</li>
+                </ol>
+            </nav>
+            <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl mb-4">
+                Find a <span class="text-primary">Claritone</span> Near You
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400">
+                Visit any of our state-of-the-art hearing aid centers for professional diagnosis, fitting, and aftercare
+                services. ISO 9001:2015 Certified care at every location.
+            </p>
+        </div>
+    </div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex flex-col lg:flex-row gap-6 mb-10 items-end lg:items-center">
+        <div class="relative flex-grow w-full">
+            <span class="absolute inset-y-0 left-0 pl-4 flex items-center h-full pointer-events-none">
+                <span class="material-symbols-outlined text-slate-400 mt-1">search</span>
+            </span>
+            <input
+                class="block w-full pl-12 pr-4 py-4 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary shadow-sm dark:text-white"
+                placeholder="Search by city, state or zip code..." type="text" />
+        </div>
+        <div class="flex gap-4 w-full lg:w-auto">
+            <select (change)="onStateChange($event)"
+                class="block w-full lg:w-48 py-4 pl-4 pr-10 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary shadow-sm text-sm dark:text-white">
+                <option value="">All States</option>
+                <option value="California">California</option>
+                <option value="New York">New York</option>
+                <option value="Texas">Texas</option>
+                <option value="Florida">Florida</option>
+            </select>
+            <button (click)="useMyLocation()"
+                class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg cursor-pointer">
+                <span class="material-symbols-outlined text-sm">my_location</span>
+                <span>Near Me</span>
+            </button>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-7 space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold dark:text-white">{{ stores.length }} Centers Available</h2>
+                <div class="flex items-center gap-2 text-sm text-slate-500">
+                    <span>Sort by:</span>
+                    <select
+                        class="bg-transparent border-none focus:ring-0 font-medium text-slate-900 dark:text-white p-0">
+                        <option>Closest to me</option>
+                        <option>Alphabetical</option>
+                    </select>
+                </div>
+            </div>
+
+            <div *ngIf="isLoadingStores" class="py-8 text-center text-slate-500">
+                <span class="material-symbols-outlined animate-spin text-primary text-3xl mb-2">refresh</span>
+                <p>Loading centers...</p>
+            </div>
+
+            <div *ngIf="!isLoadingStores && stores.length === 0" class="py-8 text-center text-slate-500">
+                <p>No centers found matching your search.</p>
+            </div>
+
+            <div *ngIf="!isLoadingStores && stores.length > 0" class="space-y-4">
+                <div *ngFor="let store of stores"
+                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold dark:text-white">{{ store.name }}</h3>
+                                <span *ngIf="store.status === 'Active'"
+                                    class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">Open
+                                    Now</span>
+                                <span *ngIf="store.status !== 'Active'"
+                                    class="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">{{
+                                    store.status || 'Closed' }}</span>
+                            </div>
+                            <div class="space-y-3 text-slate-600 dark:text-slate-400 text-sm">
+                                <div class="flex items-start gap-2">
+                                    <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+                                    <span>{{ store.address }}, {{ store.city }}, {{ store.state }} {{ store.zipCode
+                                        }}</span>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <span class="material-symbols-outlined text-primary text-lg">phone</span>
+                                    <span>{{ store.contact }}</span>
+                                </div>
+                                <div class="flex items-start gap-2" *ngIf="store.hours">
+                                    <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+                                    <span>{{ store.hours }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-3 min-w-[180px]">
+                            <button (click)="openBookingModal(store.name)"
+                                class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors cursor-pointer">Book
+                                Appointment</button>
+                            <a [href]="store.mapLocation" target="_blank" *ngIf="store.mapLocation"
+                                class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 py-3 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                                <span class="material-symbols-outlined text-sm">directions</span> Directions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-6 flex justify-center">
+                <button *ngIf="stores.length > 5 && !isLoadingStores" (click)="toggleAllLocations()"
+                    class="text-primary font-bold flex items-center gap-2 hover:underline cursor-pointer">
+                    View all {{ stores.length }} locations <span class="material-symbols-outlined">expand_more</span>
+                </button>
+            </div>
+        </div>
+        <div class="lg:col-span-5 h-[600px] lg:h-auto sticky top-32">
+            <div class="w-full h-full bg-slate-200 dark:bg-slate-800 rounded-3xl relative overflow-hidden group">
+                <div class="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none">
+                    <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern height="100" id="mapPattern" patternUnits="userSpaceOnUse" width="100" x="0" y="0">
+                                <path d="M0 50 L100 50 M50 0 L50 100" fill="none" stroke="currentColor"
+                                    stroke-width="0.5"></path>
+                                <circle cx="50" cy="50" fill="currentColor" r="2"></circle>
+                            </pattern>
+                        </defs>
+                        <rect fill="url(#mapPattern)" height="100%" width="100%"></rect>
+                    </svg>
+                </div>
+                <div class="absolute top-1/4 left-1/3 group-hover:scale-110 transition-transform duration-300">
+                    <span class="material-symbols-outlined text-primary text-4xl drop-shadow-lg">location_on</span>
+                    <div
+                        class="absolute -top-12 -left-1/2 bg-white dark:bg-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap border border-slate-200 dark:border-slate-700">
+                        Downtown Center</div>
+                </div>
+                <div class="absolute top-1/2 left-2/3 group-hover:scale-110 transition-transform duration-300">
+                    <span class="material-symbols-outlined text-secondary text-4xl drop-shadow-lg">location_on</span>
+                </div>
+                <div class="absolute bottom-1/3 left-1/4 group-hover:scale-110 transition-transform duration-300">
+                    <span class="material-symbols-outlined text-primary text-4xl drop-shadow-lg">location_on</span>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div
+                        class="text-center p-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl max-w-xs">
+                        <span class="material-symbols-outlined text-slate-400 text-5xl mb-3">map</span>
+                        <h4 class="font-bold text-lg mb-2 dark:text-white">Interactive Map View</h4>
+                        <p class="text-sm text-slate-500 mb-4">Zoom in to see exact locations and real-time traffic
+                            updates to our centers.</p>
+                        <button (click)="expandMap()"
+                            class="bg-secondary text-white px-6 py-2 rounded-lg text-sm font-semibold hover:opacity-90 cursor-pointer">Expand
+                            Map</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- Booking Modal -->
+<div *ngIf="showBookingModal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    (click)="closeBookingModal()">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div
+            class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-8 py-6 flex items-center justify-between z-10">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Book Appointment</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ selectedLocation }}</p>
+            </div>
+            <button (click)="closeBookingModal()"
+                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-slate-500">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-8 py-6">
+            <form (ngSubmit)="submitBooking()" class="space-y-6">
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Full Name <span class="text-primary">*</span>
+                    </label>
+                    <input type="text" [(ngModel)]="bookingForm.name" name="name" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        placeholder="Enter your full name" />
+                </div>
+
+                <!-- Location/Place Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Location <span class="text-primary">*</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.location" name="location" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                        <option *ngFor="let outlet of stores" [value]="outlet.name">{{ outlet.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Language Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Language <span class="text-primary">*</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.languageId" name="languageId" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                        <option value="">Select Language</option>
+                        <option *ngFor="let lang of languages" [value]="lang._id">{{ lang.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Contact Number Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Contact Number <span class="text-primary">*</span>
+                    </label>
+                    <input type="tel" [(ngModel)]="bookingForm.contactNumber" name="contactNumber" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        placeholder="+1 (555) 123-4567" />
+                </div>
+
+                <!-- Day Selection  -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Day <span class="text-primary">*</span>
+                    </label>
+                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (change)="onDateChange()"
+                        name="preferredDay" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        [min]="getMinDate()" />
+                </div>
+
+                <!-- Time Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Time <span class="text-primary">*</span>
+                        <span *ngIf="isLoadingSlots" class="text-xs text-slate-500 ml-2 animate-pulse">Checking
+                            availability...</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.slotId" name="slotId"
+                        [disabled]="!bookingForm.preferredDay || isLoadingSlots" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50">
+                        <option value="">{{ !bookingForm.preferredDay ? 'Select a date first' : 'Select a time slot' }}
+                        </option>
+                        <option *ngFor="let slot of availableSlots" [value]="slot._id">{{ slot.time }}</option>
+                    </select>
+                    <p *ngIf="availableSlots.length === 0 && bookingForm.preferredDay && !isLoadingSlots"
+                        class="text-xs text-red-500 mt-1">
+                        No slots available for this date.
+                    </p>
+                </div>
+
+                <!-- Additional Notes (Optional) -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea rows="3" [(ngModel)]="bookingForm.notes" name="notes"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                        placeholder="Any specific requirements or questions?"></textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex gap-4 pt-4">
+                    <button type="button" (click)="closeBookingModal()"
+                        class="flex-1 px-6 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-red-700 transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        Book Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

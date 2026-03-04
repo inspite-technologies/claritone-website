@@ -1,0 +1,273 @@
+<header
+    class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-[1400px] mx-auto">
+        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-10 h-16 sm:h-20">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3">
+                <img src="assets/logo.png" alt="Claritone Logo" class="h-8 sm:h-10 w-auto" />
+                <span
+                    class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Claritone</span>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center gap-8">
+                <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Home
+                </a>
+                <a routerLink="/products" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Products
+                </a>
+                <a routerLink="/compare" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Compare
+                </a>
+                <a routerLink="/services" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Services
+                </a>
+                <a routerLink="/outlets" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Locations
+                </a>
+                <a routerLink="/blog" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer">
+                    Blog
+                </a>
+            </nav>
+
+            <!-- Right Side Actions -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="hidden sm:flex items-center space-x-2">
+                    <button
+                        class="p-2.5 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer">
+                        <span class="material-symbols-outlined text-2xl">search</span>
+                    </button>
+                    <button
+                        class="p-2.5 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer"
+                        (click)="toggleDarkMode()">
+                        <span class="material-symbols-outlined text-2xl">dark_mode</span>
+                    </button>
+                </div>
+
+                <!-- Wishlist Icon -->
+                <a routerLink="/wishlist"
+                    class="hidden xl:flex relative p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-2xl text-slate-700 dark:text-slate-200">favorite</span>
+                    <span *ngIf="wishlistCount > 0"
+                        class="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
+                        {{ wishlistCount }}
+                    </span>
+                </a>
+
+                <!-- Shopping Cart Icon -->
+                <a routerLink="/cart"
+                    class="hidden xl:flex relative p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer">
+                    <span
+                        class="material-symbols-outlined text-2xl text-slate-700 dark:text-slate-200">shopping_cart</span>
+                    <span *ngIf="cartItemCount > 0"
+                        class="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                        {{ cartItemCount }}
+                    </span>
+                </a>
+
+                <button (click)="openBookingModal()"
+                    class="hidden xl:flex bg-primary text-white px-8 py-3.5 rounded-full text-[15px] font-bold hover:bg-[#c4161b] hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/30 items-center gap-2 cursor-pointer">
+                    Book Appointment
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button (click)="toggleMobileMenu()" type="button"
+                    class="flex items-center justify-center lg:hidden p-3 min-w-[48px] min-h-[48px] text-slate-700 dark:text-slate-200 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all cursor-pointer border border-slate-200 dark:border-slate-700">
+                    <span class="material-symbols-outlined text-3xl" *ngIf="!mobileMenuOpen">menu</span>
+                    <span class="material-symbols-outlined text-3xl" *ngIf="mobileMenuOpen">close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Drawer -->
+    <div *ngIf="mobileMenuOpen"
+        class="lg:hidden fixed inset-0 top-16 sm:top-20 z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 overflow-y-auto">
+        <nav class="flex flex-col p-6 space-y-1">
+            <a routerLink="/" (click)="closeMobileMenu()"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Home</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a routerLink="/products" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Products</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a routerLink="/compare" (click)="closeMobileMenu()"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Compare</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a routerLink="/services" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Services</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a routerLink="/outlets" (click)="closeMobileMenu()"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Locations</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+            <a routerLink="/blog" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Blog</span>
+                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+            </a>
+
+            <!-- Mobile CTA -->
+            <div class="pt-6 border-t border-slate-200 dark:border-slate-800 mt-4">
+                <button (click)="openBookingModal()"
+                    class="flex items-center justify-center w-full bg-primary text-white py-4 rounded-xl text-base font-bold hover:bg-[#c4161b] transition-all shadow-lg cursor-pointer">
+                    <span class="material-symbols-outlined mr-2">calendar_today</span>
+                    Book Appointment
+                </button>
+                <a routerLink="/hearing-test" (click)="closeMobileMenu()"
+                    class="flex items-center justify-center w-full bg-secondary text-white py-4 rounded-xl text-base font-bold hover:bg-[#004a80] transition-all shadow-lg cursor-pointer mt-3">
+                    <span class="material-symbols-outlined mr-2">hearing</span>
+                    Free Hearing Test
+                </a>
+            </div>
+
+            <!-- Mobile Dark Mode Toggle -->
+            <div class="sm:hidden pt-6 border-t border-slate-200 dark:border-slate-800 mt-4">
+                <button (click)="toggleDarkMode()"
+                    class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                    <span>Dark Mode</span>
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Global Booking Modal -->
+<div *ngIf="showBookingModal"
+    class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+    (click)="closeBookingModal()">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div
+            class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-8 py-6 flex items-center justify-between z-10">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Book Appointment</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Schedule your visit</p>
+            </div>
+            <button (click)="closeBookingModal()"
+                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-slate-500">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-8 py-6">
+            <form (ngSubmit)="submitBooking()" class="space-y-6">
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Full Name <span class="text-primary">*</span>
+                    </label>
+                    <input type="text" [(ngModel)]="bookingForm.name" name="name" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        placeholder="Enter your full name" />
+                </div>
+
+                <!-- Location/Place Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Location <span class="text-primary">*</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.location" name="location" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                        <option value="">Select a location</option>
+                        <option *ngFor="let outlet of outlets" [value]="outlet.name">{{ outlet.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Language Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Language <span class="text-primary">*</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.languageId" name="languageId" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                        <option value="">Select Language</option>
+                        <option *ngFor="let lang of languages" [value]="lang._id">{{ lang.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Contact Number Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Contact Number <span class="text-primary">*</span>
+                    </label>
+                    <input type="tel" [(ngModel)]="bookingForm.contactNumber" name="contactNumber" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        placeholder="+1 (555) 123-4567" />
+                </div>
+
+                <!-- Day Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Day <span class="text-primary">*</span>
+                    </label>
+                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (change)="onDateChange()"
+                        name="preferredDay" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                        [min]="getMinDate()" />
+                </div>
+
+                <!-- Time Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Preferred Time <span class="text-primary">*</span>
+                        <span *ngIf="isLoadingSlots" class="text-xs text-slate-500 ml-2 animate-pulse">Checking
+                            availability...</span>
+                    </label>
+                    <select [(ngModel)]="bookingForm.slotId" name="slotId"
+                        [disabled]="!bookingForm.preferredDay || isLoadingSlots" required
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50">
+                        <option value="">{{ !bookingForm.preferredDay ? 'Select a date first' : 'Select a time slot' }}
+                        </option>
+                        <option *ngFor="let slot of availableSlots" [value]="slot._id">{{ slot.time }}</option>
+                    </select>
+                    <p *ngIf="availableSlots.length === 0 && bookingForm.preferredDay && !isLoadingSlots"
+                        class="text-xs text-red-500 mt-1">
+                        No slots available for this date.
+                    </p>
+                </div>
+
+                <!-- Additional Notes (Optional) -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea rows="3"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                        placeholder="Any specific requirements or questions?"></textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex gap-4 pt-4">
+                    <button type="button" (click)="closeBookingModal()"
+                        class="flex-1 px-6 py-3 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-red-700 transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        Book Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

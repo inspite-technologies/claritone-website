@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-6">
+    <div
+        class="max-w-xl w-full bg-white dark:bg-slate-900 rounded-[3rem] p-12 text-center shadow-2xl border border-slate-100 dark:border-slate-800">
+        <!-- Failure Icon -->
+        <div class="w-32 h-32 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-8">
+            <span class="material-symbols-outlined text-primary text-6xl font-bold">error</span>
+        </div>
+
+        <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-4">Payment Failed</h1>
+        <p class="text-slate-600 dark:text-gray-400 text-lg mb-8">
+            We couldn't process your payment at this moment.
+        </p>
+
+        <!-- Error Insight -->
+        <div class="bg-red-50 dark:bg-red-900/10 rounded-2xl p-6 mb-10 text-left flex items-start gap-4">
+            <span class="material-symbols-outlined text-primary mt-1">info</span>
+            <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Error Reason</p>
+                <p class="text-slate-700 dark:text-gray-300 font-medium">{{ randomError }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <button routerLink="/payment"
+                class="bg-primary text-white h-14 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-red-700 transition-colors">
+                Try Again
+            </button>
+            <button routerLink="/checkout"
+                class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white h-14 rounded-xl font-bold hover:bg-slate-200 transition-colors">
+                Edit Details
+            </button>
+        </div>
+
+        <!-- Help -->
+        <p class="mt-8 text-sm text-slate-400">
+            Don't worry, no money was debited from your account.
+            <br>If the issue persists, please <a class="text-primary font-bold hover:underline cursor-pointer">Live
+                Chat</a> with us.
+        </p>
+    </div>
+</div>

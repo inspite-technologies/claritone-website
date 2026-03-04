@@ -1,0 +1,142 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-slate-900 dark:text-white">Shopping Cart</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-2">{{ cartItems.length }} item(s) in your cart</p>
+        </div>
+
+        <!-- Empty Cart State -->
+        <div *ngIf="cartItems.length === 0" class="text-center py-16">
+            <span
+                class="material-symbols-outlined text-8xl text-slate-300 dark:text-slate-600 mb-4">shopping_cart</span>
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Your cart is empty</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-8">Add some products to get started</p>
+            <a routerLink="/compare"
+                class="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined">shopping_bag</span>
+                Browse Products
+            </a>
+        </div>
+
+        <!-- Cart Content -->
+        <div *ngIf="cartItems.length > 0" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2 space-y-4">
+                <div *ngFor="let item of cartItems"
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div class="flex gap-6">
+                        <!-- Product Image -->
+                        <div class="flex-shrink-0">
+                            <div class="w-24 h-24 bg-slate-100 dark:bg-slate-700 rounded-xl bg-center bg-no-repeat bg-contain"
+                                [style.background-image]="'url(' + item.product.image + ')'"></div>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ item.product.name }}
+                                    </h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ item.product.category }}
+                                    </p>
+                                </div>
+                                <button (click)="removeItem(item.product.id)"
+                                    class="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
+                                    title="Remove item">
+                                    <span
+                                        class="material-symbols-outlined text-slate-400 hover:text-red-500">delete</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center justify-between mt-4">
+                                <!-- Quantity Controls -->
+                                <div class="flex items-center gap-3">
+                                    <span class="text-sm text-slate-600 dark:text-slate-400">Quantity:</span>
+                                    <div class="flex items-center gap-2">
+                                        <button (click)="updateQuantity(item.product.id, item.quantity - 1)"
+                                            class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-colors cursor-pointer">
+                                            <span class="material-symbols-outlined text-sm">remove</span>
+                                        </button>
+                                        <span class="w-12 text-center font-bold text-slate-900 dark:text-white">{{
+                                            item.quantity }}</span>
+                                        <button (click)="updateQuantity(item.product.id, item.quantity + 1)"
+                                            class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 flex items-center justify-center transition-colors cursor-pointer">
+                                            <span class="material-symbols-outlined text-sm">add</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="text-right">
+                                    <p class="text-2xl font-bold text-primary">{{ formatPrice(item.product.price *
+                                        item.quantity) }}</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">{{
+                                        formatPrice(item.product.price) }} each</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div
+                    class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm sticky top-24">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Order Summary</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Subtotal</span>
+                            <span class="font-semibold">{{ formatPrice(subtotal) }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Tax (18% GST)</span>
+                            <span class="font-semibold">{{ formatPrice(tax) }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+                            <span>Shipping</span>
+                            <span class="font-semibold text-green-600">FREE</span>
+                        </div>
+                        <div class="border-t border-slate-200 dark:border-slate-700 pt-3 mt-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-bold text-slate-900 dark:text-white">Total</span>
+                                <span class="text-2xl font-bold text-primary">{{ formatPrice(total) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a routerLink="/checkout"
+                        class="w-full bg-primary text-white py-4 rounded-xl font-bold text-center flex items-center justify-center gap-2 hover:bg-red-700 transition-colors shadow-lg cursor-pointer mb-3">
+                        <span class="material-symbols-outlined">shopping_bag</span>
+                        Proceed to Checkout
+                    </a>
+
+                    <a routerLink="/compare"
+                        class="w-full bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white py-3 rounded-xl font-semibold text-center block hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors cursor-pointer">
+                        Continue Shopping
+                    </a>
+
+                    <!-- Trust Badges -->
+                    <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+                        <div class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600">verified</span>
+                                <span>Secure checkout</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600">local_shipping</span>
+                                <span>Free shipping on all orders</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600">autorenew</span>
+                                <span>30-day money-back guarantee</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

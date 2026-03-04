@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center py-12 px-4">
+    <div class="max-w-2xl w-full">
+        <div
+            class="bg-white dark:bg-slate-800 rounded-3xl p-12 border border-slate-200 dark:border-slate-700 shadow-xl text-center">
+            <!-- Success Icon -->
+            <div
+                class="w-24 h-24 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-6xl text-green-600">check_circle</span>
+            </div>
+
+            <!-- Success Message -->
+            <h1 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Order Placed Successfully!</h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 mb-8">Thank you for your purchase. Your order has been
+                confirmed.</p>
+
+            <!-- Order Details -->
+            <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Order ID</p>
+                        <p class="font-bold text-slate-900 dark:text-white">{{ orderId }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Total Amount</p>
+                        <p class="font-bold text-primary text-xl">{{ formatPrice(amount) }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Order Date</p>
+                        <p class="font-bold text-slate-900 dark:text-white">{{ currentDate }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Payment Status</p>
+                        <p class="font-bold text-green-600">Confirmed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div
+                class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 mb-8 text-left">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600">info</span>
+                    What happens next?
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-green-600 text-sm mt-0.5">check</span>
+                        <span>Order confirmation email sent to your inbox</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-green-600 text-sm mt-0.5">check</span>
+                        <span>Our team will contact you within 24 hours for fitting appointment</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-green-600 text-sm mt-0.5">check</span>
+                        <span>Free home delivery and professional setup included</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a routerLink="/"
+                    class="px-8 py-3 bg-primary text-white rounded-xl font-bold hover:bg-red-700 transition-colors cursor-pointer inline-block">
+                    Back to Home
+                </a>
+                <a routerLink="/compare"
+                    class="px-8 py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white rounded-xl font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors cursor-pointer inline-block">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

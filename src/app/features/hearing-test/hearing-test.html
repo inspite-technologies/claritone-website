@@ -1,0 +1,197 @@
+<section
+    class="min-h-screen bg-[#f0f7ff] dark:bg-slate-950 pt-20 pb-20 transition-colors duration-300 flex items-center justify-center">
+    <div class="container mx-auto px-6">
+        <div
+            class="max-w-xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden border border-blue-50 dark:border-slate-800">
+
+            <!-- HEADER / PROGRESS (Hidden in Result) -->
+            <div *ngIf="currentState !== 'result'" class="px-8 pt-8 flex justify-between items-center">
+                <img alt="Claritone Logo" class="h-8" src="assets/logo.png" />
+                <div class="flex gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
+                        [ngClass]="currentState === 'person-selection' || currentState === 'setup' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'">
+                    </div>
+                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
+                        [ngClass]="currentState === 'test' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'"></div>
+                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
+                        [ngClass]="currentState === 'lead-form' || currentState === 'result' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 md:p-12">
+
+                <!-- 1. PERSON SELECTION -->
+                <div *ngIf="currentState === 'person-selection'" class="anime-fade-in text-center">
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Hi, Confirm the person's details!
+                    </h2>
+                    <p class="text-slate-500 dark:text-slate-400 mb-8">Choose who is taking the rapid hearing test</p>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <button *ngFor="let person of personOptions" (click)="selectPerson(person.id)"
+                            class="flex flex-col items-center group gap-2 transition-transform active:scale-95">
+                            <div
+                                class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-slate-100 dark:border-slate-800 group-hover:border-primary group-hover:bg-primary/5 p-1 transition-all">
+                                <img [src]="person.avatar" [alt]="person.label"
+                                    class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all">
+                            </div>
+                            <span
+                                class="text-xs font-semibold text-slate-600 dark:text-slate-300 group-hover:text-primary">{{
+                                person.label }}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. SETUP / PREREQUISITES -->
+                <div *ngIf="currentState === 'setup'" class="anime-slide-up text-center">
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-8">Ready to start?</h2>
+
+                    <div class="space-y-8 mb-12">
+                        <div class="flex flex-col items-center">
+                            <div
+                                class="w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-primary mb-4">
+                                <span class="material-symbols-outlined text-5xl">headphones</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-300 font-medium">Connect your headphones</p>
+                        </div>
+
+                        <div class="flex flex-col items-center">
+                            <div
+                                class="w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-primary mb-4">
+                                <span class="material-symbols-outlined text-5xl">volume_off</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-300 font-medium">Find a quiet environment</p>
+                        </div>
+                    </div>
+
+                    <button (click)="startTest()"
+                        class="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg">
+                        Start Assessment
+                    </button>
+                </div>
+
+                <!-- 3. QUESTIONNAIRE -->
+                <div *ngIf="currentState === 'test'" class="anime-slide-up">
+                    <div class="mb-8">
+                        <span class="text-xs font-bold text-primary uppercase tracking-widest block mb-2">Question {{
+                            currentStep + 1 }} of {{ questions.length }}</span>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-primary h-full transition-all duration-500"
+                                [style.width.%]="progressPercentage"></div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-8 leading-tight">
+                        {{ currentQuestion.text }}
+                    </h3>
+
+                    <div class="space-y-4">
+                        <button *ngFor="let option of currentQuestion.options" (click)="selectOption(option.value)"
+                            class="w-full flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all hover:scale-[1.01]"
+                            [ngClass]="{
+                'border-primary bg-primary/5': isOptionSelected(option.value),
+                'border-slate-50 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 hover:border-primary/30': !isOptionSelected(option.value)
+              }">
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
+                                [ngClass]="isOptionSelected(option.value) ? 'bg-primary text-white' : 'bg-white dark:bg-slate-700 text-slate-400'">
+                                <span class="material-symbols-outlined">{{ option.icon }}</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-900 dark:text-white">{{ option.label }}</span>
+                                <span class="block text-sm text-slate-500 dark:text-slate-400">{{ option.description
+                                    }}</span>
+                            </div>
+                            <div *ngIf="isOptionSelected(option.value)" class="ml-auto">
+                                <span class="material-symbols-outlined text-primary">check_circle</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="mt-8 flex justify-between">
+                        <button (click)="prevStep()"
+                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold flex items-center text-sm">
+                            <span class="material-symbols-outlined text-lg mr-1">arrow_back</span> Back
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. LEAD GENERATION FORM -->
+                <div *ngIf="currentState === 'lead-form'" class="anime-fade-in">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Almost there!</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mb-8">Provide your details to see your hearing score.
+                    </p>
+
+                    <form (ngSubmit)="submitLead()" #leadFormTag="ngForm" class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full
+                                Name</label>
+                            <div class="relative">
+                                <input type="text" [(ngModel)]="leadForm.fullName" name="fullName" required
+                                    placeholder="Enter your full name"
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile
+                                Number</label>
+                            <div class="relative">
+                                <input type="tel" [(ngModel)]="leadForm.phone" name="phone" required
+                                    placeholder="+91 XXXXX XXXXX"
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email ID
+                                (Optional)</label>
+                            <div class="relative">
+                                <input type="email" [(ngModel)]="leadForm.email" name="email"
+                                    placeholder="example@mail.com"
+                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
+                            </div>
+                        </div>
+
+                        <button type="submit" [disabled]="!leadFormTag.form.valid"
+                            class="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg disabled:opacity-50 disabled:grayscale">
+                            View My Results
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 5. RESULTS -->
+                <div *ngIf="currentState === 'result'" class="text-center anime-scale-in">
+                    <div
+                        class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-green-500/20">
+                        <span class="material-symbols-outlined text-4xl">check</span>
+                    </div>
+
+                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">You're All Set!</h2>
+                    <p class="text-slate-600 dark:text-slate-300 mb-10 leading-relaxed">
+                        Great job, {{ leadForm.fullName.split(' ')[0] }}! Your hearing checkup is complete. We've
+                        assessed your responses and our specialists are ready to discuss your results.
+                    </p>
+
+                    <div
+                        class="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-2xl mb-10 text-left border border-blue-100 dark:border-blue-800">
+                        <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">Next Recommended Step:</h4>
+                        <p class="text-sm text-blue-700 dark:text-blue-400">Schedule a professional audiometry test for
+                            a comprehensive diagnosis.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <a routerLink="/outlets"
+                            class="bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg cursor-pointer">
+                            Book Appointment
+                        </a>
+                        <a routerLink="/"
+                            class="text-slate-500 hover:text-slate-800 dark:hover:text-white font-bold transition-all cursor-pointer">
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

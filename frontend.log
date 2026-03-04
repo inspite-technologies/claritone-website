@@ -1,0 +1,295 @@
+
+> clariton@0.0.0 start
+> ng serve
+
+❯ Building...
+✔ Building...
+Application bundle generation failed. [1.767 seconds] - 2026-02-06T07:59:20.587Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token 'Date' at column 6 in [ new Date().toLocaleDateString() ] in /Users/jitheshkmeethal/Desktop/clariton/src/app/features/order-success/order-success.html@28:76[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/order-success/order-success.html:29:76:
+[37m      29 │ ...ate-900 dark:text-white">[32m{{ new Date().toLocaleDateString() }}[37m</p>
+         ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component OrderSuccess.
+
+    src/app/features/order-success/order-success.ts:8:17:
+[37m      8 │     templateUrl: [32m'./order-success.html'[37m,
+        ╵                  [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'new' does not exist on type 'OrderSuccess'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/order-success/order-success.html:29:79:
+[37m      29 │ ...slate-900 dark:text-white">{{ [32mnew[37m Date().toLocaleDateString() }...
+         ╵                                  [32m~~~[0m
+
+  Error occurs in the template of component OrderSuccess.
+
+    src/app/features/order-success/order-success.ts:8:17:
+[37m      8 │     templateUrl: [32m'./order-success.html'[37m,
+        ╵                  [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Watch mode enabled. Watching for file changes...
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.702 seconds] - 2026-02-06T07:59:52.583Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mNG5002: Parser Error: Unexpected token 'Date' at column 6 in [ new Date().toLocaleDateString() ] in /Users/jitheshkmeethal/Desktop/clariton/src/app/features/order-success/order-success.html@28:76[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/order-success/order-success.html:29:76:
+[37m      29 │ ...ate-900 dark:text-white">[32m{{ new Date().toLocaleDateString() }}[37m</p>
+         ╵                             [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component OrderSuccess.
+
+    src/app/features/order-success/order-success.ts:8:17:
+[37m      8 │     templateUrl: [32m'./order-success.html'[37m,
+        ╵                  [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'new' does not exist on type 'OrderSuccess'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/order-success/order-success.html:29:79:
+[37m      29 │ ...slate-900 dark:text-white">{{ [32mnew[37m Date().toLocaleDateString() }...
+         ╵                                  [32m~~~[0m
+
+  Error occurs in the template of component OrderSuccess.
+
+    src/app/features/order-success/order-success.ts:8:17:
+[37m      8 │     templateUrl: [32m'./order-success.html'[37m,
+        ╵                  [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 452.91 kB | 
+styles.css          | styles        |  53.13 kB | 
+
+                    | Initial total | 506.04 kB
+
+Application bundle generation complete. [0.169 seconds] - 2026-02-06T07:59:54.148Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+1:29:54 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+  ➜  Local:   http://localhost:4200/
+  ➜  press h + enter to show help
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names  | Raw size
+styles.css          | styles | 52.55 kB | 
+
+Application bundle generation complete. [0.363 seconds] - 2026-02-06T09:53:14.979Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+
+No output file changes.
+
+Application bundle generation complete. [0.029 seconds] - 2026-02-06T09:53:17.677Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 453.35 kB | 
+styles.css          | styles        |  56.77 kB | 
+
+                    | Initial total | 510.12 kB
+
+Application bundle generation complete. [0.673 seconds] - 2026-02-06T09:55:50.959Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names |  Raw size
+main.js             | main  | 453.35 kB | 
+
+Application bundle generation complete. [0.495 seconds] - 2026-02-06T09:59:01.795Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names |  Raw size
+main.js             | main  | 453.36 kB | 
+
+Application bundle generation complete. [0.345 seconds] - 2026-02-06T09:59:14.840Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names |  Raw size
+main.js             | main  | 453.14 kB | 
+
+Application bundle generation complete. [0.436 seconds] - 2026-02-06T10:26:18.903Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Component update sent to client(s).
+Component update failed: Cannot read properties of undefined (reading 'image')
+TypeError: Cannot read properties of undefined (reading 'image')
+    at Compare_Template (http://localhost:4200/@ng/component?c=src%2Fapp%2Ffeatures%2Fcompare%2Fcompare.ts%40Compare&t=1770373578905:187:80)
+    at executeTemplate (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:8285:5)
+    at refreshView (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:8945:7)
+    at recreate (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20497:5)
+    at executeWithInvalidateFallback (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20507:5)
+    at http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20502:20
+    at NoopNgZone.run (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:3129:15)
+    at recreateLView (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20502:10)
+    at recreateMatchingLViews (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20452:5)
+    at recreateMatchingLViews (http://localhost:4200/@fs/Users/jitheshkmeethal/Desktop/clariton/.angular/cache/21.1.2/clariton/vite/deps/chunk-RMG632KN.js?v=fa544c59:20465:7)
+Please consider reporting the error at https://github.com/angular/angular-cli/issues
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 455.84 kB | 
+styles.css          | styles        |  57.03 kB | 
+
+                    | Initial total | 512.87 kB
+
+Application bundle generation complete. [0.337 seconds] - 2026-02-06T10:27:58.060Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names  | Raw size
+styles.css          | styles | 52.55 kB | 
+
+Application bundle generation complete. [0.404 seconds] - 2026-02-06T10:35:47.106Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 456.02 kB | 
+styles.css          | styles        |  54.01 kB | 
+
+                    | Initial total | 510.03 kB
+
+Application bundle generation complete. [0.778 seconds] - 2026-02-06T10:44:52.557Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names |  Raw size
+main.js             | main  | 456.59 kB | 
+
+Application bundle generation complete. [0.516 seconds] - 2026-02-06T10:48:37.798Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names         |  Raw size
+main.js             | main          | 447.06 kB | 
+styles.css          | styles        |  54.61 kB | 
+
+                    | Initial total | 501.67 kB
+
+Application bundle generation complete. [0.656 seconds] - 2026-02-06T10:49:11.204Z
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: RouterLink is not used within the template of Blog[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/features/blog/blog.ts:8:26:
+[37m      8 │   imports: [CommonModule, [32mRouterLink[37m],
+        ╵                           [32m~~~~~~~~~~[0m
+
+
+Stylesheet update sent to client(s).
+Component update sent to client(s).

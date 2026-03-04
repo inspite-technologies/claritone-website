@@ -1,0 +1,170 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+            <!-- Left: Payment Methods & Details -->
+            <div class="lg:col-span-2">
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl">
+                    <h1 class="text-3xl font-black text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary text-4xl">lock</span>
+                        Secure Payment
+                    </h1>
+
+                    <!-- Payment Method Selection -->
+                    <div class="grid grid-cols-3 gap-4 mb-10">
+                        <button (click)="paymentMethod = 'card'" [class.border-primary]="paymentMethod === 'card'"
+                            [class.bg-primary/5]="paymentMethod === 'card'"
+                            class="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 transition-all hover:border-primary/50 group">
+                            <span
+                                class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">credit_card</span>
+                            <span class="font-bold text-sm">Card</span>
+                        </button>
+                        <button (click)="paymentMethod = 'upi'" [class.border-primary]="paymentMethod === 'upi'"
+                            [class.bg-primary/5]="paymentMethod === 'upi'"
+                            class="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 transition-all hover:border-primary/50 group">
+                            <span
+                                class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">payments</span>
+                            <span class="font-bold text-sm">UPI</span>
+                        </button>
+                        <button (click)="paymentMethod = 'netbanking'"
+                            [class.border-primary]="paymentMethod === 'netbanking'"
+                            [class.bg-primary/5]="paymentMethod === 'netbanking'"
+                            class="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 transition-all hover:border-primary/50 group">
+                            <span
+                                class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform">account_balance</span>
+                            <span class="font-bold text-sm">Banking</span>
+                        </button>
+                    </div>
+
+                    <!-- Card Details Form -->
+                    <form *ngIf="paymentMethod === 'card'" (ngSubmit)="processPayment()"
+                        class="space-y-6 animate-fade-in">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Card Number</label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400">credit_card</span>
+                                <input type="text" [(ngModel)]="cardData.number" name="number"
+                                    placeholder="0000 0000 0000 0000"
+                                    class="w-full h-14 pl-12 pr-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-mono tracking-widest">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Expiry
+                                    Date</label>
+                                <input type="text" [(ngModel)]="cardData.expiry" name="expiry" placeholder="MM/YY"
+                                    class="w-full h-14 px-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-wider text-slate-500">CVV</label>
+                                <input type="password" [(ngModel)]="cardData.cvv" name="cvv" placeholder="***"
+                                    class="w-full h-14 px-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500">Cardholder
+                                Name</label>
+                            <input type="text" [(ngModel)]="cardData.name" name="name" placeholder="Name on card"
+                                class="w-full h-14 px-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                        </div>
+
+                        <button type="submit" [disabled]="isProcessing"
+                            class="w-full bg-primary text-white h-16 rounded-2xl font-black text-lg shadow-xl shadow-primary/30 hover:bg-red-700 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+                            <span *ngIf="!isProcessing">Pay ${{ total | number:'1.2-2' }}</span>
+                            <div *ngIf="isProcessing"
+                                class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin">
+                            </div>
+                            <span *ngIf="isProcessing">Processing...</span>
+                        </button>
+                    </form>
+
+                    <!-- UPI Section -->
+                    <div *ngIf="paymentMethod === 'upi'" class="space-y-6 animate-fade-in text-center py-8">
+                        <div
+                            class="w-48 h-48 bg-slate-100 dark:bg-slate-800 rounded-3xl mx-auto flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700">
+                            <span class="material-symbols-outlined text-6xl text-slate-300">qr_code_2</span>
+                        </div>
+                        <p class="text-sm font-medium text-slate-600 dark:text-gray-400">Scan QR or enter UPI ID to pay
+                        </p>
+                        <div class="max-w-xs mx-auto">
+                            <input type="text" [(ngModel)]="upiId" placeholder="username@upi"
+                                class="w-full h-14 px-4 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-primary outline-none transition-all text-center">
+                        </div>
+                        <button (click)="processPayment()" [disabled]="isProcessing"
+                            class="w-full max-w-xs bg-primary text-white h-14 rounded-xl font-bold hover:bg-red-700 transition-colors">
+                            Verify & Pay
+                        </button>
+                    </div>
+
+                    <!-- Net Banking -->
+                    <div *ngIf="paymentMethod === 'netbanking'" class="space-y-4 animate-fade-in">
+                        <div *ngFor="let bank of ['HDFC Bank', 'ICICI Bank', 'SBI', 'Axis Bank']"
+                            class="flex items-center justify-between p-4 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-primary cursor-pointer transition-colors group">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-bold text-primary">
+                                    {{ bank[0] }}</div>
+                                <span class="font-bold text-slate-700 dark:text-gray-300">{{ bank }}</span>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">chevron_right</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="mt-8 flex items-center justify-center gap-8 grayscale opacity-50 dark:invert">
+                    <img src="https://img.icons8.com/color/48/visa.png" alt="Visa">
+                    <img src="https://img.icons8.com/color/48/mastercard.png" alt="Mastercard">
+                    <img src="https://img.icons8.com/color/48/paypal.png" alt="PayPal">
+                    <img src="https://img.icons8.com/color/48/google-pay.png" alt="GPay">
+                </div>
+            </div>
+
+            <!-- Right: Order Summary Sidebar -->
+            <div class="lg:col-span-1">
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl sticky top-24">
+                    <h2 class="text-xl font-black text-slate-900 dark:text-white mb-6">Order Summary</h2>
+
+                    <div class="space-y-4 mb-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div *ngFor="let item of cartService.getCart()" class="flex gap-4">
+                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-xl bg-center bg-contain bg-no-repeat"
+                                [style.background-image]="'url(' + item.product.image + ')'"></div>
+                            <div class="flex-1">
+                                <p class="text-sm font-bold truncate">{{ item.product.name }}</p>
+                                <p class="text-xs text-slate-500">Qty: {{ item.quantity }}</p>
+                                <p class="text-primary font-bold text-sm mt-1">${{ item.product.price * item.quantity |
+                                    number:'1.2-2' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500 uppercase font-bold text-[10px]">Subtotal</span>
+                            <span class="font-bold">${{ subtotal | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500 uppercase font-bold text-[10px]">Shipping</span>
+                            <span class="text-green-600 font-bold uppercase text-[10px]">Free</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-slate-500 uppercase font-bold text-[10px]">GST (18%)</span>
+                            <span class="font-bold">${{ tax | number:'1.2-2' }}</span>
+                        </div>
+                        <div
+                            class="flex justify-between items-center pt-4 mt-2 border-t border-slate-200 dark:border-slate-800">
+                            <span class="text-lg font-black dark:text-white">Total</span>
+                            <span class="text-3xl font-black text-primary">${{ total | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

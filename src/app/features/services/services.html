@@ -1,0 +1,153 @@
+<section class="relative bg-slate-900 overflow-hidden py-20 lg:py-28">
+    <div class="absolute inset-0 z-0">
+        <img alt="Audiologist with patient" class="w-full h-full object-cover opacity-40" src="hearing%20care.jpg" />
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-3xl">
+            <span
+                class="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium mb-6 backdrop-blur-sm border border-white/20">Our
+                Expertise</span>
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">World-Class Hearing Care Tailored
+                to
+                Your Life</h1>
+            <p class="text-xl text-blue-50 leading-relaxed mb-10">From diagnostic evaluations to personalized fitting
+                sessions, Claritone provides comprehensive audiological services across all our state-of-the-art
+                locations.</p>
+            <div class="flex flex-wrap gap-4">
+                <a (click)="exploreServices()"
+                    class="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-opacity-90 transition-all cursor-pointer">Explore
+                    Our Services</a>
+                <a class="bg-white/10 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-full font-bold hover:bg-white/20 transition-all cursor-pointer"
+                    routerLink="/outlets">View Our Locations</a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-24 bg-white dark:bg-slate-900" id="services-grid">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">Core Audiology Services</h2>
+            <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">We combine advanced technology with a
+                compassionate, patient-centered approach to ensure you never miss a sound that matters.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div
+                class="service-card group bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300">
+                <div
+                    class="service-icon w-14 h-14 rounded-xl bg-blue-100 dark:bg-slate-700 flex items-center justify-center text-secondary mb-6 transition-colors duration-300">
+                    <span class="material-symbols-outlined text-3xl">hearing</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Professional Hearing Tests</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Comprehensive diagnostic
+                    evaluations using clinical-grade equipment to precisely map your hearing profile.</p>
+                <a routerLink="/hearing-test"
+                    class="inline-flex items-center text-sm font-bold text-primary hover:gap-2 transition-all cursor-pointer">
+                    Learn More <span class="material-symbols-outlined text-lg ml-1">arrow_forward</span>
+                </a>
+            </div>
+            <div
+                class="service-card group bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300">
+                <div
+                    class="service-icon w-14 h-14 rounded-xl bg-blue-100 dark:bg-slate-700 flex items-center justify-center text-secondary mb-6 transition-colors duration-300">
+                    <span class="material-symbols-outlined text-3xl">settings_input_component</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Hearing Aid Fitting &amp; Trial</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Personalized device selection
+                    followed by a 14-day risk-free home trial to ensure total satisfaction.</p>
+                <a routerLink="/hearing-test"
+                    class="inline-flex items-center text-sm font-bold text-primary hover:gap-2 transition-all cursor-pointer">
+                    Learn More <span class="material-symbols-outlined text-lg ml-1">arrow_forward</span>
+                </a>
+            </div>
+            <div
+                class="service-card group bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300">
+                <div
+                    class="service-icon w-14 h-14 rounded-xl bg-blue-100 dark:bg-slate-700 flex items-center justify-center text-secondary mb-6 transition-colors duration-300">
+                    <span class="material-symbols-outlined text-3xl">build</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Repairs &amp; Maintenance</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">On-site troubleshooting,
+                    professional cleaning, and manufacturer-authorized repairs for all major brands.</p>
+                <a routerLink="/hearing-test"
+                    class="inline-flex items-center text-sm font-bold text-primary hover:gap-2 transition-all cursor-pointer">
+                    Learn More <span class="material-symbols-outlined text-lg ml-1">arrow_forward</span>
+                </a>
+            </div>
+            <div
+                class="service-card group bg-slate-50 dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300">
+                <div
+                    class="service-icon w-14 h-14 rounded-xl bg-blue-100 dark:bg-slate-700 flex items-center justify-center text-secondary mb-6 transition-colors duration-300">
+                    <span class="material-symbols-outlined text-3xl">spatial_audio_off</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Tinnitus Management</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">Specialized sound therapy and
+                    masking strategies designed to alleviate the discomfort of ringing ears.</p>
+                <a
+                    class="inline-flex items-center text-sm font-bold text-primary hover:gap-2 transition-all cursor-pointer">
+                    Learn More <span class="material-symbols-outlined text-lg ml-1">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-24 bg-slate-50 dark:bg-slate-800/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="w-full lg:w-1/2">
+                <div class="relative">
+                    <img alt="Corporate meeting" class="rounded-2xl shadow-2xl relative z-10 w-full h-auto"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD589oXQl7OObfaluQjdRG81SHtBb9nis3z0vA8GZ7Ay1GMQ_enGX_2wD32g_A5d3Rna7NlB-noVSUDx1MSsV7Bjkskve-8hX7fD8HPFrfwYxSWXQ7KSTBOMDAo62wkBIm1JvZSvl98FPkLIe33_Jygm_aei-QEPbwZKjiUgAQibPcfO8mXyz1vMIDOoHpmpNsBtCwSHlONMoPovaeVzaMA7AwS9XQmPFcqY5O5iI37y_LpEG-uzSlyCR1tDBhlLn5uJXP7bQjZfWo" />
+                    <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-primary/10 rounded-2xl -z-10"></div>
+                    <div class="absolute -top-6 -left-6 w-32 h-32 bg-secondary/10 rounded-full -z-10"></div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2">
+                <span class="text-primary font-bold tracking-widest uppercase text-sm mb-4 block">Corporate
+                    Partnerships</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">Corporate Hearing
+                    Wellness Programs</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">Boost workplace productivity
+                    and employee well-being with our on-site hearing screenings and conservation workshops. We partner
+                    with
+                    businesses to provide industrial-grade hearing protection and annual health checkups for teams.</p>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-3">
+                        <span
+                            class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded-full text-lg">check</span>
+                        <span class="font-medium">Mobile Diagnostic Screenings</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span
+                            class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded-full text-lg">check</span>
+                        <span class="font-medium">Custom Noise-Reduction Earplugs</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span
+                            class="material-symbols-outlined text-primary bg-primary/10 p-1 rounded-full text-lg">check</span>
+                        <span class="font-medium">OHSA/ISO Compliance Reports</span>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="relative py-24 bg-slate-900 overflow-hidden">
+    <div class="absolute inset-0 opacity-40">
+        <img alt="Background" class="w-full h-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRQFWL53xLp5XK9HNIW8xAS8mhPnOzbwjdJw9Fak8xTWTx0q1SLPYKZiUdvNMettOgWO6LX0HadKvCQovaES0q78gGohMVt10XAQZn7qcdjS58qVu8V6FxLG_O6BtbIh95s8NWH7WOVLaBcI8d0KxRFg364GmsG5242VDi4frz696c3KUHv-m9lMTRZOjq-Gs3rXuIyGiF0joA3BPZsWA1n-C3PEZWOS7KBupPp8wNxubJrv3NSZwRQ_ZB-5oijiFMnFOAMAYLNGc" />
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-8">Rediscover the Joy of Better Hearing Today</h2>
+            <p class="text-xl text-slate-300 mb-12">Visit any of our locations across Mumbai for a consultation with our
+                senior audiologists. Your journey back to sound starts with a single click.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a routerLink="/hearing-test"
+                    class="bg-primary text-white px-10 py-4 rounded-full text-lg font-bold hover:bg-red-700 hover:scale-105 transition-all shadow-xl shadow-primary/30 cursor-pointer">Book
+                    a Consultation</a>
+
+            </div>
+        </div>
+    </div>
+</section>

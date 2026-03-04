@@ -1,0 +1,40 @@
+import { Routes } from '@angular/router';
+import { Home } from './features/home/home';
+import { Outlets } from './features/outlets/outlets';
+import { HearingTest } from './features/hearing-test/hearing-test';
+import { Products } from './features/products/products';
+import { Services } from './features/services/services';
+import { Blog } from './features/blog/blog';
+import { Compare } from './features/compare/compare';
+import { Cart } from './features/cart/cart';
+import { Checkout } from './features/checkout/checkout';
+import { OrderSuccess } from './features/order-success/order-success';
+import { PrivacyPolicy } from './features/legal/privacy-policy/privacy-policy';
+import { TermsOfService } from './features/legal/terms-of-service/terms-of-service';
+import { MedicalDisclaimer } from './features/legal/medical-disclaimer/medical-disclaimer';
+import { ProductDetail } from './features/product-detail/product-detail';
+import { Wishlist } from './features/wishlist/wishlist';
+import { Payment } from './features/payment/payment';
+import { PaymentSuccess } from './features/payment/payment-success';
+import { PaymentFailure } from './features/payment/payment-failure';
+
+export const routes: Routes = [
+    { path: '', component: Home },
+    { path: 'outlets', component: Outlets },
+    { path: 'hearing-test', component: HearingTest },
+    { path: 'products', component: Products },
+    { path: 'products/:id', component: ProductDetail },
+    { path: 'services', component: Services },
+    { path: 'blog', component: Blog },
+    { path: 'compare', component: Compare },
+    { path: 'cart', component: Cart },
+    { path: 'wishlist', component: Wishlist },
+    { path: 'checkout', component: Checkout },
+    { path: 'payment', component: Payment },
+    { path: 'payment/success', component: PaymentSuccess },
+    { path: 'payment/failure', component: PaymentFailure },
+    { path: 'order-success', component: OrderSuccess },
+    { path: 'privacy-policy', component: PrivacyPolicy },
+    { path: 'terms-of-service', component: TermsOfService },
+    { path: 'medical-disclaimer', component: MedicalDisclaimer }
+];

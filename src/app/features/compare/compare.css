@@ -1,0 +1,5 @@
+/* Comparison table specific styles */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}

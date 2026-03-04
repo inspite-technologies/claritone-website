@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-6">
+    <div
+        class="max-w-xl w-full bg-white dark:bg-slate-900 rounded-[3rem] p-12 text-center shadow-2xl border border-slate-100 dark:border-slate-800">
+        <!-- Success Icon -->
+        <div
+            class="w-32 h-32 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-8 success-icon-animate">
+            <span class="material-symbols-outlined text-green-600 text-6xl font-bold">check_circle</span>
+        </div>
+
+        <h1 class="text-4xl font-black text-slate-900 dark:text-white mb-4">Payment Successful!</h1>
+        <p class="text-slate-600 dark:text-gray-400 text-lg mb-8">
+            Thank you for choosing Claritone. Your hearing journey begins today.
+        </p>
+
+        <!-- Order Information Card -->
+        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 mb-10 text-left space-y-4">
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Order ID</span>
+                <span class="font-mono font-bold text-primary">{{ orderId }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Estimated Delivery</span>
+                <span class="font-bold dark:text-white">{{ deliveryDate }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-500">Status</span>
+                <span
+                    class="bg-green-100 text-green-700 text-[10px] font-black px-3 py-1 rounded-full uppercase">Processing</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <button routerLink="/products"
+                class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white h-14 rounded-xl font-bold hover:bg-slate-200 transition-colors">
+                Continue Shopping
+            </button>
+            <button routerLink="/"
+                class="bg-primary text-white h-14 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-red-700 transition-colors">
+                Go to Home
+            </button>
+        </div>
+
+        <!-- Support Link -->
+        <p class="mt-8 text-sm text-slate-400">
+            A confirmation email has been sent to your address.
+            <br>Need help? <a class="text-primary font-bold hover:underline cursor-pointer">Contact Support</a>
+        </p>
+    </div>
+</div>

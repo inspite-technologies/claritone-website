@@ -1,0 +1,71 @@
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+}
+
+/* Service Card Pastel Backgrounds with Gradients */
+.bg-tan {
+    background: linear-gradient(135deg, #FDF7F2 0%, #F3E4D6 100%);
+}
+
+.bg-mint {
+    background: linear-gradient(135deg, #F0F9F9 0%, #E1F3F2 100%);
+}
+
+.bg-blue-light {
+    background: linear-gradient(135deg, #EFF6FB 0%, #D4E5F1 100%);
+}
+
+.service-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.dark .service-card {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.service-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 30px 50px -12px rgb(0 0 0 / 0.15);
+}
+
+.service-card .icon-wrapper {
+    transition: all 0.5s ease;
+}
+
+.service-card:hover .icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+    background-color: theme('colors.primary');
+    color: white;
+}
+
+.service-card:hover .icon-wrapper span {
+    color: white;
+}
+
+.service-card-image {
+    position: absolute;
+    right: -10%;
+    bottom: -10%;
+    width: 60%;
+    opacity: 0.9;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-card-image {
+    transform: scale(1.1) rotate(-5deg);
+}
