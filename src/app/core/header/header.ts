@@ -77,6 +77,18 @@ export class Header implements OnInit {
   }
 
   onDateChange() {
+    if (this.bookingForm.preferredDay) {
+      const [year, month, day] = this.bookingForm.preferredDay.split('-').map(Number);
+      const selectedDate = new Date(year, month - 1, day);
+      if (selectedDate.getDay() === 0) {
+        this.toastr.error('Sundays are closed. Please select another day.', 'Store Closed');
+        this.bookingForm.preferredDay = '';
+        this.availableSlots = [];
+        this.bookingForm.slotId = '';
+        return;
+      }
+    }
+
     if (this.bookingForm.preferredDay && this.bookingForm.location) {
       this.isLoadingSlots = true;
       this.availableSlots = [];

@@ -74,10 +74,10 @@ export class WishlistService {
         this.wishlistSubject.next(this.wishlistItems);
     }
 
-    addToWishlist(product: Product) {
-        if (typeof window !== 'undefined' && !localStorage.getItem('claritone_token')) {
+    addToWishlist(product: Product): boolean {
+        if (!this.api.isAuthenticated()) {
             this.router.navigate(['/login']);
-            return;
+            return false;
         }
 
         const existingItem = this.wishlistItems.find(item => item.id === product.id);
@@ -92,6 +92,7 @@ export class WishlistService {
                 });
             }
         }
+        return true;
     }
 
     removeFromWishlist(productId: string) {
@@ -105,11 +106,12 @@ export class WishlistService {
         }
     }
 
-    toggleWishlist(product: Product) {
+    toggleWishlist(product: Product): boolean {
         if (this.isInWishlist(product.id)) {
             this.removeFromWishlist(product.id);
+            return true;
         } else {
-            this.addToWishlist(product);
+            return this.addToWishlist(product);
         }
     }
 

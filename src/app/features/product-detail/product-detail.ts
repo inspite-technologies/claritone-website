@@ -36,7 +36,12 @@ export class ProductDetail implements OnInit {
 
     toggleWishlist() {
         if (this.product) {
-            this.wishlistService.toggleWishlist(this.product);
+            const success = this.wishlistService.toggleWishlist(this.product);
+            if (success && this.isInWishlist()) {
+                this.toastr.success(`${this.product.name} added to wishlist!`, 'Success');
+            } else if (success && !this.isInWishlist()) {
+                this.toastr.info(`${this.product.name} removed from wishlist.`, 'Wishlist');
+            }
         }
     }
 
@@ -91,8 +96,10 @@ export class ProductDetail implements OnInit {
 
     addToCart() {
         if (this.product) {
-            this.cartService.addToCart(this.product, 1);
-            this.toastr.success(`${this.product.name} added to cart!`, 'Success');
+            const success = this.cartService.addToCart(this.product, 1);
+            if (success) {
+                this.toastr.success(`${this.product.name} added to cart!`, 'Success');
+            }
         }
     }
 }

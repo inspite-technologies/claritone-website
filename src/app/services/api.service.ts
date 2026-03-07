@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class ApiService {
-    private baseUrl = '/api'; // Relative URL, proxied to backend
+    private baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+        ? '/api'
+        : 'https://claritone-api.onrender.com/api';
 
     constructor(private http: HttpClient) { }
 
@@ -19,6 +21,11 @@ export class ApiService {
             headers = headers.set('Authorization', `Bearer ${token}`);
         }
         return headers;
+    }
+
+    isAuthenticated(): boolean {
+        if (typeof window === 'undefined') return false;
+        return !!localStorage.getItem('claritone_token');
     }
 
     get<T>(endpoint: string): Observable<T> {

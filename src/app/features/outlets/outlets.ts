@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -42,6 +42,7 @@ export class Outlets implements OnInit {
     private apiService: ApiService,
     private appointmentService: AppointmentService,
     private storeService: StoreService,
+    private router: Router,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -66,6 +67,18 @@ export class Outlets implements OnInit {
   }
 
   onDateChange() {
+    if (this.bookingForm.preferredDay) {
+      const [year, month, day] = this.bookingForm.preferredDay.split('-').map(Number);
+      const selectedDate = new Date(year, month - 1, day);
+      if (selectedDate.getDay() === 0) {
+        this.toastr.error('Sundays are closed. Please select another day.', 'Store Closed');
+        this.bookingForm.preferredDay = '';
+        this.availableSlots = [];
+        this.bookingForm.slotId = '';
+        return;
+      }
+    }
+
     if (this.bookingForm.preferredDay && this.bookingForm.location) {
       this.isLoadingSlots = true;
       this.availableSlots = [];
@@ -92,6 +105,12 @@ export class Outlets implements OnInit {
   }
 
   openBookingModal(storeId: string) {
+    if (!this.apiService.isAuthenticated()) {
+      this.toastr.info('Please login to book an appointment', 'Login Required');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     const store = this.stores.find(s => s._id === storeId);
     this.selectedLocationId = storeId;
     this.selectedLocationName = store ? store.name : '';
@@ -123,6 +142,12 @@ export class Outlets implements OnInit {
   }
 
   submitBooking() {
+    if (!this.apiService.isAuthenticated()) {
+      this.toastr.warning('Session expired. Please login again.', 'Warning');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     // Validate form
     if (!this.bookingForm.name || !this.bookingForm.contactNumber || !this.bookingForm.preferredDay || !this.bookingForm.slotId || !this.bookingForm.languageId) {
       this.toastr.warning('Please fill in all required fields', 'Warning');

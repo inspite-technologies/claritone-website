@@ -44,7 +44,14 @@ export class Products implements OnInit {
   ) { }
 
   toggleWishlist(product: Product) {
-    this.wishlistService.toggleWishlist(product);
+    const success = this.wishlistService.toggleWishlist(product);
+    if (success) {
+      if (this.isInWishlist(product.id)) {
+        this.toastr.success(`${product.name} added to wishlist!`, 'Success');
+      } else {
+        this.toastr.info(`${product.name} removed from wishlist.`, 'Wishlist');
+      }
+    }
   }
 
   isInWishlist(productId: string): boolean {
@@ -175,8 +182,10 @@ export class Products implements OnInit {
   }
 
   addToCart(product: Product) {
-    this.cartService.addToCart(product, 1);
-    this.toastr.success(`${product.name} added to cart!`, 'Success');
+    const success = this.cartService.addToCart(product, 1);
+    if (success) {
+      this.toastr.success(`${product.name} added to cart!`, 'Success');
+    }
   }
 
   goToPage(page: number) {

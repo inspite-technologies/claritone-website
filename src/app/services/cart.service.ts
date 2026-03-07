@@ -80,10 +80,10 @@ export class CartService {
         this.cartSubject.next(this.cartItems);
     }
 
-    addToCart(product: Product, quantity: number = 1) {
-        if (typeof window !== 'undefined' && !localStorage.getItem('claritone_token')) {
+    addToCart(product: Product, quantity: number = 1): boolean {
+        if (!this.api.isAuthenticated()) {
             this.router.navigate(['/login']);
-            return;
+            return false;
         }
 
         const existingItem = this.cartItems.find(item => item.product.id === product.id);
@@ -101,6 +101,7 @@ export class CartService {
                 error: (err) => console.error('Failed to sync add to cart', err)
             });
         }
+        return true;
     }
 
     removeFromCart(productId: string) {
