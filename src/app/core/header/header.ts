@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { ApiService } from '../../services/api.service';
 import { AppointmentService, Language, Slot } from '../../services/appointment.service';
+import { StoreService, Store } from '../../services/store.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -33,16 +36,18 @@ export class Header implements OnInit {
     notes: ''
   };
 
-  outlets = [
-    { name: 'Downtown Medical Center', address: '450 Healthcare Plaza, Suite 200, Downtown Core, CA 90210' },
-    { name: 'Westside Wellness Hub', address: '1280 Ocean Boulevard, Marina District, CA 90401' },
-    { name: 'North Valley Clinic', address: '899 Mountain Road, Valley Square, CA 91301' }
-  ];
+  stores: Store[] = [];
+  isLoadingStores = false;
 
   constructor(
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private apiService: ApiService,
+    private storeService: StoreService,
+    private toastr: ToastrService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -52,32 +57,48 @@ export class Header implements OnInit {
     this.wishlistService.wishlist$.subscribe(items => {
       this.wishlistCount = items.length;
     });
-    this.loadLanguages();
-  }
 
-  loadLanguages() {
-    this.appointmentService.getLanguages().subscribe({
-      next: (langs) => this.languages = langs,
-      error: (err) => console.error('Failed to load languages', err)
+    this.storeService.loadInitialData();
+
+    this.storeService.stores$.subscribe(stores => {
+      this.stores = stores;
+      this.cdr.detectChanges();
+    });
+
+    this.storeService.languages$.subscribe(langs => {
+      this.languages = langs;
+      this.cdr.detectChanges();
+    });
+
+    this.storeService.isLoadingStores$.subscribe(isLoading => {
+      this.isLoadingStores = isLoading;
+      this.cdr.detectChanges();
     });
   }
 
   onDateChange() {
-    if (this.bookingForm.preferredDay) {
+    if (this.bookingForm.preferredDay && this.bookingForm.location) {
       this.isLoadingSlots = true;
       this.availableSlots = [];
       this.bookingForm.slotId = '';
 
-      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay).subscribe({
+      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay, this.bookingForm.location).subscribe({
         next: (slots) => {
+          console.log('Slots received in Header:', slots);
           this.availableSlots = slots;
           this.isLoadingSlots = false;
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Failed to load slots', err);
           this.isLoadingSlots = false;
+          this.toastr.error('Failed to load available time slots', 'Error');
+          this.cdr.detectChanges();
         }
       });
+    } else {
+      this.availableSlots = [];
+      this.bookingForm.slotId = '';
     }
   }
 
@@ -119,7 +140,7 @@ export class Header implements OnInit {
   submitBooking() {
     // Validate form
     if (!this.bookingForm.name || !this.bookingForm.contactNumber || !this.bookingForm.preferredDay || !this.bookingForm.slotId || !this.bookingForm.languageId) {
-      alert('Please fill in all required fields');
+      this.toastr.warning('Please fill in all required fields', 'Warning');
       return;
     }
 
@@ -128,24 +149,46 @@ export class Header implements OnInit {
       phone: this.bookingForm.contactNumber,
       languageId: this.bookingForm.languageId,
       date: this.bookingForm.preferredDay,
-      slotId: this.bookingForm.slotId
+      slotId: this.bookingForm.slotId,
+      storeId: this.bookingForm.location,
+      additionalNotes: this.bookingForm.notes
     };
 
     this.appointmentService.createAppointment(payload).subscribe({
       next: (res) => {
         console.log('Booking submitted:', res);
-        alert(`Appointment requested successfully!\n\nOur team will confirm your appointment shortly via phone.`);
+        this.toastr.success('Appointment requested successfully!\n\nOur team will confirm your appointment shortly via phone.', 'Success');
         this.closeBookingModal();
       },
       error: (err) => {
         console.error('Booking failed', err);
-        alert('Failed to book appointment. Please check your connection or try again later.');
+        this.toastr.error('Failed to book appointment. Please check your connection or try again later.', 'Error');
       }
     });
   }
 
   getMinDate(): string {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  get isAuthenticated(): boolean {
+    if (typeof window !== 'undefined') {
+      return !!localStorage.getItem('claritone_token');
+    }
+    return false;
+  }
+
+  logout() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('claritone_token');
+      this.cartService.clearCart();
+      this.wishlistService.clearWishlist();
+      this.toastr.success('Logged out successfully', 'Success');
+      this.router.navigate(['/']);
+    }
   }
 }

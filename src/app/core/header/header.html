@@ -1,12 +1,10 @@
 <header
-    class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    class="sticky top-0 z-[100] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
     <div class="max-w-[1400px] mx-auto">
         <div class="flex items-center justify-between px-4 sm:px-6 lg:px-10 h-16 sm:h-20">
             <!-- Logo -->
             <div class="flex items-center space-x-3">
                 <img src="assets/logo.png" alt="Claritone Logo" class="h-8 sm:h-10 w-auto" />
-                <span
-                    class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Claritone</span>
             </div>
 
             <!-- Desktop Navigation -->
@@ -41,10 +39,6 @@
             <div class="flex items-center space-x-2 sm:space-x-4">
                 <div class="hidden sm:flex items-center space-x-2">
                     <button
-                        class="p-2.5 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer">
-                        <span class="material-symbols-outlined text-2xl">search</span>
-                    </button>
-                    <button
                         class="p-2.5 text-slate-500 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer"
                         (click)="toggleDarkMode()">
                         <span class="material-symbols-outlined text-2xl">dark_mode</span>
@@ -77,6 +71,28 @@
                     Book Appointment
                 </button>
 
+                <!-- Auth Buttons -->
+                <a *ngIf="!isAuthenticated" routerLink="/login"
+                    class="hidden xl:flex items-center gap-2 px-6 py-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer border border-slate-200 dark:border-slate-800 shadow-sm"
+                    title="Login">
+                    <span class="material-symbols-outlined text-xl text-primary font-semibold">login</span>
+                    <span class="text-[15px] font-bold text-slate-700 dark:text-slate-200">Login</span>
+                </a>
+
+                <!-- Profile Icon -->
+                <a *ngIf="isAuthenticated" routerLink="/profile"
+                    class="hidden xl:flex p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all cursor-pointer border border-slate-200 dark:border-slate-800 shadow-sm"
+                    title="My Profile">
+                    <span class="material-symbols-outlined text-2xl text-primary font-semibold">person</span>
+                </a>
+
+                <button *ngIf="isAuthenticated" (click)="logout()"
+                    class="hidden xl:flex items-center gap-2 px-6 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-full transition-all cursor-pointer border border-red-100 dark:border-red-900/30 shadow-sm"
+                    title="Logout">
+                    <span class="material-symbols-outlined text-xl text-red-600 font-semibold">logout</span>
+                    <span class="text-[15px] font-bold text-red-600">Logout</span>
+                </button>
+
                 <!-- Mobile Menu Button -->
                 <button (click)="toggleMobileMenu()" type="button"
                     class="flex items-center justify-center lg:hidden p-3 min-w-[48px] min-h-[48px] text-slate-700 dark:text-slate-200 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all cursor-pointer border border-slate-200 dark:border-slate-700">
@@ -86,67 +102,88 @@
             </div>
         </div>
     </div>
-
-    <!-- Mobile Menu Drawer -->
-    <div *ngIf="mobileMenuOpen"
-        class="lg:hidden fixed inset-0 top-16 sm:top-20 z-40 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 overflow-y-auto">
-        <nav class="flex flex-col p-6 space-y-1">
-            <a routerLink="/" (click)="closeMobileMenu()"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Home</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-            <a routerLink="/products" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Products</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-            <a routerLink="/compare" (click)="closeMobileMenu()"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Compare</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-            <a routerLink="/services" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Services</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-            <a routerLink="/outlets" (click)="closeMobileMenu()"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Locations</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-            <a routerLink="/blog" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
-                class="flex items-center justify-between py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                <span>Blog</span>
-                <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-            </a>
-
-            <!-- Mobile CTA -->
-            <div class="pt-6 border-t border-slate-200 dark:border-slate-800 mt-4">
-                <button (click)="openBookingModal()"
-                    class="flex items-center justify-center w-full bg-primary text-white py-4 rounded-xl text-base font-bold hover:bg-[#c4161b] transition-all shadow-lg cursor-pointer">
-                    <span class="material-symbols-outlined mr-2">calendar_today</span>
-                    Book Appointment
-                </button>
-                <a routerLink="/hearing-test" (click)="closeMobileMenu()"
-                    class="flex items-center justify-center w-full bg-secondary text-white py-4 rounded-xl text-base font-bold hover:bg-[#004a80] transition-all shadow-lg cursor-pointer mt-3">
-                    <span class="material-symbols-outlined mr-2">hearing</span>
-                    Free Hearing Test
-                </a>
-            </div>
-
-            <!-- Mobile Dark Mode Toggle -->
-            <div class="sm:hidden pt-6 border-t border-slate-200 dark:border-slate-800 mt-4">
-                <button (click)="toggleDarkMode()"
-                    class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-                    <span>Dark Mode</span>
-                    <span class="material-symbols-outlined">dark_mode</span>
-                </button>
-            </div>
-        </nav>
-    </div>
 </header>
+
+<!-- Mobile Menu Drawer -->
+<div *ngIf="mobileMenuOpen"
+    class="lg:hidden fixed inset-x-0 bottom-0 top-[64px] sm:top-[80px] z-[999] bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 overflow-y-auto shadow-2xl pb-20">
+    <nav class="flex flex-col p-6 space-y-2 relative z-[1000] w-full h-full">
+        <a routerLink="/" (click)="closeMobileMenu()"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Home</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/products" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Products</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/compare" (click)="closeMobileMenu()"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Compare</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/services" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Services</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/outlets" (click)="closeMobileMenu()"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Locations</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/blog" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Blog</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+
+        <!-- Mobile Auth -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 mt-4 w-full">
+            <a *ngIf="isAuthenticated" routerLink="/profile" (click)="closeMobileMenu()"
+                class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>My Profile</span>
+                <span class="material-symbols-outlined text-primary">person</span>
+            </a>
+            <button *ngIf="isAuthenticated" (click)="logout(); closeMobileMenu()"
+                class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all cursor-pointer">
+                <span>Logout</span>
+                <span class="material-symbols-outlined">logout</span>
+            </button>
+        </div>
+
+        <!-- Mobile CTA -->
+        <div class="pt-4 border-t border-slate-200 dark:border-slate-800 mt-4 w-full">
+            <button (click)="openBookingModal()"
+                class="flex items-center justify-center w-full bg-primary text-white py-4 rounded-xl text-base font-bold hover:bg-[#c4161b] transition-all shadow-lg cursor-pointer">
+                <span class="material-symbols-outlined mr-2">calendar_today</span>
+                Book Appointment
+            </button>
+            <a routerLink="/hearing-test" (click)="closeMobileMenu()"
+                class="flex items-center justify-center w-full bg-secondary text-white py-4 rounded-xl text-base font-bold hover:bg-[#004a80] transition-all shadow-lg cursor-pointer mt-3">
+                <span class="material-symbols-outlined mr-2">hearing</span>
+                Free Hearing Test
+            </a>
+
+            <!-- Mobile Login (Moved) -->
+            <a *ngIf="!isAuthenticated" routerLink="/login" (click)="closeMobileMenu()"
+                class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-primary hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer mt-3 border border-primary/20">
+                <span>Login</span>
+                <span class="material-symbols-outlined">login</span>
+            </a>
+        </div>
+
+        <!-- Mobile Dark Mode Toggle -->
+        <div class="sm:hidden pt-6 border-t border-slate-200 dark:border-slate-800 mt-4">
+            <button (click)="toggleDarkMode()"
+                class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+                <span>Dark Mode</span>
+                <span class="material-symbols-outlined">dark_mode</span>
+            </button>
+        </div>
+    </nav>
+</div>
 
 <!-- Global Booking Modal -->
 <div *ngIf="showBookingModal"
@@ -185,10 +222,10 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Preferred Location <span class="text-primary">*</span>
                     </label>
-                    <select [(ngModel)]="bookingForm.location" name="location" required
+                    <select [(ngModel)]="bookingForm.location" name="location" (change)="onDateChange()" required
                         class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
                         <option value="">Select a location</option>
-                        <option *ngFor="let outlet of outlets" [value]="outlet.name">{{ outlet.name }}</option>
+                        <option *ngFor="let store of stores" [value]="store._id">{{ store.name }}</option>
                     </select>
                 </div>
 
@@ -219,7 +256,7 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Preferred Day <span class="text-primary">*</span>
                     </label>
-                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (change)="onDateChange()"
+                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (ngModelChange)="onDateChange()"
                         name="preferredDay" required
                         class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         [min]="getMinDate()" />
@@ -250,7 +287,7 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Additional Notes (Optional)
                     </label>
-                    <textarea rows="3"
+                    <textarea rows="3" [(ngModel)]="bookingForm.notes" name="notes"
                         class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
                         placeholder="Any specific requirements or questions?"></textarea>
                 </div>

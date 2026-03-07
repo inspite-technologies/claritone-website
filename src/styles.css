@@ -46,3 +46,82 @@ body {
   /* Feature settings based on the original design */
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
+
+/* ─── Premium Buttons (Shared) ─── */
+.ht-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 14px 28px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.ht-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ht-btn--primary {
+  background: linear-gradient(135deg, #E31E24, #cc1a1f);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(227, 30, 36, 0.3);
+}
+
+.ht-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(227, 30, 36, 0.4);
+}
+
+.ht-btn--outline {
+  background: transparent;
+  color: #E31E24;
+  border: 2px solid #E31E24;
+}
+
+.ht-btn--outline:hover:not(:disabled) {
+  background: #fef2f2;
+  transform: translateY(-2px);
+}
+
+.ht-btn--large {
+  padding: 18px 36px;
+  font-size: 16px;
+  border-radius: 16px;
+}
+
+.ht-btn--ghost {
+  background: transparent;
+  color: #64748b;
+  padding: 10px 20px;
+  font-size: 13px;
+}
+
+.ht-btn--ghost:hover:not(:disabled) {
+  color: #E31E24;
+  background: #fef2f2;
+}
+
+.anime-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

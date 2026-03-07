@@ -1,197 +1,264 @@
-<section
-    class="min-h-screen bg-[#f0f7ff] dark:bg-slate-950 pt-20 pb-20 transition-colors duration-300 flex items-center justify-center">
-    <div class="container mx-auto px-6">
-        <div
-            class="max-w-xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden border border-blue-50 dark:border-slate-800">
-
-            <!-- HEADER / PROGRESS (Hidden in Result) -->
-            <div *ngIf="currentState !== 'result'" class="px-8 pt-8 flex justify-between items-center">
-                <img alt="Claritone Logo" class="h-8" src="assets/logo.png" />
-                <div class="flex gap-2">
-                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
-                        [ngClass]="currentState === 'person-selection' || currentState === 'setup' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'">
-                    </div>
-                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
-                        [ngClass]="currentState === 'test' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'"></div>
-                    <div class="w-2.5 h-2.5 rounded-full transition-colors"
-                        [ngClass]="currentState === 'lead-form' || currentState === 'result' ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'">
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-8 md:p-12">
-
-                <!-- 1. PERSON SELECTION -->
-                <div *ngIf="currentState === 'person-selection'" class="anime-fade-in text-center">
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Hi, Confirm the person's details!
-                    </h2>
-                    <p class="text-slate-500 dark:text-slate-400 mb-8">Choose who is taking the rapid hearing test</p>
-
-                    <div class="grid grid-cols-4 gap-4">
-                        <button *ngFor="let person of personOptions" (click)="selectPerson(person.id)"
-                            class="flex flex-col items-center group gap-2 transition-transform active:scale-95">
-                            <div
-                                class="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-slate-100 dark:border-slate-800 group-hover:border-primary group-hover:bg-primary/5 p-1 transition-all">
-                                <img [src]="person.avatar" [alt]="person.label"
-                                    class="w-full h-full object-cover rounded-full grayscale group-hover:grayscale-0 transition-all">
-                            </div>
-                            <span
-                                class="text-xs font-semibold text-slate-600 dark:text-slate-300 group-hover:text-primary">{{
-                                person.label }}</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 2. SETUP / PREREQUISITES -->
-                <div *ngIf="currentState === 'setup'" class="anime-slide-up text-center">
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-8">Ready to start?</h2>
-
-                    <div class="space-y-8 mb-12">
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-primary mb-4">
-                                <span class="material-symbols-outlined text-5xl">headphones</span>
-                            </div>
-                            <p class="text-slate-600 dark:text-slate-300 font-medium">Connect your headphones</p>
-                        </div>
-
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-primary mb-4">
-                                <span class="material-symbols-outlined text-5xl">volume_off</span>
-                            </div>
-                            <p class="text-slate-600 dark:text-slate-300 font-medium">Find a quiet environment</p>
-                        </div>
-                    </div>
-
-                    <button (click)="startTest()"
-                        class="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg">
-                        Start Assessment
-                    </button>
-                </div>
-
-                <!-- 3. QUESTIONNAIRE -->
-                <div *ngIf="currentState === 'test'" class="anime-slide-up">
-                    <div class="mb-8">
-                        <span class="text-xs font-bold text-primary uppercase tracking-widest block mb-2">Question {{
-                            currentStep + 1 }} of {{ questions.length }}</span>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-primary h-full transition-all duration-500"
-                                [style.width.%]="progressPercentage"></div>
-                        </div>
-                    </div>
-
-                    <h3 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-8 leading-tight">
-                        {{ currentQuestion.text }}
-                    </h3>
-
-                    <div class="space-y-4">
-                        <button *ngFor="let option of currentQuestion.options" (click)="selectOption(option.value)"
-                            class="w-full flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all hover:scale-[1.01]"
-                            [ngClass]="{
-                'border-primary bg-primary/5': isOptionSelected(option.value),
-                'border-slate-50 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 hover:border-primary/30': !isOptionSelected(option.value)
-              }">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center transition-colors"
-                                [ngClass]="isOptionSelected(option.value) ? 'bg-primary text-white' : 'bg-white dark:bg-slate-700 text-slate-400'">
-                                <span class="material-symbols-outlined">{{ option.icon }}</span>
-                            </div>
-                            <div>
-                                <span class="block font-bold text-slate-900 dark:text-white">{{ option.label }}</span>
-                                <span class="block text-sm text-slate-500 dark:text-slate-400">{{ option.description
-                                    }}</span>
-                            </div>
-                            <div *ngIf="isOptionSelected(option.value)" class="ml-auto">
-                                <span class="material-symbols-outlined text-primary">check_circle</span>
-                            </div>
-                        </button>
-                    </div>
-
-                    <div class="mt-8 flex justify-between">
-                        <button (click)="prevStep()"
-                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold flex items-center text-sm">
-                            <span class="material-symbols-outlined text-lg mr-1">arrow_back</span> Back
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 4. LEAD GENERATION FORM -->
-                <div *ngIf="currentState === 'lead-form'" class="anime-fade-in">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Almost there!</h2>
-                    <p class="text-slate-500 dark:text-slate-400 mb-8">Provide your details to see your hearing score.
-                    </p>
-
-                    <form (ngSubmit)="submitLead()" #leadFormTag="ngForm" class="space-y-6">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full
-                                Name</label>
-                            <div class="relative">
-                                <input type="text" [(ngModel)]="leadForm.fullName" name="fullName" required
-                                    placeholder="Enter your full name"
-                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mobile
-                                Number</label>
-                            <div class="relative">
-                                <input type="tel" [(ngModel)]="leadForm.phone" name="phone" required
-                                    placeholder="+91 XXXXX XXXXX"
-                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email ID
-                                (Optional)</label>
-                            <div class="relative">
-                                <input type="email" [(ngModel)]="leadForm.email" name="email"
-                                    placeholder="example@mail.com"
-                                    class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl py-4 px-6 focus:ring-2 focus:ring-primary outline-none transition-all dark:text-white">
-                            </div>
-                        </div>
-
-                        <button type="submit" [disabled]="!leadFormTag.form.valid"
-                            class="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg disabled:opacity-50 disabled:grayscale">
-                            View My Results
-                        </button>
-                    </form>
-                </div>
-
-                <!-- 5. RESULTS -->
-                <div *ngIf="currentState === 'result'" class="text-center anime-scale-in">
-                    <div
-                        class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-green-500/20">
-                        <span class="material-symbols-outlined text-4xl">check</span>
-                    </div>
-
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">You're All Set!</h2>
-                    <p class="text-slate-600 dark:text-slate-300 mb-10 leading-relaxed">
-                        Great job, {{ leadForm.fullName.split(' ')[0] }}! Your hearing checkup is complete. We've
-                        assessed your responses and our specialists are ready to discuss your results.
-                    </p>
-
-                    <div
-                        class="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-2xl mb-10 text-left border border-blue-100 dark:border-blue-800">
-                        <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">Next Recommended Step:</h4>
-                        <p class="text-sm text-blue-700 dark:text-blue-400">Schedule a professional audiometry test for
-                            a comprehensive diagnosis.</p>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
-                        <a routerLink="/outlets"
-                            class="bg-primary text-white py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg cursor-pointer">
-                            Book Appointment
-                        </a>
-                        <a routerLink="/"
-                            class="text-slate-500 hover:text-slate-800 dark:hover:text-white font-bold transition-all cursor-pointer">
-                            Back to Home
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+<div class="ht-page" [class.ht-page--blur]="!hasHeadphones && currentState !== 'result'">
+  <!-- Headphone Warning -->
+  <div *ngIf="!hasHeadphones && currentState !== 'result'" class="ht-modal-overlay">
+    <div class="ht-card ht-section anime-scale-in" style="max-width: 400px; text-align: center;">
+      <div class="ht-intro-icon" style="background: #f1f5f9; box-shadow: none;">
+        <span class="material-symbols-outlined" style="color: #475569;">headphones</span>
+      </div>
+      <h2 class="ht-title">Headset Required</h2>
+      <p class="ht-subtitle" style="margin-bottom: 24px;">Please connect your headphones or earphones to start. This
+        ensures accurate results for both ears.</p>
+      <button class="ht-btn ht-btn--primary ht-btn--large" (click)="checkHeadphones()">
+        I'VE CONNECTED THEM
+      </button>
     </div>
-</section>
+  </div>
+
+  <div class="ht-container">
+    <div class="ht-card" [class.ht-card--wide]="currentState === 'result'">
+
+      <!-- Stepper Tracking -->
+      <div class="ht-stepper">
+        <div class="ht-stepper__step" [class.active]="currentState === 'intro'"
+          [class.done]="currentState === 'test' || currentState === 'result'">
+          <div class="ht-stepper__dot">1</div>
+          <span>Intro</span>
+        </div>
+        <div class="ht-stepper__line" [class.done]="currentState === 'test' || currentState === 'result'"></div>
+        <div class="ht-stepper__step" [class.active]="currentState === 'test'" [class.done]="currentState === 'result'">
+          <div class="ht-stepper__dot">2</div>
+          <span>Screening</span>
+        </div>
+        <div class="ht-stepper__line" [class.done]="currentState === 'result'"></div>
+        <div class="ht-stepper__step" [class.active]="currentState === 'result'">
+          <div class="ht-stepper__dot">3</div>
+          <span>Results</span>
+        </div>
+      </div>
+
+      <!-- 1. INTRO SCREEN -->
+      <div *ngIf="currentState === 'intro'" class="ht-section anime-fade-in">
+        <div class="ht-intro-icon">
+          <span class="material-symbols-outlined">hearing</span>
+        </div>
+        <h1 class="ht-title">Professional Hearing Test</h1>
+        <p class="ht-subtitle">Assess your hearing health with our clinical-grade screening tool in under 3 minutes.</p>
+
+        <div class="ht-instructions">
+          <div class="ht-instruction-item">
+            <div class="ht-instruction-icon"><span class="material-symbols-outlined">volume_off</span></div>
+            <div>
+              <strong>Quiet Environment</strong>
+              <p>Find a room with minimal background noise.</p>
+            </div>
+          </div>
+          <div class="ht-instruction-item">
+            <div class="ht-instruction-icon"><span class="material-symbols-outlined">headphones</span></div>
+            <div>
+              <strong>Use Headphones</strong>
+              <p>Essential for testing one ear at a time.</p>
+            </div>
+          </div>
+          <div class="ht-instruction-item">
+            <div class="ht-instruction-icon"><span class="material-symbols-outlined">volume_up</span></div>
+            <div>
+              <strong>Set Volume to 50%</strong>
+              <p>Ensure your device volume is at a comfortable level.</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="ht-btn ht-btn--primary ht-btn--large" (click)="startInstructions()">
+          START HEARING TEST <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+        <p class="ht-disclaimer-small">This is a screening tool and does not replace a clinical audiogram.</p>
+      </div>
+
+      <!-- 2. SCREENING SCREEN -->
+      <div *ngIf="currentState === 'test'" class="ht-section anime-slide-up">
+        <div class="ht-test-progress">
+          <div class="ht-test-progress__label">
+            <span>Overall Progress</span>
+            <span class="ht-test-progress__pct">{{ progressPercentage }}%</span>
+          </div>
+          <div class="ht-test-progress__bar">
+            <div class="ht-test-progress__fill" [style.width.%]="progressPercentage"></div>
+          </div>
+        </div>
+
+        <div class="ht-test-info">
+          <div class="ht-ear-badge" [class.ht-ear-badge--left]="currentEar === 'left'"
+            [class.ht-ear-badge--right]="currentEar === 'right'">
+            <span class="material-symbols-outlined">earbuds</span>
+            {{ currentEar | titlecase }} Ear
+          </div>
+          <div class="ht-freq-badge">
+            <span class="material-symbols-outlined">graphic_eq</span>
+            {{ frequencyLabel }}
+          </div>
+        </div>
+
+        <div class="ht-wave-container" [class.ht-wave--active]="isPlayingTone">
+          <div class="ht-wave-circle ht-wave-circle--1"></div>
+          <div class="ht-wave-circle ht-wave-circle--2"></div>
+          <div class="ht-wave-circle ht-wave-circle--3"></div>
+          <div class="ht-wave-icon" [class.ht-wave-icon--left]="currentEar === 'left'"
+            [class.ht-wave-icon--right]="currentEar === 'right'">
+            <span class="material-symbols-outlined">volume_up</span>
+          </div>
+        </div>
+
+        <p class="ht-test-instruction" [class.ht-status-transition]="isTransitioning">{{ statusMessage }}</p>
+
+        <div class="ht-response-buttons">
+          <button class="ht-btn ht-btn--heard" (click)="onHeard()" [disabled]="isTransitioning">
+            <span class="material-symbols-outlined">check</span> I Heard It
+          </button>
+          <button class="ht-btn ht-btn--not-heard" (click)="onNotHeard()" [disabled]="isTransitioning">
+            <span class="material-symbols-outlined">close</span> Not Heard
+          </button>
+        </div>
+
+        <button *ngIf="!isPlayingTone && !isTransitioning" class="ht-btn ht-btn--ghost ht-btn--large"
+          (click)="playCurrentTone()">
+          <span class="material-symbols-outlined">replay</span> Play Sound Again
+        </button>
+      </div>
+
+      <!-- 3. RESULTS SCREEN -->
+      <div *ngIf="currentState === 'result'" class="ht-section anime-scale-in">
+        <div class="ht-result-header">
+          <div class="ht-result-check">
+            <span class="material-symbols-outlined">task_alt</span>
+          </div>
+          <h2 class="ht-title">TEST COMPLETE</h2>
+        </div>
+
+        <div class="ht-overall-badge" [class.cat-normal]="analysis.left === 'Normal' && analysis.right === 'Normal'"
+          [class.cat-moderate]="analysis.left !== 'Normal' || analysis.right !== 'Normal'">
+          <span class="ht-overall-label">Screening Assessment</span>
+          <span class="ht-overall-value">{{ analysis.left === 'Normal' && analysis.right === 'Normal' ? 'Hearing is
+            within Normal Range' : 'Potential Hearing Loss Detected' }}</span>
+        </div>
+
+        <div class="ht-ear-cards">
+          <div class="ht-ear-card ht-ear-card--left">
+            <div class="ht-ear-card__icon"><span class="material-symbols-outlined">hearing</span></div>
+            <h4>Left Ear</h4>
+            <div class="ht-ear-card__cat" [class.cat-normal]="analysis.left === 'Normal'"
+              [class.cat-moderate]="analysis.left !== 'Normal'">{{ analysis.left }}</div>
+          </div>
+          <div class="ht-ear-card ht-ear-card--right">
+            <div class="ht-ear-card__icon"><span class="material-symbols-outlined">hearing</span></div>
+            <h4>Right Ear</h4>
+            <div class="ht-ear-card__cat" [class.cat-normal]="analysis.right === 'Normal'"
+              [class.cat-moderate]="analysis.right !== 'Normal'">{{ analysis.right }}</div>
+          </div>
+        </div>
+
+        <div class="ht-ai-box">
+          <div class="ht-ai-box__header">
+            <span class="material-symbols-outlined">smart_toy</span>
+            AI Insight
+          </div>
+          <p class="ht-ai-box__text">
+            {{ analysis.showDifferenceMessage ? 'We detected a difference in hearing levels between your ears. ' : '' }}
+            {{ analysis.left !== 'Normal' || analysis.right !== 'Normal' ? 'Your screening suggests some hearing
+            difficulty. We recommend a full clinical evaluation.' : 'Your hearing thresholds appear healthy across the
+            tested frequencies.' }}
+          </p>
+        </div>
+
+        <div class="ht-cta-section">
+          <button class="ht-btn ht-btn--primary ht-btn--large" [routerLink]="['/outlets']">
+            BOOK CLINICAL APPOINTMENT
+          </button>
+          <button class="ht-btn ht-btn--outline ht-btn--large" (click)="openAssistant()">
+            <span class="material-symbols-outlined">chat</span> HEARING AID SUGGESTIONS
+          </button>
+          <button class="ht-btn ht-btn--ghost" (click)="restartTest()">CLOSE AND RESET</button>
+        </div>
+
+        <div class="ht-disclaimer">
+          <span class="material-symbols-outlined">info</span>
+          <p>This result is based on a screening only. For medical decisions, always consult with a certified
+            audiologist or hearing specialist.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 4. AI CONSULTATION MODAL -->
+<div class="chat-overlay" *ngIf="showConsultation" (click)="closeConsultation()">
+  <div class="chat-window anime-slide-up" (click)="$event.stopPropagation()">
+    <div class="chat-header">
+      <div class="bot-info">
+        <div class="bot-avatar">🩺</div>
+        <div>
+          <div class="bot-name">AI Consultation Result</div>
+          <div class="bot-status">Professional Analysis</div>
+        </div>
+      </div>
+      <button class="chat-close" (click)="closeConsultation()">×</button>
+    </div>
+
+    <div class="chat-messages" style="background: #fff;">
+      <div class="analyzing-state" *ngIf="isAnalyzing" style="text-align: center; padding: 40px 0;">
+        <div class="ai-orb" style="margin: 0 auto 20px;"></div>
+        <h3 style="font-weight: 700; color: #1e293b;">Analyzing Results...</h3>
+        <p style="color: #64748b; font-size: 14px;">Our AI is evaluating your frequency thresholds</p>
+      </div>
+
+      <div class="consultation-content anime-fade-in" *ngIf="!isAnalyzing && consultationData">
+        <div class="ht-overall-badge" style="margin-top: 0; background: #fef2f2; border: 1px solid #fee2e2;">
+          <span class="ht-overall-label" style="color: #991b1b;">Condition Indicator</span>
+          <span class="ht-overall-value" style="color: #dc2626;">{{ consultationData.condition }}</span>
+        </div>
+
+        <div class="ht-ai-box" style="margin-top: 20px; background: #fff; border: 1px solid #e2e8f0;">
+          <div class="ht-ai-box__header" style="color: #1e293b;">
+            <span class="material-symbols-outlined">description</span>
+            Professional Advice
+          </div>
+          <p class="ht-ai-box__text" style="color: #475569;">{{ consultationData.advice }}</p>
+        </div>
+
+        <button class="ht-btn ht-btn--primary ht-btn--large" style="margin-top: 20px;" [routerLink]="['/outlets']">
+          BOOK CLINICAL APPOINTMENT
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. AI CHATBOT MODAL (New Professional Styles) -->
+<div class="chat-overlay" *ngIf="showAiAssistant" (click)="closeAiAssistant()">
+  <div class="chat-window anime-slide-up" (click)="$event.stopPropagation()">
+    <div class="chat-header">
+      <div class="bot-info">
+        <div class="bot-avatar">🤖</div>
+        <div>
+          <div class="bot-name">Claritone AI Assistant</div>
+          <div class="bot-status">Online • Ready to help</div>
+        </div>
+      </div>
+      <button class="chat-close" (click)="closeAiAssistant()">×</button>
+    </div>
+
+    <div class="chat-messages" #chatMessages>
+      <div *ngFor="let msg of assistantMessages" [class]="'msg-wrapper ' + msg.type">
+        <div class="message" [class.result-message]="msg.type === 'result'">{{ msg.text }}</div>
+        <div class="msg-options" *ngIf="msg.options">
+          <button *ngFor="let opt of msg.options" class="opt-btn" (click)="handleAssistantOption(opt)">{{ opt
+            }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <p>© 2026 Claritone Medical AI • Secure Consultation</p>
+    </div>
+  </div>
+</div>

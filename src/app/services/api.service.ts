@@ -14,7 +14,7 @@ export class ApiService {
         let headers = new HttpHeaders({
             'Content-Type': 'application/json'
         });
-        const token = localStorage.getItem('claritone_token');
+        const token = typeof window !== 'undefined' ? localStorage.getItem('claritone_token') : null;
         if (token) {
             headers = headers.set('Authorization', `Bearer ${token}`);
         }

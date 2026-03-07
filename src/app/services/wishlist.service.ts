@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { Product } from './product.service';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -11,11 +12,12 @@ export class WishlistService {
     private wishlistSubject = new BehaviorSubject<Product[]>([]);
     public wishlist$ = this.wishlistSubject.asObservable();
 
-    constructor(private api: ApiService) {
+    constructor(private api: ApiService, private router: Router) {
         this.loadWishlist();
     }
 
     private loadWishlist() {
+        if (typeof window === 'undefined') return;
         // Fallback to local storage for instant load
         const savedWishlist = localStorage.getItem('claritone_wishlist');
         if (savedWishlist) {
@@ -66,18 +68,25 @@ export class WishlistService {
     }
 
     private saveWishlistLocal() {
-        localStorage.setItem('claritone_wishlist', JSON.stringify(this.wishlistItems));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('claritone_wishlist', JSON.stringify(this.wishlistItems));
+        }
         this.wishlistSubject.next(this.wishlistItems);
     }
 
     addToWishlist(product: Product) {
+        if (typeof window !== 'undefined' && !localStorage.getItem('claritone_token')) {
+            this.router.navigate(['/login']);
+            return;
+        }
+
         const existingItem = this.wishlistItems.find(item => item.id === product.id);
 
         if (!existingItem) {
             this.wishlistItems.push(product);
             this.saveWishlistLocal();
 
-            if (localStorage.getItem('claritone_token')) {
+            if (typeof window !== 'undefined' && localStorage.getItem('claritone_token')) {
                 this.api.post<any>(`wishlist/${product.id}`, {}).subscribe({
                     error: (err) => console.error('Failed to sync add to wishlist', err)
                 });
@@ -89,7 +98,7 @@ export class WishlistService {
         this.wishlistItems = this.wishlistItems.filter(item => item.id !== productId);
         this.saveWishlistLocal();
 
-        if (localStorage.getItem('claritone_token')) {
+        if (typeof window !== 'undefined' && localStorage.getItem('claritone_token')) {
             this.api.delete<any>(`wishlist/${productId}`).subscribe({
                 error: (err) => console.error('Failed to sync remove from wishlist', err)
             });

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { AppointmentService, Language, Slot } from '../../services/appointment.service';
+import { StoreService, Store } from '../../services/store.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-outlets',
@@ -14,7 +16,9 @@ import { AppointmentService, Language, Slot } from '../../services/appointment.s
 })
 export class Outlets implements OnInit {
   showBookingModal = false;
-  selectedLocation = '';
+  selectedLocationId = '';
+  selectedLocationName = '';
+
 
   languages: Language[] = [];
   availableSlots: Slot[] = [];
@@ -30,65 +34,74 @@ export class Outlets implements OnInit {
     notes: ''
   };
 
-  stores: any[] = [];
+  stores: Store[] = [];
   isLoadingStores = true;
+  visibleTimings: { [key: string]: boolean } = {};
 
   constructor(
     private apiService: ApiService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private storeService: StoreService,
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    this.loadLanguages();
-    this.loadStores();
-  }
+    this.storeService.loadInitialData();
 
-  loadStores() {
-    this.isLoadingStores = true;
-    this.apiService.get<any>('stores').subscribe({
-      next: (res) => {
-        if (res.success && res.data) {
-          this.stores = res.data;
-        }
-        this.isLoadingStores = false;
-      },
-      error: (err) => {
-        console.error('Failed to load stores', err);
-        this.isLoadingStores = false;
-      }
+    this.storeService.stores$.subscribe(stores => {
+      this.stores = stores;
+      this.cdr.detectChanges();
     });
-  }
 
-  loadLanguages() {
-    this.appointmentService.getLanguages().subscribe({
-      next: (langs) => this.languages = langs,
-      error: (err) => console.error('Failed to load languages', err)
+    this.storeService.languages$.subscribe(langs => {
+      this.languages = langs;
+      this.cdr.detectChanges();
+    });
+
+    this.storeService.isLoadingStores$.subscribe(isLoading => {
+      this.isLoadingStores = isLoading;
+      this.cdr.detectChanges();
     });
   }
 
   onDateChange() {
-    if (this.bookingForm.preferredDay) {
+    if (this.bookingForm.preferredDay && this.bookingForm.location) {
       this.isLoadingSlots = true;
       this.availableSlots = [];
       this.bookingForm.slotId = '';
 
-      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay).subscribe({
+      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay, this.bookingForm.location).subscribe({
         next: (slots) => {
+          console.log('Slots received in Outlets:', slots);
           this.availableSlots = slots;
           this.isLoadingSlots = false;
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Failed to load slots', err);
           this.isLoadingSlots = false;
+          this.toastr.error('Failed to load available time slots', 'Error');
+          this.cdr.detectChanges();
         }
       });
+    } else {
+      this.availableSlots = [];
+      this.bookingForm.slotId = '';
     }
   }
 
-  openBookingModal(locationName: string) {
-    this.selectedLocation = locationName;
-    this.bookingForm.location = locationName;
+  openBookingModal(storeId: string) {
+    const store = this.stores.find(s => s._id === storeId);
+    this.selectedLocationId = storeId;
+    this.selectedLocationName = store ? store.name : '';
+    this.bookingForm.location = storeId;
     this.showBookingModal = true;
+
+    // If a date happens to be pre-filled, fetch slots
+    if (this.bookingForm.preferredDay) {
+      this.onDateChange();
+    }
   }
 
   closeBookingModal() {
@@ -96,19 +109,10 @@ export class Outlets implements OnInit {
     this.resetForm();
   }
 
-  onStateChange(event: any) {
-    const selectedState = event.target.value;
-    if (selectedState) {
-      this.openBookingModal(`Any Clinic in ${selectedState}`);
-      // Reset the dropdown back to "All States" so the user can select it again
-      event.target.value = "";
-    }
-  }
-
   resetForm() {
     this.bookingForm = {
       name: '',
-      location: this.selectedLocation,
+      location: this.selectedLocationId,
       contactNumber: '',
       languageId: '',
       preferredDay: '',
@@ -121,7 +125,7 @@ export class Outlets implements OnInit {
   submitBooking() {
     // Validate form
     if (!this.bookingForm.name || !this.bookingForm.contactNumber || !this.bookingForm.preferredDay || !this.bookingForm.slotId || !this.bookingForm.languageId) {
-      alert('Please fill in all required fields');
+      this.toastr.warning('Please fill in all required fields', 'Warning');
       return;
     }
 
@@ -130,50 +134,50 @@ export class Outlets implements OnInit {
       phone: this.bookingForm.contactNumber,
       languageId: this.bookingForm.languageId,
       date: this.bookingForm.preferredDay,
-      slotId: this.bookingForm.slotId
+      slotId: this.bookingForm.slotId,
+      storeId: this.bookingForm.location,
+      additionalNotes: this.bookingForm.notes
     };
 
     this.appointmentService.createAppointment(payload).subscribe({
       next: (res) => {
         console.log('Booking submitted:', res);
-        alert(`Appointment requested successfully!\n\nOur team will confirm your appointment shortly via phone.`);
+        this.toastr.success('Appointment requested successfully!\n\nOur team will confirm your appointment shortly via phone.', 'Success');
         this.closeBookingModal();
       },
       error: (err) => {
         console.error('Booking failed', err);
-        alert('Failed to book appointment. Please check your connection or try again later.');
+        this.toastr.error('Failed to book appointment. Please check your connection or try again later.', 'Error');
       }
     });
   }
 
 
-  useMyLocation() {
-    alert('Requesting your current location...');
-    console.log('Using my location');
-  }
-
   getDirections(location: string) {
-    alert(`Getting directions to ${location}...`);
+    this.toastr.info(`Getting directions to ${location}...`);
     console.log('Getting directions to:', location);
   }
 
   toggleAllLocations() {
-    alert('Loading all 15+ centers nationwide...');
+    this.toastr.info('Loading all 15+ centers nationwide...');
     console.log('Toggling all locations');
   }
 
-  expandMap() {
-    alert('Opening interactive map in full view...');
-    console.log('Expanding map');
-  }
-
   requestHomeVisit() {
-    alert('Request for home visit received! Our team will contact you shortly to schedule.');
+    this.toastr.success('Request for home visit received! Our team will contact you shortly to schedule.', 'Success');
     console.log('Home visit requested');
   }
 
+  toggleTimings(storeId: string) {
+    this.visibleTimings[storeId] = !this.visibleTimings[storeId];
+    this.cdr.detectChanges();
+  }
+
   getMinDate(): string {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

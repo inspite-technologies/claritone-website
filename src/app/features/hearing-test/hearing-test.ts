@@ -1,227 +1,410 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnDestroy, AfterViewInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
+import { HearingPlayerService } from './hearing-player.service';
+import { ToastrService } from 'ngx-toastr';
 
-interface Question {
-  id: number;
-  text: string;
-  options: {
-    label: string;
-    description: string;
-    icon: string;
-    value: string;
-  }[];
+type TestState = 'intro' | 'test' | 'result';
+
+interface ConsultationData {
+  condition: string;
+  advice: string;
+  recommendations: string[];
 }
-
-interface PersonOption {
-  id: string;
-  label: string;
-  avatar: string;
-}
-
-type TestState = 'person-selection' | 'setup' | 'test' | 'lead-form' | 'result';
 
 @Component({
   selector: 'app-hearing-test',
   standalone: true,
   imports: [RouterLink, CommonModule, FormsModule],
-  providers: [DecimalPipe],
   templateUrl: './hearing-test.html',
   styleUrls: ['./hearing-test.css'],
 })
-export class HearingTest {
-  currentState: any = 'person-selection';
-  currentStep = 0;
-  answers: { [key: number]: string } = {};
+export class HearingTest implements OnDestroy, AfterViewInit {
+  currentState: TestState = 'intro';
+  hasHeadphones = false;
+
+  // Test state
+  readonly frequencies = [250, 500, 1000, 2000, 4000];
+  readonly ears: ('left' | 'right')[] = ['left', 'right'];
+  currentFreqIndex = 0;
+  currentEarIndex = 0;
+  readonly testVolumeLevel = 2; // Fixed screening level
+
+  isPlayingTone = false;
   isTransitioning = false;
-  private autoAdvanceTimer: any;
+  toneTimeout: any = null;
+  transitionTimeout: any = null;
+  statusMessage = '';
 
-  // Lead Form Data
-  leadForm = {
-    fullName: '',
-    phone: '',
-    email: ''
-  };
+  responses = new Map<string, boolean>(); // true = heard, false = not heard
+  completedSteps = 0;
+  totalSteps = 0;
 
-  // Person Selection Options
-  personOptions: PersonOption[] = [
-    { id: 'me', label: 'Me', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' },
-    { id: 'mom', label: 'Mom', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135789.png' },
-    { id: 'dad', label: 'Dad', avatar: 'https://cdn-icons-png.flaticon.com/512/488/488931.png' },
-    { id: 'son', label: 'Son', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135823.png' },
-    { id: 'daughter', label: 'Daughter', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png' },
-    { id: 'grandfather', label: 'Grand Father', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135708.png' },
-    { id: 'grandmother', label: 'Grand Mother', avatar: 'https://cdn-icons-png.flaticon.com/512/4134/4134175.png' },
-    { id: 'others', label: 'Others', avatar: 'https://cdn-icons-png.flaticon.com/512/3135/3135768.png' }
-  ];
+  analysis: any = null;
 
-  selectedPersonId: string | null = null;
+  // Consultation State
+  showConsultation = false;
+  isAnalyzing = false;
+  consultationData: ConsultationData | null = null;
 
-  questions: Question[] = [
+  // AI Assistant (Chatbot) State
+  showAiAssistant = false;
+  assistantMessages: { text: string, type: 'bot' | 'user' | 'result', options?: string[] }[] = [];
+  currentQuestionIndex = -1;
+  userAnswers: Record<string, string> = {};
+
+  readonly questions = [
     {
-      id: 1,
-      text: 'How well do you hear in noisy environments?',
-      options: [
-        { label: 'Perfectly', description: 'I can follow conversations clearly anywhere.', icon: 'sentiment_satisfied', value: 'good' },
-        { label: 'With some difficulty', description: 'I often ask people to repeat themselves.', icon: 'sentiment_neutral', value: 'fair' },
-        { label: 'Hardly at all', description: 'I find it almost impossible to communicate.', icon: 'sentiment_dissatisfied', value: 'poor' },
-      ]
+      id: 'q1',
+      text: 'What is your age group?',
+      options: ['Under 18', '18 – 40', '41 – 60', '60+']
     },
     {
-      id: 2,
-      text: 'Do you find yourself turning up the TV volume?',
-      options: [
-        { label: 'Never', description: 'I listen at the same volume as everyone else.', icon: 'volume_up', value: 'good' },
-        { label: 'Sometimes', description: 'Others sometimes complain it is too loud.', icon: 'volume_down', value: 'fair' },
-        { label: 'Always', description: 'I need it much louder than anyone else.', icon: 'volume_off', value: 'poor' },
-      ]
+      id: 'q2',
+      text: 'How would you describe your lifestyle?',
+      options: ['Office-based', 'Active / Outdoor', 'Mostly at home', 'Social / Frequent meetings']
     },
     {
-      id: 3,
-      text: 'Do you struggle to hear on the phone?',
-      options: [
-        { label: 'No issues', description: 'I hear clearly on both ears.', icon: 'phone_in_talk', value: 'good' },
-        { label: 'Occasionally', description: 'I prefer speakerphone or one specific ear.', icon: 'phone_missed', value: 'fair' },
-        { label: 'Frequently', description: 'Talking on the phone is very frustrating.', icon: 'phone_disabled', value: 'poor' },
-      ]
+      id: 'q3',
+      text: 'Do you experience difficulty hearing in conversations?',
+      options: ['Yes, frequently', 'Sometimes', 'Rarely', 'No']
     },
     {
-      id: 4,
-      text: 'Do you experience ringing or buzzing (Tinnitus)?',
-      options: [
-        { label: 'Never', description: 'Complete silence when it is quiet.', icon: 'notifications_off', value: 'good' },
-        { label: 'Sometimes', description: 'I notice it in quiet rooms.', icon: 'notifications_paused', value: 'fair' },
-        { label: 'Constantly', description: 'It affects my sleep and concentration.', icon: 'notifications_active', value: 'poor' },
-      ]
+      id: 'q4',
+      text: 'In which situations do you find hearing most difficult?',
+      options: ['Phone calls', 'Group conversations', 'Watching TV', 'Noisy environments']
     },
     {
-      id: 5,
-      text: 'How often do you ask people to repeat themselves?',
-      options: [
-        { label: 'Rarely', description: 'Only if they mumble.', icon: 'record_voice_over', value: 'good' },
-        { label: 'Sometimes', description: 'Especially women or children.', icon: 'hearing', value: 'fair' },
-        { label: 'Very Often', description: 'It is a constant struggle.', icon: 'hearing_disabled', value: 'poor' },
-      ]
+      id: 'q5',
+      text: 'Do you often ask people to repeat what they said?',
+      options: ['Yes, very often', 'Sometimes', 'Rarely', 'Never']
+    },
+    {
+      id: 'q6',
+      text: 'Have you used hearing aids before?',
+      options: ['Yes', 'No']
+    },
+    {
+      id: 'q7',
+      text: 'What type of hearing aid did you use?',
+      options: ['BTE (Behind-The-Ear)', 'RIC (Receiver In Canal)', 'ITE (In-The-Ear)', 'Not sure'],
+      condition: (answers: any) => answers['q6'] === 'Yes'
+    },
+    {
+      id: 'q8',
+      text: 'What is your preferred budget range?',
+      options: ['Budget Range', 'Mid-range (Standard)', 'Premium']
+    },
+    {
+      id: 'q9',
+      text: 'Which feature is most important to you?',
+      options: ['Bluetooth connectivity', 'Rechargeable battery', 'Noise cancellation', 'Small / invisible design']
+    },
+    {
+      id: 'q10',
+      text: 'Which listening environment is most important for you?',
+      options: ['Phone Calls', 'Office meetings', 'Watching TV', 'Outdoor conversations']
     }
   ];
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private apiService: ApiService
-  ) { }
+  private cdr = inject(ChangeDetectorRef);
+  private player = inject(HearingPlayerService);
+  private toastr = inject(ToastrService);
 
-  selectPerson(personId: string) {
-    this.selectedPersonId = personId;
-    this.isTransitioning = true;
-    setTimeout(() => {
-      this.currentState = 'setup';
-      this.isTransitioning = false;
-      this.cdr.detectChanges();
-    }, 400);
+  constructor() {
+    this.totalSteps = this.frequencies.length * this.ears.length;
   }
 
-  startTest() {
-    this.currentState = 'test';
-    this.currentStep = 0;
-    this.answers = {};
+  ngAfterViewInit(): void {
+    this.checkHeadphones();
+  }
+
+  ngOnDestroy(): void {
+    this.player.dispose();
+    if (this.toneTimeout) clearTimeout(this.toneTimeout);
+    if (this.transitionTimeout) clearTimeout(this.transitionTimeout);
+  }
+
+  async checkHeadphones(): Promise<void> {
+    this.hasHeadphones = await this.player.checkHeadphones();
     this.cdr.detectChanges();
   }
 
-  selectOption(optionValue: string) {
+  startInstructions(): void {
+    this.currentState = 'test';
+    this.currentFreqIndex = 0;
+    this.currentEarIndex = 0;
+    this.responses.clear();
+    this.completedSteps = 0;
+    this.statusMessage = 'Sit back. Testing Left Ear first.';
+    this.cdr.detectChanges();
+    setTimeout(() => this.playCurrentTone(), 1500);
+  }
+
+  get currentFrequency(): number {
+    return this.frequencies[this.currentFreqIndex];
+  }
+
+  get currentEar(): 'left' | 'right' {
+    return this.ears[this.currentEarIndex];
+  }
+
+  get progressPercentage(): number {
+    return Math.round((this.completedSteps / this.totalSteps) * 100);
+  }
+
+  get frequencyLabel(): string {
+    const f = this.currentFrequency;
+    return f >= 1000 ? `${f / 1000} kHz` : `${f} Hz`;
+  }
+
+  playCurrentTone(): void {
+    this.isTransitioning = false;
+    this.player.playTone({
+      frequency: this.currentFrequency,
+      ear: this.currentEar,
+      volumeLevel: this.testVolumeLevel,
+    });
+    this.isPlayingTone = true;
+    this.statusMessage = `🔉 Testing ${this.frequencyLabel}...`;
+    this.cdr.detectChanges();
+
+    if (this.toneTimeout) clearTimeout(this.toneTimeout);
+    this.toneTimeout = setTimeout(() => {
+      this.player.stopTone();
+      this.isPlayingTone = false;
+      this.cdr.detectChanges();
+    }, 2000);
+  }
+
+  onHeard(): void {
     if (this.isTransitioning) return;
+    this.stopAndClear();
+    const key = `${this.currentEar}-${this.currentFrequency}`;
+    this.responses.set(key, true);
+    this.statusMessage = '✅ Recorded. Next...';
+    this.cdr.detectChanges();
+    setTimeout(() => this.advanceToNext(), 500);
+  }
 
-    this.answers[this.currentStep] = optionValue;
+  onNotHeard(): void {
+    if (this.isTransitioning) return;
+    this.stopAndClear();
+    const key = `${this.currentEar}-${this.currentFrequency}`;
+    this.responses.set(key, false);
+    this.statusMessage = '❌ Recorded. Next...';
+    this.cdr.detectChanges();
+    setTimeout(() => this.advanceToNext(), 500);
+  }
+
+  private stopAndClear(): void {
+    this.player.stopTone();
+    this.isPlayingTone = false;
+    if (this.toneTimeout) clearTimeout(this.toneTimeout);
+  }
+
+  private advanceToNext(): void {
+    this.completedSteps++;
+    if (this.currentFreqIndex < this.frequencies.length - 1) {
+      this.currentFreqIndex++;
+    } else if (this.currentEarIndex < this.ears.length - 1) {
+      this.currentFreqIndex = 0;
+      this.currentEarIndex++;
+      this.statusMessage = 'Left Ear Done. Testing Right Ear next...';
+      this.cdr.detectChanges();
+      setTimeout(() => this.playCurrentTone(), 2000);
+      return;
+    } else {
+      this.finishTest();
+      return;
+    }
     this.isTransitioning = true;
+    this.cdr.detectChanges();
+    if (this.transitionTimeout) clearTimeout(this.transitionTimeout);
+    this.transitionTimeout = setTimeout(() => this.playCurrentTone(), 1000);
+  }
 
-    if (this.autoAdvanceTimer) clearTimeout(this.autoAdvanceTimer);
+  private finishTest(): void {
+    const getCategory = (passes: number) => {
+      if (passes === 5) return 'Normal';
+      if (passes >= 4) return 'Slight Hearing Loss';
+      if (passes >= 3) return 'Mild Hearing Loss';
+      if (passes >= 1) return 'Moderate Hearing Loss';
+      return 'Severe Hearing Loss';
+    };
 
-    this.autoAdvanceTimer = setTimeout(() => {
-      this.nextStep();
+    const leftPasses = this.frequencies.filter(f => this.responses.get(`left-${f}`)).length;
+    const rightPasses = this.frequencies.filter(f => this.responses.get(`right-${f}`)).length;
+
+    this.analysis = {
+      left: getCategory(leftPasses),
+      right: getCategory(rightPasses),
+      showDifferenceMessage: Math.abs(leftPasses - rightPasses) >= 2
+    };
+
+    this.currentState = 'result';
+    this.cdr.detectChanges();
+  }
+
+  getConsultation(): void {
+    this.isAnalyzing = true;
+    this.showConsultation = true;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.generateAiAdvice();
+      this.isAnalyzing = false;
+      this.cdr.detectChanges();
+    }, 2500);
+  }
+
+  private generateAiAdvice(): void {
+    const left = (f: number) => this.responses.get(`left-${f}`);
+    const right = (f: number) => this.responses.get(`right-${f}`);
+
+    const lowFreq = left(250) && left(500) && right(250) && right(500);
+    const speechFreq = left(1000) && left(2000) && right(1000) && right(2000);
+    const highFreq = left(4000) && right(4000);
+
+    let advice = '';
+    let condition = 'Normal';
+
+    if (lowFreq && speechFreq && highFreq) {
+      condition = 'Normal';
+      advice = 'Based on your hearing test results, your hearing ability is excellent across all frequencies. Your ears can pick up subtle high-pitched sounds without difficulty.';
+    } else if (lowFreq && speechFreq && !highFreq) {
+      condition = 'High-Frequency Loss';
+      advice = 'Your hearing is generally good for low and speech frequencies, but there is some difficulty detecting higher frequency sounds (4000Hz). This can occasionally affect the clarity of consonants in speech.';
+    } else if (lowFreq && !speechFreq) {
+      condition = 'Moderate Loss';
+      advice = 'Your results show significant difficulty in the speech frequency range (1000Hz - 2000Hz). This may cause frequent misunderstandings in conversation.';
+    } else {
+      condition = 'Mild to Moderate Loss';
+      advice = 'The screening indicates some hearing difficulties across multiple frequencies. We recommend a clinical evaluation to prevent further strain on your auditory system.';
+    }
+
+    this.consultationData = {
+      condition,
+      advice: advice + ' We recommend scheduling a professional hearing evaluation for a precise diagnostic assessment.',
+      recommendations: [
+        'Book a clinical hearing consultation',
+        'Visit our nearest hearing care center',
+        'Explore digital hearing aid devices',
+        'Speak with our senior audiologist'
+      ]
+    };
+  }
+
+  closeConsultation(): void {
+    this.showConsultation = false;
+    this.cdr.detectChanges();
+  }
+
+  // AI Assistant Logic
+  openAssistant(): void {
+    this.showAiAssistant = true;
+    this.currentQuestionIndex = 0;
+    this.userAnswers = {};
+    this.assistantMessages = [
+      {
+        text: `Hello! I'm your Claritone Assistant. To give you the best recommendation, I have a few questions for you.`,
+        type: 'bot'
+      }
+    ];
+    this.nextQuestion();
+    this.cdr.detectChanges();
+  }
+
+  private nextQuestion(): void {
+    if (this.currentQuestionIndex >= this.questions.length) {
+      this.generateFinalRecommendation();
+      return;
+    }
+
+    const question = this.questions[this.currentQuestionIndex];
+
+    // Check condition
+    if (question.condition && !question.condition(this.userAnswers)) {
+      this.currentQuestionIndex++;
+      this.nextQuestion();
+      return;
+    }
+
+    this.assistantMessages.push({
+      text: question.text,
+      type: 'bot',
+      options: question.options
+    });
+    this.cdr.detectChanges();
+  }
+
+  handleAssistantOption(option: string): void {
+    this.assistantMessages.push({ text: option, type: 'user' });
+
+    const question = this.questions[this.currentQuestionIndex];
+    this.userAnswers[question.id] = option;
+
+    this.currentQuestionIndex++;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.nextQuestion();
     }, 600);
   }
 
-  nextStep() {
-    if (this.autoAdvanceTimer) clearTimeout(this.autoAdvanceTimer);
+  private generateFinalRecommendation(): void {
+    const budget = this.userAnswers['q8'];
+    const lifestyle = this.userAnswers['q2'];
+    const feature = this.userAnswers['q9'];
+    const loss = this.analysis ? this.analysis.left : 'Normal';
+
+    let model = '';
+    let description = '';
+
+    if (budget === 'Premium' || feature === 'Noise cancellation' || lifestyle === 'Active / Outdoor') {
+      model = 'Phonak Lumity L90-R';
+      description = 'A premium hearing aid featuring StereoZoom 2.0 and SpeechSensor technology for exceptional clarity in noisy environments.';
+    } else if (budget === 'Budget Range') {
+      model = 'Signia Pure Charge&Go T AX';
+      description = 'Reliable performance with Augmented Xperience technology, providing up to 36 hours of battery life and integrated telecoil.';
+    } else {
+      model = 'Oticon Real 1';
+      description = 'Features RealSound Technology and Wind & Handling Stabilizer, offering BrainHearing optimization for a natural listening experience.';
+    }
+
+    this.assistantMessages.push({
+      text: `Based on your lifestyle (${lifestyle}) and results, here is our recommendation:`,
+      type: 'bot'
+    });
+
+    this.assistantMessages.push({
+      text: `✨ Recommended Model: ${model}\n\n${description}`,
+      type: 'result'
+    });
+
+    this.cdr.detectChanges();
+  }
+
+  closeAiAssistant(): void {
+    this.showAiAssistant = false;
+    this.cdr.detectChanges();
+  }
+
+  restartTest(): void {
+    this.currentState = 'intro';
+    this.responses.clear();
+    this.analysis = null;
+    this.currentFreqIndex = 0;
+    this.currentEarIndex = 0;
+    this.completedSteps = 0;
+    this.isPlayingTone = false;
     this.isTransitioning = false;
-
-    if (this.currentStep < this.questions.length - 1) {
-      this.currentStep++;
-    } else {
-      this.goToLeadForm();
-    }
+    this.statusMessage = '';
+    this.showConsultation = false;
+    this.consultationData = null;
+    this.showAiAssistant = false;
+    this.assistantMessages = [];
     this.cdr.detectChanges();
-  }
-
-  prevStep() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-      this.isTransitioning = false;
-    } else {
-      this.currentState = 'setup';
-    }
-    this.cdr.detectChanges();
-  }
-
-  goToLeadForm() {
-    this.currentState = 'lead-form';
-    this.cdr.detectChanges();
-  }
-
-  submitLead() {
-    if (this.leadForm.fullName && this.leadForm.phone) {
-
-      // Calculate score (simple logic: 'poor' = 0, 'fair' = 1, 'good' = 2)
-      let totalScore = 0;
-      const answerMap: any = {};
-
-      Object.keys(this.answers).forEach(step => {
-        const val = this.answers[parseInt(step)];
-        answerMap[`Question ${parseInt(step) + 1}`] = val; // Store question number -> answer
-        if (val === 'good') totalScore += 2;
-        else if (val === 'fair') totalScore += 1;
-        // poor = 0
-      });
-
-      const leadData = {
-        fullName: this.leadForm.fullName,
-        phone: this.leadForm.phone,
-        email: this.leadForm.email,
-        score: totalScore,
-        answers: answerMap,
-        status: 'NEW'
-      };
-
-      this.apiService.post('leads', leadData).subscribe({
-        next: (res) => {
-          console.log('Lead submitted successfully', res);
-          this.currentState = 'result';
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Failed to submit lead', err);
-          // Fallback for demo
-          if (confirm('API call failed. Show results anyway (Demo Mode)?')) {
-            this.currentState = 'result';
-            this.cdr.detectChanges();
-          }
-        }
-      });
-    } else {
-      alert('Please fill in your name and phone number.');
-    }
-  }
-
-  get progressPercentage() {
-    return ((this.currentStep + 1) / this.questions.length) * 100;
-  }
-
-  get currentQuestion() {
-    return this.questions[this.currentStep];
-  }
-
-  isOptionSelected(optionValue: string): boolean {
-    return this.answers[this.currentStep] === optionValue;
   }
 }

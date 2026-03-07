@@ -1,0 +1,64 @@
+:host {
+    display: block;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+}
+
+/* Custom Scrollbar for the profile page */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E2E8F0;
+    border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #CBD5E1;
+}
+
+/* Transitions */
+button {
+    @apply transition-all duration-200;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.max-w-7xl {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Dark mode refinements */
+.dark .bg-white {
+    background-color: #111827;
+}
+
+.dark .border-slate-200 {
+    border-color: #1F2937;
+}

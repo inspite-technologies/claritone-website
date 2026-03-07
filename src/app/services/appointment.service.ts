@@ -19,6 +19,8 @@ export interface AppointmentPayload {
     languageId: string;
     date: string;
     slotId: string;
+    storeId: string;
+    additionalNotes?: string;
 }
 
 @Injectable({
@@ -33,9 +35,12 @@ export class AppointmentService {
         );
     }
 
-    getAvailableSlots(date: string): Observable<Slot[]> {
-        // The backend expects YYYY-MM-DD format in the query param
-        return this.api.get<any>(`appointments/slots?date=${date}`).pipe(
+    getAvailableSlots(date: string, storeId?: string): Observable<Slot[]> {
+        let url = `appointments/slots?date=${encodeURIComponent(date)}`;
+        if (storeId) {
+            url += `&storeId=${encodeURIComponent(storeId)}`;
+        }
+        return this.api.get<any>(url).pipe(
             map(res => res.success ? res.data : [])
         );
     }

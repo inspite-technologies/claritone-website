@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { ProductService, Product } from '../../services/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-compare',
@@ -29,7 +30,8 @@ export class Compare {
 
     constructor(
         private cartService: CartService,
-        private productService: ProductService
+        private productService: ProductService,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit() {
@@ -48,7 +50,7 @@ export class Compare {
 
     addToCart(product: Product) {
         this.cartService.addToCart(product, 1);
-        alert(`${product.name} added to cart!`);
+        this.toastr.success(`${product.name} added to cart!`, 'Success');
     }
 
     formatPrice(price: number): string {

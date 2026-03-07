@@ -28,24 +28,9 @@
                 class="block w-full pl-12 pr-4 py-4 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary shadow-sm dark:text-white"
                 placeholder="Search by city, state or zip code..." type="text" />
         </div>
-        <div class="flex gap-4 w-full lg:w-auto">
-            <select (change)="onStateChange($event)"
-                class="block w-full lg:w-48 py-4 pl-4 pr-10 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary shadow-sm text-sm dark:text-white">
-                <option value="">All States</option>
-                <option value="California">California</option>
-                <option value="New York">New York</option>
-                <option value="Texas">Texas</option>
-                <option value="Florida">Florida</option>
-            </select>
-            <button (click)="useMyLocation()"
-                class="flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-xl font-semibold hover:opacity-90 transition-all shadow-lg cursor-pointer">
-                <span class="material-symbols-outlined text-sm">my_location</span>
-                <span>Near Me</span>
-            </button>
-        </div>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div class="lg:col-span-7 space-y-6">
+    <div class="grid grid-cols-1 gap-8">
+        <div class="space-y-6">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold dark:text-white">{{ stores.length }} Centers Available</h2>
                 <div class="flex items-center gap-2 text-sm text-slate-500">
@@ -58,19 +43,21 @@
                 </div>
             </div>
 
-            <div *ngIf="isLoadingStores" class="py-8 text-center text-slate-500">
-                <span class="material-symbols-outlined animate-spin text-primary text-3xl mb-2">refresh</span>
-                <p>Loading centers...</p>
+            <div *ngIf="isLoadingStores" class="py-12 text-center text-slate-500">
+                <span class="material-symbols-outlined animate-spin text-primary text-4xl mb-3">refresh</span>
+                <p class="text-lg">Loading centers...</p>
             </div>
 
-            <div *ngIf="!isLoadingStores && stores.length === 0" class="py-8 text-center text-slate-500">
-                <p>No centers found matching your search.</p>
+            <div *ngIf="!isLoadingStores && stores.length === 0"
+                class="py-12 text-center text-slate-500 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                <span class="material-symbols-outlined text-5xl mb-3">location_off</span>
+                <p class="text-lg">No centers found matching your search.</p>
             </div>
 
-            <div *ngIf="!isLoadingStores && stores.length > 0" class="space-y-4">
+            <div *ngIf="!isLoadingStores && stores.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div *ngFor="let store of stores"
                     class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
-                    <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-col gap-6">
                         <div class="flex-grow">
                             <div class="flex justify-between items-start mb-2">
                                 <h3 class="text-xl font-bold dark:text-white">{{ store.name }}</h3>
@@ -91,69 +78,42 @@
                                     <span class="material-symbols-outlined text-primary text-lg">phone</span>
                                     <span>{{ store.contact }}</span>
                                 </div>
-                                <div class="flex items-start gap-2" *ngIf="store.hours">
-                                    <span class="material-symbols-outlined text-primary text-lg">schedule</span>
-                                    <span>{{ store.hours }}</span>
+                                <div class="flex flex-col gap-3 py-2 border-y border-slate-100 dark:border-slate-800"
+                                    *ngIf="store.hours && store.hours.length > 0">
+                                    <button (click)="toggleTimings(store._id)"
+                                        class="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:text-red-700 transition-colors cursor-pointer w-fit">
+                                        <span class="material-symbols-outlined text-lg">{{ visibleTimings[store._id] ?
+                                            'expand_less' : 'schedule' }}</span>
+                                        {{ visibleTimings[store._id] ? 'Hide Store Timings' : 'Show Store Timings' }}
+                                    </button>
+
+                                    <div class="flex flex-col gap-2 mt-2" *ngIf="visibleTimings[store._id]">
+                                        <div *ngFor="let h of store.hours"
+                                            class="flex justify-between items-center text-xs py-1 px-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                                            <span
+                                                class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{
+                                                h.day }}</span>
+                                            <span class="text-slate-500 dark:text-slate-400">{{ h.time }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-3 min-w-[180px]">
-                            <button (click)="openBookingModal(store.name)"
-                                class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors cursor-pointer">Book
-                                Appointment</button>
-                            <a [href]="store.mapLocation" target="_blank" *ngIf="store.mapLocation"
-                                class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 py-3 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                                <span class="material-symbols-outlined text-sm">directions</span> Directions
-                            </a>
+                        <div class="mt-auto pt-4">
+                            <button (click)="openBookingModal(store._id)"
+                                class="w-full bg-primary text-white py-2.5 rounded-xl font-bold uppercase tracking-widest text-[11px] hover:bg-red-700 transition-all shadow-md hover:shadow-primary/20 cursor-pointer flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                Book Appointment
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="pt-6 flex justify-center">
-                <button *ngIf="stores.length > 5 && !isLoadingStores" (click)="toggleAllLocations()"
+                <button *ngIf="stores.length > 6 && !isLoadingStores" (click)="toggleAllLocations()"
                     class="text-primary font-bold flex items-center gap-2 hover:underline cursor-pointer">
                     View all {{ stores.length }} locations <span class="material-symbols-outlined">expand_more</span>
                 </button>
-            </div>
-        </div>
-        <div class="lg:col-span-5 h-[600px] lg:h-auto sticky top-32">
-            <div class="w-full h-full bg-slate-200 dark:bg-slate-800 rounded-3xl relative overflow-hidden group">
-                <div class="absolute inset-0 opacity-40 dark:opacity-20 pointer-events-none">
-                    <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <pattern height="100" id="mapPattern" patternUnits="userSpaceOnUse" width="100" x="0" y="0">
-                                <path d="M0 50 L100 50 M50 0 L50 100" fill="none" stroke="currentColor"
-                                    stroke-width="0.5"></path>
-                                <circle cx="50" cy="50" fill="currentColor" r="2"></circle>
-                            </pattern>
-                        </defs>
-                        <rect fill="url(#mapPattern)" height="100%" width="100%"></rect>
-                    </svg>
-                </div>
-                <div class="absolute top-1/4 left-1/3 group-hover:scale-110 transition-transform duration-300">
-                    <span class="material-symbols-outlined text-primary text-4xl drop-shadow-lg">location_on</span>
-                    <div
-                        class="absolute -top-12 -left-1/2 bg-white dark:bg-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap border border-slate-200 dark:border-slate-700">
-                        Downtown Center</div>
-                </div>
-                <div class="absolute top-1/2 left-2/3 group-hover:scale-110 transition-transform duration-300">
-                    <span class="material-symbols-outlined text-secondary text-4xl drop-shadow-lg">location_on</span>
-                </div>
-                <div class="absolute bottom-1/3 left-1/4 group-hover:scale-110 transition-transform duration-300">
-                    <span class="material-symbols-outlined text-primary text-4xl drop-shadow-lg">location_on</span>
-                </div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <div
-                        class="text-center p-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl max-w-xs">
-                        <span class="material-symbols-outlined text-slate-400 text-5xl mb-3">map</span>
-                        <h4 class="font-bold text-lg mb-2 dark:text-white">Interactive Map View</h4>
-                        <p class="text-sm text-slate-500 mb-4">Zoom in to see exact locations and real-time traffic
-                            updates to our centers.</p>
-                        <button (click)="expandMap()"
-                            class="bg-secondary text-white px-6 py-2 rounded-lg text-sm font-semibold hover:opacity-90 cursor-pointer">Expand
-                            Map</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -171,7 +131,7 @@
             class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-8 py-6 flex items-center justify-between z-10">
             <div>
                 <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Book Appointment</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ selectedLocation }}</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ selectedLocationName }}</p>
             </div>
             <button (click)="closeBookingModal()"
                 class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer">
@@ -197,9 +157,9 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Preferred Location <span class="text-primary">*</span>
                     </label>
-                    <select [(ngModel)]="bookingForm.location" name="location" required
+                    <select [(ngModel)]="bookingForm.location" name="location" (change)="onDateChange()" required
                         class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
-                        <option *ngFor="let outlet of stores" [value]="outlet.name">{{ outlet.name }}</option>
+                        <option *ngFor="let outlet of stores" [value]="outlet._id">{{ outlet.name }}</option>
                     </select>
                 </div>
 
@@ -230,7 +190,7 @@
                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                         Preferred Day <span class="text-primary">*</span>
                     </label>
-                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (change)="onDateChange()"
+                    <input type="date" [(ngModel)]="bookingForm.preferredDay" (ngModelChange)="onDateChange()"
                         name="preferredDay" required
                         class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                         [min]="getMinDate()" />

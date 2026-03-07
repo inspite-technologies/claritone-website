@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartService, CartItem } from '../../services/cart.service';
 import { ApiService } from '../../services/api.service';
+import { ToastrService } from 'ngx-toastr';
 
 declare var Razorpay: any;
 
@@ -30,7 +31,8 @@ export class Checkout implements OnInit {
     constructor(
         public cartService: CartService,
         private router: Router,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit() {
@@ -45,35 +47,14 @@ export class Checkout implements OnInit {
     }
 
     ensureAuthenticated() {
-        // If we don't have a token, automatically register/login a demo user so checkout works
+        if (typeof window === 'undefined') return;
         if (!localStorage.getItem('claritone_token')) {
-            const demoUser = { Email: 'demo@claritone.com', password: 'password123' };
-
-            // First try to login
-            this.apiService.post<any>('user/login', demoUser).subscribe({
-                next: (loginRes) => {
-                    if (loginRes.success && loginRes.token) {
-                        localStorage.setItem('claritone_token', loginRes.token);
-                    }
-                },
-                error: () => {
-                    // Try registering as admin if it fails (admin bypasses OTP)
-                    this.apiService.post<any>('user/admin/register', demoUser).subscribe({
-                        next: () => {
-                            // Login after registering
-                            this.apiService.post<any>('user/login', demoUser).subscribe(res => {
-                                if (res.success && res.token) {
-                                    localStorage.setItem('claritone_token', res.token);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            this.router.navigate(['/login']);
         }
     }
 
     loadRazorpayScript() {
+        if (typeof document === 'undefined') return;
         const script = document.createElement('script');
         script.src = 'https://checkout.razorpay.com/v1/checkout.js';
         script.async = true;
@@ -100,7 +81,7 @@ export class Checkout implements OnInit {
         // Validate form
         const { firstName, lastName, email, phone, address, city, state, zipCode } = this.checkoutForm;
         if (!firstName || !email || !phone || !address || !city || !state || !zipCode) {
-            alert('Please fill in all required fields');
+            this.toastr.warning('Please fill in all required fields', 'Warning');
             return;
         }
 
@@ -128,22 +109,24 @@ export class Checkout implements OnInit {
                                 // 3. Initiate Razorpay Checkout Window
                                 this.initiateRazorpay(orderRes.data);
                             } else {
-                                alert(orderRes.message || 'Failed to create order');
+                                this.toastr.error(orderRes.message || 'Failed to create order', 'Error');
                             }
                         },
                         error: (err) => {
                             console.error('Order creation error:', err);
-                            alert('An error occurred while creating your order. Ensure your cart is not empty.');
+                            this.toastr.error('An error occurred while creating your order. Ensure your cart is not empty.', 'Error');
                         }
                     });
+                    // 2. Create Order in backend
+                    // ... (rest handled inside)
 
                 } else {
-                    alert('Failed to save shipping address');
+                    this.toastr.error('Failed to save shipping address', 'Error');
                 }
             },
             error: (err) => {
                 console.error('Address creation error:', err);
-                alert('An error occurred while saving your address.');
+                this.toastr.error('An error occurred while saving your address.', 'Error');
             }
         });
     }
@@ -172,7 +155,7 @@ export class Checkout implements OnInit {
             modal: {
                 ondismiss: () => {
                     console.log('Payment cancelled by user');
-                    alert('Payment was cancelled.');
+                    this.toastr.warning('Payment was cancelled.', 'Warning');
                 }
             }
         };
@@ -182,7 +165,7 @@ export class Checkout implements OnInit {
             razorpay.open();
         } catch (error) {
             console.error('Razorpay not loaded', error);
-            alert('Payment gateway failed to load.');
+            this.toastr.error('Payment gateway failed to load.', 'Error');
         }
     }
 
@@ -198,12 +181,12 @@ export class Checkout implements OnInit {
                 if (res.success) {
                     this.handlePaymentSuccess(response, orderId);
                 } else {
-                    alert('Payment verification failed.');
+                    this.toastr.error('Payment verification failed.', 'Error');
                 }
             },
             error: (err) => {
                 console.error('Verification error:', err);
-                alert('An error occurred during payment verification.');
+                this.toastr.error('An error occurred during payment verification.', 'Error');
             }
         });
     }
@@ -213,6 +196,8 @@ export class Checkout implements OnInit {
     handlePaymentSuccess(response: any, orderId?: string) {
         console.log('Payment successful:', response);
 
+        const orderAmount = this.total; // Capture total before clearing cart
+
         // Clear cart
         this.cartService.clearCart();
 
@@ -220,7 +205,7 @@ export class Checkout implements OnInit {
         this.router.navigate(['/order-success'], {
             queryParams: {
                 orderId: orderId || response.razorpay_payment_id || 'DEMO_ORDER',
-                amount: this.total
+                amount: orderAmount
             }
         });
     }

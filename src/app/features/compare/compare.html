@@ -64,7 +64,7 @@
                                     [ngClass]="{'border-x border-primary/20 bg-primary/5 -mx-px': product.isExpertChoice}">
 
                                     <div class="h-32 w-32 bg-gray-100 dark:bg-gray-800 rounded-xl bg-center bg-no-repeat bg-contain shadow-sm"
-                                        [style.background-image]="'url(' + product.image + ')'"
+                                        [style.background-image]="'url(' + (product.images?.[0] || 'assets/product-placeholder.png') + ')'"
                                         [style.transform]="product.isExpertChoice ? 'scaleX(-1)' : 'none'"></div>
 
                                     <div class="flex flex-col">

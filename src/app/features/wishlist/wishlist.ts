@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { WishlistService } from '../../services/wishlist.service';
 import { CartService } from '../../services/cart.service';
 import { Product } from '../../services/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-wishlist',
@@ -17,7 +18,8 @@ export class Wishlist implements OnInit {
 
     constructor(
         private wishlistService: WishlistService,
-        private cartService: CartService
+        private cartService: CartService,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit() {
@@ -33,7 +35,7 @@ export class Wishlist implements OnInit {
     addToCart(product: Product) {
         this.cartService.addToCart(product, 1);
         this.wishlistService.removeFromWishlist(product.id);
-        alert(`${product.name} added to cart!`);
+        this.toastr.success(`${product.name} added to cart!`, 'Success');
     }
 
     formatPrice(price: number): string {

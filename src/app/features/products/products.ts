@@ -5,6 +5,7 @@ import { CartService, CartItem } from '../../services/cart.service';
 import { ProductService, Product } from '../../services/product.service';
 import { WishlistService } from '../../services/wishlist.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-products',
@@ -38,7 +39,8 @@ export class Products implements OnInit {
     private productService: ProductService,
     public wishlistService: WishlistService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
   ) { }
 
   toggleWishlist(product: Product) {
@@ -174,7 +176,7 @@ export class Products implements OnInit {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product, 1);
-    alert(`${product.name} added to cart!`);
+    this.toastr.success(`${product.name} added to cart!`, 'Success');
   }
 
   goToPage(page: number) {

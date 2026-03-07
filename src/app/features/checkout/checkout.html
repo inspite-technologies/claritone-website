@@ -120,7 +120,8 @@
                     <div class="space-y-4 mb-6 max-h-60 overflow-y-auto">
                         <div *ngFor="let item of cartItems" class="flex gap-3">
                             <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-lg bg-center bg-no-repeat bg-contain flex-shrink-0"
-                                [style.background-image]="'url(' + item.product.image + ')'"></div>
+                                [style.background-image]="'url(' + (item.product.images?.[0] || 'assets/product-placeholder.png') + ')'">
+                            </div>
                             <div class="flex-1 min-w-0">
                                 <p class="font-semibold text-sm text-slate-900 dark:text-white truncate">{{
                                     item.product.name }}</p>
@@ -136,10 +137,6 @@
                         <div class="flex justify-between text-slate-600 dark:text-slate-400">
                             <span>Subtotal</span>
                             <span class="font-semibold">{{ formatPrice(subtotal) }}</span>
-                        </div>
-                        <div class="flex justify-between text-slate-600 dark:text-slate-400">
-                            <span>Tax (18% GST)</span>
-                            <span class="font-semibold">{{ formatPrice(tax) }}</span>
                         </div>
                         <div class="flex justify-between text-slate-600 dark:text-slate-400">
                             <span>Shipping</span>

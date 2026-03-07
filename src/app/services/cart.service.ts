@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { Product } from './product.service';
+import { Router } from '@angular/router';
 
 export interface CartItem {
     product: Product;
@@ -16,11 +17,12 @@ export class CartService {
     private cartSubject = new BehaviorSubject<CartItem[]>([]);
     public cart$ = this.cartSubject.asObservable();
 
-    constructor(private api: ApiService) {
+    constructor(private api: ApiService, private router: Router) {
         this.loadCart();
     }
 
     private loadCart() {
+        if (typeof window === 'undefined') return;
         const savedCart = localStorage.getItem('claritone_cart');
         if (savedCart) {
             this.cartItems = JSON.parse(savedCart);
@@ -72,11 +74,18 @@ export class CartService {
     }
 
     private saveCartLocal() {
-        localStorage.setItem('claritone_cart', JSON.stringify(this.cartItems));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('claritone_cart', JSON.stringify(this.cartItems));
+        }
         this.cartSubject.next(this.cartItems);
     }
 
     addToCart(product: Product, quantity: number = 1) {
+        if (typeof window !== 'undefined' && !localStorage.getItem('claritone_token')) {
+            this.router.navigate(['/login']);
+            return;
+        }
+
         const existingItem = this.cartItems.find(item => item.product.id === product.id);
 
         if (existingItem) {
@@ -87,7 +96,7 @@ export class CartService {
 
         this.saveCartLocal();
 
-        if (localStorage.getItem('claritone_token')) {
+        if (typeof window !== 'undefined' && localStorage.getItem('claritone_token')) {
             this.api.post<any>(`cart/${product.id}`, { quantity }).subscribe({
                 error: (err) => console.error('Failed to sync add to cart', err)
             });
@@ -98,7 +107,7 @@ export class CartService {
         this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
         this.saveCartLocal();
 
-        if (localStorage.getItem('claritone_token')) {
+        if (typeof window !== 'undefined' && localStorage.getItem('claritone_token')) {
             this.api.delete<any>(`cart/${productId}`).subscribe({
                 error: (err) => console.error('Failed to sync remove from cart', err)
             });
@@ -114,7 +123,7 @@ export class CartService {
                 item.quantity = quantity;
                 this.saveCartLocal();
 
-                if (localStorage.getItem('claritone_token')) {
+                if (typeof window !== 'undefined' && localStorage.getItem('claritone_token')) {
                     this.api.put<any>(`cart/${productId}`, { quantity }).subscribe({
                         error: (err) => console.error('Failed to sync update quantity', err)
                     });
@@ -136,11 +145,11 @@ export class CartService {
     }
 
     getTax(): number {
-        return this.getSubtotal() * 0.18; // 18% tax
+        return 0; // GST removed per user request to match backend
     }
 
     getTotal(): number {
-        return this.getSubtotal() + this.getTax();
+        return this.getSubtotal();
     }
 
     clearCart() {

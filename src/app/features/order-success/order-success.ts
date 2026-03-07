@@ -18,11 +18,17 @@ export class OrderSuccess implements OnInit {
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             this.orderId = params['orderId'] || 'N/A';
-            this.amount = params['amount'] || 0;
+            this.amount = Number(params['amount']) || 0;
         });
     }
 
+    getFormattedOrderId(id: string): string {
+        if (!id || id === 'N/A') return 'N/A';
+        const cleanId = id.toString().replace(/^ORD-/, '').toUpperCase();
+        return `ORD-${cleanId.length > 8 ? cleanId.substring(cleanId.length - 8) : cleanId}`;
+    }
+
     formatPrice(price: number): string {
-        return '₹' + price.toLocaleString('en-IN');
+        return '$' + price.toLocaleString('en-US');
     }
 }

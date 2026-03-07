@@ -48,18 +48,7 @@ export const PRODUCT_METADATA: { [key: string]: any } = {
         ]
     },
     'default': {
-        features: [
-            'Digital Sound Processing',
-            'Noise Reduction',
-            'Feedback Cancellation',
-            'Volume Control',
-            'Comfortable Fit',
-            '1 Year Warranty'
-        ],
-        specifications: [
-            { label: 'Type', value: 'Digital Hearing Aid' },
-            { label: 'Warranty', value: '1 Year' },
-            { label: 'Power', value: 'Battery Operated' }
-        ]
+        features: [],
+        specifications: []
     }
 };

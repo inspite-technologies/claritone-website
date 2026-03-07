@@ -17,9 +17,17 @@ import { Wishlist } from './features/wishlist/wishlist';
 import { Payment } from './features/payment/payment';
 import { PaymentSuccess } from './features/payment/payment-success';
 import { PaymentFailure } from './features/payment/payment-failure';
+import { Login } from './features/login/login';
+import { Profile } from './features/profile/profile';
+import { ForgotPassword } from './features/login/forgot-password';
+
 
 export const routes: Routes = [
     { path: '', component: Home },
+    { path: 'login', component: Login },
+    { path: 'forgot-password', component: ForgotPassword },
+    { path: 'profile', component: Profile },
+
     { path: 'outlets', component: Outlets },
     { path: 'hearing-test', component: HearingTest },
     { path: 'products', component: Products },

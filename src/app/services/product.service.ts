@@ -80,16 +80,7 @@ export class ProductService {
             image: p.images && p.images.length > 0 ? p.images[0] : (p.image || 'https://via.placeholder.com/300x300.png?text=No+Image+Available'),
             images: p.images || (p.image ? [p.image] : ['https://via.placeholder.com/300x300.png?text=No+Image+Available']),
             features: p.features || metadata.features,
-            featuresObject: p.featuresObject || (metadata.featuresObject || {
-                battery: 'Lithium-ion Rechargeable',
-                batteryLife: '24 Hours',
-                channels: '16 Channels',
-                noiseReduction: 'Active Noise Control',
-                connectivity: 'Wireless App Control',
-                waterResistance: 'IP67 Protection',
-                warranty: '2 Years Warranty',
-                style: 'Mini BTE'
-            }),
+            featuresObject: p.featuresObject || metadata.featuresObject || {},
             specifications: p.specifications || metadata.specifications
         };
     }

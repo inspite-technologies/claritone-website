@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-blog',
@@ -10,6 +11,8 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./blog.css']
 })
 export class Blog {
+  constructor(private toastr: ToastrService) { }
+
   categories = ['All', 'Hearing Health', 'Technology', 'Lifestyle', 'Company News'];
   activeCategory = 'All';
 
@@ -72,12 +75,12 @@ export class Blog {
   }
 
   readArticle(post: any) {
-    alert(`Opening article: ${post.title}`);
+    this.toastr.info(`Opening article: ${post.title}`);
     console.log('Reading article:', post);
   }
 
   loadMore() {
-    alert('Loading more articles from our archives...');
+    this.toastr.info('Loading more articles from our archives...');
     console.log('Loading more articles');
   }
 }

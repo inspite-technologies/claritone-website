@@ -1,20 +1,22 @@
 .footer-link {
-    @apply text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-all duration-300 cursor-pointer hover:translate-x-1 inline-block font-light text-sm;
+    @apply text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-all duration-300 cursor-pointer inline-block font-medium text-sm;
+    position: relative;
 }
 
-.social-link {
-    @apply h-11 w-11 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-primary hover:border-primary transition-all duration-500 cursor-pointer shadow-sm hover:shadow-primary/20 hover:-translate-y-1;
+.footer-link:hover {
+    transform: translateX(4px);
 }
 
 footer h5 {
     position: relative;
     display: inline-block;
+    padding-bottom: 8px;
 }
 
 footer h5::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: 0;
     left: 0;
     width: 20px;
     height: 2px;
@@ -25,4 +27,8 @@ footer h5::after {
 
 footer div:hover>h5::after {
     width: 40px;
+}
+
+.social-link {
+    @apply transition-all duration-300 hover:text-primary;
 }
