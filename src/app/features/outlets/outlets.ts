@@ -31,7 +31,8 @@ export class Outlets implements OnInit {
     languageId: '',
     preferredDay: '',
     slotId: '',
-    notes: ''
+    notes: '',
+    consultation: 'Offline'
   };
 
   stores: Store[] = [];
@@ -136,7 +137,8 @@ export class Outlets implements OnInit {
       languageId: '',
       preferredDay: '',
       slotId: '',
-      notes: ''
+      notes: '',
+      consultation: 'Offline'
     };
     this.availableSlots = [];
   }
@@ -161,7 +163,8 @@ export class Outlets implements OnInit {
       date: this.bookingForm.preferredDay,
       slotId: this.bookingForm.slotId,
       storeId: this.bookingForm.location,
-      additionalNotes: this.bookingForm.notes
+      additionalNotes: this.bookingForm.notes,
+      consultation: this.bookingForm.consultation
     };
 
     this.appointmentService.createAppointment(payload).subscribe({

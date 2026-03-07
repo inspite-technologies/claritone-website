@@ -8,8 +8,12 @@
       <h2 class="ht-title">Headset Required</h2>
       <p class="ht-subtitle" style="margin-bottom: 24px;">Please connect your headphones or earphones to start. This
         ensures accurate results for both ears.</p>
-      <button class="ht-btn ht-btn--primary ht-btn--large" (click)="checkHeadphones()">
+      <button class="ht-btn ht-btn--primary ht-btn--large" (click)="checkHeadphones()"
+        style="margin-bottom: 12px; width: 100%;">
         I'VE CONNECTED THEM
+      </button>
+      <button class="ht-btn ht-btn--ghost ht-btn--large" (click)="closeTest()" style="width: 100%;">
+        CLOSE TEST
       </button>
     </div>
   </div>

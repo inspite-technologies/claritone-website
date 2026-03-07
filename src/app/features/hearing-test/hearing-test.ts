@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, OnDestroy, AfterViewInit, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HearingPlayerService } from './hearing-player.service';
@@ -111,6 +111,7 @@ export class HearingTest implements OnDestroy, AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
   private player = inject(HearingPlayerService);
   private toastr = inject(ToastrService);
+  private router = inject(Router);
 
   constructor() {
     this.totalSteps = this.frequencies.length * this.ears.length;
@@ -406,5 +407,9 @@ export class HearingTest implements OnDestroy, AfterViewInit {
     this.showAiAssistant = false;
     this.assistantMessages = [];
     this.cdr.detectChanges();
+  }
+
+  closeTest(): void {
+    this.router.navigate(['/']);
   }
 }

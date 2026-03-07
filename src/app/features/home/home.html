@@ -48,7 +48,7 @@
 
 <!-- Quick Service Cards Section -->
 <section class="relative z-40 pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
         <!-- Card 1: Rapid Hearing Test -->
         <div
             class="service-card bg-tan rounded-[3rem] p-12 h-[320px] flex flex-col justify-between group cursor-default">
@@ -87,7 +87,7 @@
                 <h3 class="text-3xl font-bold text-slate-900 leading-tight">Book<br>Appointment</h3>
             </div>
             <div class="z-10 relative">
-                <button routerLink="/outlets"
+                <button (click)="openBookingModal()"
                     class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-[11px] tracking-[0.2em] hover:bg-primary transition-all uppercase cursor-pointer active:scale-90">
                     Book Now
                 </button>
@@ -100,7 +100,34 @@
                 </svg>
             </div>
         </div>
+
+        <!-- Card 3: Video Consultation -->
+        <div
+            class="service-card bg-slate-200 rounded-[3rem] p-12 h-[320px] flex flex-col justify-between group cursor-default relative overflow-hidden">
+            <div class="z-10 relative">
+                <div
+                    class="icon-wrapper w-16 h-16 bg-white rounded-full flex items-center justify-center mb-8 shadow-sm">
+                    <span
+                        class="material-symbols-outlined text-slate-800 text-4xl group-hover:text-white transition-colors duration-500">video_call</span>
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900 leading-tight">Video<br>Consultation</h3>
+            </div>
+            <div class="z-10 relative">
+                <button (click)="openBookingModal()"
+                    class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-[11px] tracking-[0.2em] hover:bg-primary transition-all uppercase cursor-pointer active:scale-90">
+                    Book Now
+                </button>
+            </div>
+            <div
+                class="absolute right-6 bottom-6 text-black/5 transition-all duration-700 group-hover:scale-125 group-hover:-rotate-12 group-hover:text-black/10">
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z" />
+                </svg>
+            </div>
+        </div>
     </div>
+
 </section>
 
 <section class="pb-16 bg-slate-50 dark:bg-slate-900/40">

@@ -33,7 +33,8 @@ export class Header implements OnInit {
     languageId: '',
     preferredDay: '',
     slotId: '',
-    notes: ''
+    notes: '',
+    consultation: 'Offline'
   };
 
   stores: Store[] = [];
@@ -74,6 +75,10 @@ export class Header implements OnInit {
       this.isLoadingStores = isLoading;
       this.cdr.detectChanges();
     });
+
+    this.appointmentService.showBookingModal$.subscribe(() => {
+      this.openBookingModal();
+    });
   }
 
   onDateChange() {
@@ -89,12 +94,13 @@ export class Header implements OnInit {
       }
     }
 
-    if (this.bookingForm.preferredDay && this.bookingForm.location) {
+    if (this.bookingForm.preferredDay && (this.bookingForm.location || this.bookingForm.consultation === 'Online')) {
       this.isLoadingSlots = true;
       this.availableSlots = [];
       this.bookingForm.slotId = '';
 
-      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay, this.bookingForm.location).subscribe({
+      const storeId = this.bookingForm.consultation === 'Online' ? '' : this.bookingForm.location;
+      this.appointmentService.getAvailableSlots(this.bookingForm.preferredDay, storeId).subscribe({
         next: (slots) => {
           console.log('Slots received in Header:', slots);
           this.availableSlots = slots;
@@ -127,6 +133,11 @@ export class Header implements OnInit {
   }
 
   openBookingModal() {
+    if (!this.isAuthenticated) {
+      this.toastr.info('Please login to book an appointment', 'Login Required');
+      this.router.navigate(['/login']);
+      return;
+    }
     this.showBookingModal = true;
     this.closeMobileMenu();
   }
@@ -144,12 +155,19 @@ export class Header implements OnInit {
       languageId: '',
       preferredDay: '',
       slotId: '',
-      notes: ''
+      notes: '',
+      consultation: 'Offline'
     };
     this.availableSlots = [];
   }
 
   submitBooking() {
+    if (!this.isAuthenticated) {
+      this.toastr.warning('Session expired. Please login again.', 'Warning');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     // Validate form
     if (!this.bookingForm.name || !this.bookingForm.contactNumber || !this.bookingForm.preferredDay || !this.bookingForm.slotId || !this.bookingForm.languageId) {
       this.toastr.warning('Please fill in all required fields', 'Warning');
@@ -163,7 +181,8 @@ export class Header implements OnInit {
       date: this.bookingForm.preferredDay,
       slotId: this.bookingForm.slotId,
       storeId: this.bookingForm.location,
-      additionalNotes: this.bookingForm.notes
+      additionalNotes: this.bookingForm.notes,
+      consultation: this.bookingForm.consultation
     };
 
     this.appointmentService.createAppointment(payload).subscribe({

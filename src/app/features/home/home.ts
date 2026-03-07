@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { BannerService } from '../../services/banner.service';
+import { AppointmentService } from '../../services/appointment.service';
 
 interface HomeBanner {
   id: string | number;
@@ -29,6 +30,7 @@ export class Home implements OnInit, OnDestroy {
 
   constructor(
     private bannerService: BannerService,
+    private appointmentService: AppointmentService,
     private cdr: ChangeDetectorRef
   ) { }
 
@@ -92,5 +94,9 @@ export class Home implements OnInit, OnDestroy {
     this.currentIndex = index;
     this.stopAutoplay();
     this.startAutoplay();
+  }
+
+  openBookingModal() {
+    this.appointmentService.triggerBookingModal();
   }
 }

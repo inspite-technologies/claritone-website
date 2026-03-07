@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Language {
@@ -21,13 +21,21 @@ export interface AppointmentPayload {
     slotId: string;
     storeId: string;
     additionalNotes?: string;
+    consultation?: string;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppointmentService {
+    private showBookingModalSubject = new Subject<void>();
+    showBookingModal$ = this.showBookingModalSubject.asObservable();
+
     constructor(private api: ApiService) { }
+
+    triggerBookingModal() {
+        this.showBookingModalSubject.next();
+    }
 
     getLanguages(): Observable<Language[]> {
         return this.api.get<any>('languages').pipe(
