@@ -18,3 +18,13 @@
 .max-w-\[1440px\] {
     animation: fadeIn 0.6s cubic-bezier(0.2, 0, 0, 1);
 }
+
+.text-red-600 {
+    color: #ff0000 !important;
+    /* Pure, vibrant red for the love button */
+    filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.3));
+}
+
+.fill-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
