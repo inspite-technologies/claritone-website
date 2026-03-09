@@ -10,27 +10,23 @@
             <!-- Desktop Navigation -->
             <nav class="hidden lg:flex items-center gap-4 xl:gap-8">
                 <a routerLink="/" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Home
                 </a>
                 <a routerLink="/products" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Products
                 </a>
-                <a routerLink="/compare" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
-                    Compare
-                </a>
                 <a routerLink="/services" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Services
                 </a>
                 <a routerLink="/outlets" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Locations
                 </a>
                 <a routerLink="/blog" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-semibold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Blog
                 </a>
             </nav>
@@ -116,11 +112,6 @@
         <a routerLink="/products" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
             class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
             <span>Products</span>
-            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-        </a>
-        <a routerLink="/compare" (click)="closeMobileMenu()"
-            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-            <span>Compare</span>
             <span class="material-symbols-outlined text-slate-400">chevron_right</span>
         </a>
         <a routerLink="/services" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"

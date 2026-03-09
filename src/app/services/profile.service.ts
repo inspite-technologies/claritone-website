@@ -11,7 +11,10 @@ export class ProfileService {
 
     getProfile(): Observable<any> {
         return this.api.get<any>('profile').pipe(
-            map(res => res.success ? res.data : null)
+            map(res => {
+                console.log('ProfileService: getProfile response:', res);
+                return res.success ? res.data : null;
+            })
         );
     }
 
@@ -35,5 +38,22 @@ export class ProfileService {
         return this.api.get<any>('bookings/history').pipe(
             map(res => res.success ? res.data : [])
         );
+    }
+
+    getAddresses(): Observable<any[]> {
+        return this.api.get<any>('addresses').pipe(
+            map(res => {
+                console.log('ProfileService: getAddresses response:', res);
+                return res.success ? res.data : [];
+            })
+        );
+    }
+
+    addAddress(data: any): Observable<any> {
+        return this.api.post<any>('addresses', data);
+    }
+
+    deleteAddress(id: string): Observable<any> {
+        return this.api.delete<any>(`addresses/${id}`);
     }
 }

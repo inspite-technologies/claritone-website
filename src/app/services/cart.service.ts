@@ -69,8 +69,19 @@ export class CartService {
                 warranty: 'N/A',
                 style: 'N/A'
             },
-            specifications: p.specifications || []
+            specifications: p.specifications || [],
+            offer: p.offer
         };
+    }
+
+    getDiscountedPrice(product: Product): number {
+        if (!product.offer) return product.price;
+
+        if (product.offer.discountType === 'percentage') {
+            return product.price * (1 - (product.offer.discount / 100));
+        } else {
+            return Math.max(0, product.price - product.offer.discount);
+        }
     }
 
     private saveCartLocal() {
@@ -142,7 +153,7 @@ export class CartService {
     }
 
     getSubtotal(): number {
-        return this.cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+        return this.cartItems.reduce((total, item) => total + (this.getDiscountedPrice(item.product) * item.quantity), 0);
     }
 
     getTax(): number {

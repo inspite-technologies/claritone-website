@@ -35,7 +35,7 @@ export class Products implements OnInit {
   };
 
   constructor(
-    private cartService: CartService,
+    public cartService: CartService,
     private productService: ProductService,
     public wishlistService: WishlistService,
     private router: Router,

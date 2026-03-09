@@ -74,7 +74,7 @@
 
                         <button type="submit" [disabled]="isProcessing"
                             class="w-full bg-primary text-white h-16 rounded-2xl font-black text-lg shadow-xl shadow-primary/30 hover:bg-red-700 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3">
-                            <span *ngIf="!isProcessing">Pay ${{ total | number:'1.2-2' }}</span>
+                            <span *ngIf="!isProcessing">Pay ₹{{ total | number:'1.0-0' }}</span>
                             <div *ngIf="isProcessing"
                                 class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin">
                             </div>
@@ -138,8 +138,9 @@
                             <div class="flex-1">
                                 <p class="text-sm font-bold truncate">{{ item.product.name }}</p>
                                 <p class="text-xs text-slate-500">Qty: {{ item.quantity }}</p>
-                                <p class="text-primary font-bold text-sm mt-1">${{ item.product.price * item.quantity |
-                                    number:'1.2-2' }}</p>
+                                <p class="text-primary font-bold text-sm mt-1">₹{{
+                                    cartService.getDiscountedPrice(item.product) * item.quantity |
+                                    number:'1.0-0' }}</p>
                             </div>
                         </div>
                     </div>
@@ -147,20 +148,16 @@
                     <div class="space-y-3 pt-6 border-t border-slate-100 dark:border-slate-800">
                         <div class="flex justify-between text-sm">
                             <span class="text-slate-500 uppercase font-bold text-[10px]">Subtotal</span>
-                            <span class="font-bold">${{ subtotal | number:'1.2-2' }}</span>
+                            <span class="font-bold">₹{{ subtotal | number:'1.0-0' }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-slate-500 uppercase font-bold text-[10px]">Shipping</span>
                             <span class="text-green-600 font-bold uppercase text-[10px]">Free</span>
                         </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-slate-500 uppercase font-bold text-[10px]">GST (18%)</span>
-                            <span class="font-bold">${{ tax | number:'1.2-2' }}</span>
-                        </div>
                         <div
                             class="flex justify-between items-center pt-4 mt-2 border-t border-slate-200 dark:border-slate-800">
                             <span class="text-lg font-black dark:text-white">Total</span>
-                            <span class="text-3xl font-black text-primary">${{ total | number:'1.2-2' }}</span>
+                            <span class="text-3xl font-black text-primary">₹{{ total | number:'1.0-0' }}</span>
                         </div>
                     </div>
                 </div>

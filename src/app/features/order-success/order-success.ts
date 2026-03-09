@@ -29,6 +29,6 @@ export class OrderSuccess implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return '$' + price.toLocaleString('en-US');
+        return '₹' + Math.round(price).toLocaleString('en-IN');
     }
 }

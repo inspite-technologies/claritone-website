@@ -10,51 +10,87 @@
             <!-- Checkout Form -->
             <div class="lg:col-span-2">
                 <form (ngSubmit)="processPayment()" class="space-y-6">
-                    <!-- Contact Information -->
-                    <div
-                        class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-                        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Contact Information</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                    First Name <span class="text-primary">*</span>
-                                </label>
-                                <input type="text" [(ngModel)]="checkoutForm.firstName" name="firstName" required
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="John" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                    Last Name <span class="text-primary">*</span>
-                                </label>
-                                <input type="text" [(ngModel)]="checkoutForm.lastName" name="lastName" required
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="Doe" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                    Email <span class="text-primary">*</span>
-                                </label>
-                                <input type="email" [(ngModel)]="checkoutForm.email" name="email" required
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="john.doe@example.com" />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                                    Phone <span class="text-primary">*</span>
-                                </label>
-                                <input type="tel" [(ngModel)]="checkoutForm.phone" name="phone" required
-                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                    placeholder="+91 98765 43210" />
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Shipping Address -->
                     <div
                         class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-                        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Shipping Address</h2>
-                        <div class="space-y-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Shipping Address</h2>
+                            <button type="button" (click)="toggleAddressForm()"
+                                class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-all cursor-pointer">
+                                <span class="material-symbols-outlined">{{ showAddressForm ? 'close' : 'add' }}</span>
+                            </button>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div *ngIf="isLoadingAddresses"
+                            class="py-8 flex flex-col items-center justify-center space-y-3">
+                            <div class="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin">
+                            </div>
+                            <p class="text-sm text-slate-500 animate-pulse">Fetching your addresses...</p>
+                        </div>
+
+                        <!-- Saved Address Summaries (Show All Selectable) -->
+                        <div *ngIf="!isLoadingAddresses && !showAddressForm && savedAddresses.length > 0"
+                            class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div *ngFor="let addr of savedAddresses" (click)="selectSavedAddress(addr)"
+                                [class.border-primary]="selectedAddress?._id === addr._id"
+                                [class.bg-primary/5]="selectedAddress?._id === addr._id"
+                                class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border-2 border-transparent hover:border-primary/50 transition-all cursor-pointer relative group">
+
+                                <!-- Selection Badge -->
+                                <div *ngIf="selectedAddress?._id === addr._id"
+                                    class="absolute top-2 right-2 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center shadow-sm">
+                                    <span class="material-symbols-outlined text-sm">check</span>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <span class="material-symbols-outlined text-primary mt-1">location_on</span>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-bold text-slate-900 dark:text-white truncate">
+                                            {{ addr.fullName }}
+                                            <span *ngIf="addr.isDefault"
+                                                class="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-[10px] rounded-full uppercase">Default</span>
+                                        </p>
+                                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">{{ addr.street }}</p>
+                                        <p class="text-sm text-slate-600 dark:text-slate-400">
+                                            {{ addr.city }}, {{ addr.state }} {{ addr.zipCode }}
+                                        </p>
+                                        <p class="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">phone</span>
+                                            {{ addr.phone }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Address Selected Warning (Show only when loaded) -->
+                        <div *ngIf="!isLoadingAddresses && !showAddressForm && !selectedAddress"
+                            class="py-4 text-center">
+                            <p class="text-slate-500 text-sm">No address selected. Click + to add one.</p>
+                        </div>
+
+                        <!-- New Address Form (Hidden by default, show when toggled or no addresses) -->
+                        <div *ngIf="!isLoadingAddresses && showAddressForm"
+                            class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-700 mt-4">
+                            <h3 class="text-sm font-bold text-primary uppercase tracking-wider mb-4">Add New Address
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">First
+                                        Name</label>
+                                    <input type="text" [(ngModel)]="checkoutForm.firstName" name="firstName"
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Last
+                                        Name</label>
+                                    <input type="text" [(ngModel)]="checkoutForm.lastName" name="lastName"
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
+                                </div>
+                            </div>
                             <div>
                                 <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                     Street Address <span class="text-primary">*</span>
@@ -69,25 +105,28 @@
                                         City <span class="text-primary">*</span>
                                     </label>
                                     <input type="text" [(ngModel)]="checkoutForm.city" name="city" required
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                        placeholder="Mumbai" />
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                         State <span class="text-primary">*</span>
                                     </label>
                                     <input type="text" [(ngModel)]="checkoutForm.state" name="state" required
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                        placeholder="Maharashtra" />
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                                         ZIP Code <span class="text-primary">*</span>
                                     </label>
                                     <input type="text" [(ngModel)]="checkoutForm.zipCode" name="zipCode" required
-                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                                        placeholder="400001" />
+                                        class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
                                 </div>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+                                <input type="tel" [(ngModel)]="checkoutForm.phone" name="phone"
+                                    class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent" />
                             </div>
                         </div>
                     </div>
@@ -126,7 +165,8 @@
                                 <p class="font-semibold text-sm text-slate-900 dark:text-white truncate">{{
                                     item.product.name }}</p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400">Qty: {{ item.quantity }}</p>
-                                <p class="text-sm font-bold text-primary mt-1">{{ formatPrice(item.product.price *
+                                <p class="text-sm font-bold text-primary mt-1">{{
+                                    formatPrice(cartService.getDiscountedPrice(item.product) *
                                     item.quantity) }}</p>
                             </div>
                         </div>

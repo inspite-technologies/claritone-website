@@ -70,10 +70,27 @@
 
                                 <!-- Price -->
                                 <div class="text-right">
-                                    <p class="text-2xl font-bold text-primary">{{ formatPrice(item.product.price *
-                                        item.quantity) }}</p>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400">{{
-                                        formatPrice(item.product.price) }} each</p>
+                                    <div *ngIf="item.product.offer" class="mb-1">
+                                        <span
+                                            class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full inline-block mb-1">
+                                            {{ item.product.offer.title }}
+                                        </span>
+                                        <div class="flex items-center justify-end gap-2">
+                                            <span class="text-sm text-slate-400 line-through">{{
+                                                formatPrice(item.product.price * item.quantity) }}</span>
+                                            <p class="text-2xl font-bold text-primary">{{
+                                                formatPrice(cartService.getDiscountedPrice(item.product) *
+                                                item.quantity) }}</p>
+                                        </div>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">{{
+                                            formatPrice(cartService.getDiscountedPrice(item.product)) }} each</p>
+                                    </div>
+                                    <div *ngIf="!item.product.offer">
+                                        <p class="text-2xl font-bold text-primary">{{ formatPrice(item.product.price *
+                                            item.quantity) }}</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">{{
+                                            formatPrice(item.product.price) }} each</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

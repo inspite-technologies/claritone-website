@@ -13,11 +13,12 @@ import { ToastrService } from 'ngx-toastr';
     styleUrl: './profile.css'
 })
 export class Profile implements OnInit {
-    activeTab: 'info' | 'bookings' | 'orders' = 'info';
+    activeTab: 'info' | 'bookings' | 'orders' | 'addresses' = 'info';
 
     user: any = null;
     bookings: any[] = [];
     orders: any[] = [];
+    addresses: any[] = [];
     selectedOrder: any = null;
     showOrderModal: boolean = false;
 
@@ -33,6 +34,17 @@ export class Profile implements OnInit {
         Email: ''
     };
 
+    showAddressForm = false;
+    addressForm = {
+        fullName: '',
+        phone: '',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'India'
+    };
+
     constructor(
         private profileService: ProfileService,
         private toastr: ToastrService,
@@ -44,6 +56,7 @@ export class Profile implements OnInit {
         this.loadUserProfile();
         this.loadBookings();
         this.loadOrders();
+        this.loadAddresses();
     }
 
     loadUserProfile() {
@@ -102,7 +115,19 @@ export class Profile implements OnInit {
         });
     }
 
-    setTab(tab: 'info' | 'bookings' | 'orders') {
+    loadAddresses() {
+        this.profileService.getAddresses().subscribe({
+            next: (data) => {
+                this.addresses = data;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error loading addresses', err);
+            }
+        });
+    }
+
+    setTab(tab: 'info' | 'bookings' | 'orders' | 'addresses') {
         this.activeTab = tab;
         this.closeOrderDetails();
     }
@@ -111,7 +136,21 @@ export class Profile implements OnInit {
         this.isLoading.orders = true;
         this.profileService.getOrderDetails(order._id).subscribe({
             next: (data) => {
-                this.selectedOrder = data || order;
+                const orderData = data || order;
+
+                // Extra check for address population if backend didn't do it
+                if (orderData && orderData.address) {
+                    const addrId = typeof orderData.address === 'string' ? orderData.address : orderData.address._id;
+                    // If it's just an ID string OR an object missing key fields like 'street'
+                    if (addrId && (typeof orderData.address === 'string' || !orderData.address.street)) {
+                        const matchedAddress = this.addresses.find(a => a._id === addrId);
+                        if (matchedAddress) {
+                            orderData.address = matchedAddress;
+                        }
+                    }
+                }
+
+                this.selectedOrder = orderData;
                 this.showOrderModal = true;
                 this.isLoading.orders = false;
                 document.body.style.overflow = 'hidden';
@@ -147,6 +186,56 @@ export class Profile implements OnInit {
                 this.toastr.error(err.error?.message || 'Failed to update profile');
             }
         });
+    }
+
+    toggleAddressForm() {
+        this.showAddressForm = !this.showAddressForm;
+        if (!this.showAddressForm) {
+            this.addressForm = {
+                fullName: '',
+                phone: '',
+                street: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: 'India'
+            };
+        }
+    }
+
+    onAddAddress() {
+        this.profileService.addAddress(this.addressForm).subscribe({
+            next: (res) => {
+                if (res.success) {
+                    this.toastr.success('Address added successfully');
+                    this.loadAddresses();
+                    this.toggleAddressForm();
+                } else {
+                    this.toastr.error(res.message || 'Failed to add address');
+                }
+            },
+            error: (err) => {
+                this.toastr.error(err.error?.message || 'Failed to add address');
+            }
+        });
+    }
+
+    onDeleteAddress(id: string) {
+        if (confirm('Are you sure you want to delete this address?')) {
+            this.profileService.deleteAddress(id).subscribe({
+                next: (res) => {
+                    if (res.success) {
+                        this.toastr.success('Address deleted successfully');
+                        this.loadAddresses();
+                    } else {
+                        this.toastr.error(res.message || 'Failed to delete address');
+                    }
+                },
+                error: (err) => {
+                    this.toastr.error(err.error?.message || 'Failed to delete address');
+                }
+            });
+        }
     }
 
     getStatusColor(status: string): string {

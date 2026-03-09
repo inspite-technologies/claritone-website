@@ -29,7 +29,7 @@ export class Compare {
     ];
 
     constructor(
-        private cartService: CartService,
+        public cartService: CartService,
         private productService: ProductService,
         private toastr: ToastrService
     ) { }
@@ -54,6 +54,6 @@ export class Compare {
     }
 
     formatPrice(price: number): string {
-        return '$' + price.toLocaleString('en-US');
+        return '₹' + Math.round(price).toLocaleString('en-IN');
     }
 }

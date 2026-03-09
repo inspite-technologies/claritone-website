@@ -41,6 +41,12 @@
                             <span class="material-symbols-outlined">shopping_bag</span>
                             Order History
                         </button>
+                        <button (click)="setTab('addresses')"
+                            [class]="activeTab === 'addresses' ? 'bg-primary text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+                            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-semibold cursor-pointer">
+                            <span class="material-symbols-outlined">location_on</span>
+                            Address
+                        </button>
 
                         <!-- Logout Button -->
                         <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
@@ -242,7 +248,7 @@
                                                 class="text-sm text-slate-600 dark:text-slate-400 font-medium flex items-center gap-2">
                                                 {{ order.items?.length || 0 }} item(s) total
                                                 <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-                                                <span class="text-lg font-black text-slate-900 dark:text-white">${{
+                                                <span class="text-lg font-black text-slate-900 dark:text-white">₹{{
                                                     order.totalAmount | number }}</span>
                                             </div>
                                         </div>
@@ -258,6 +264,130 @@
                                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                                             </button>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Tab -->
+                <div *ngIf="activeTab === 'addresses'" class="space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                        <div
+                            class="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Address</h3>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Manage your shipping and
+                                    billing
+                                    addresses.</p>
+                            </div>
+                            <button (click)="toggleAddressForm()"
+                                class="px-6 py-3 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-red-700 transition-all shadow-md hover:shadow-primary/20 cursor-pointer flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">{{ showAddressForm ? 'close' : 'add'
+                                    }}</span>
+                                {{ showAddressForm ? 'Cancel' : 'Add New Address' }}
+                            </button>
+                        </div>
+
+                        <div class="p-8">
+                            <!-- Add Address Form -->
+                            <div *ngIf="showAddressForm"
+                                class="mb-10 p-8 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                <h4 class="font-bold text-slate-900 dark:text-white mb-6">Add New Shipping Address</h4>
+                                <form (ngSubmit)="onAddAddress()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-black uppercase tracking-widest text-slate-500">Full
+                                            Name</label>
+                                        <input type="text" [(ngModel)]="addressForm.fullName" name="fullName" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-black uppercase tracking-widest text-slate-500">Phone
+                                            Number</label>
+                                        <input type="tel" [(ngModel)]="addressForm.phone" name="phone" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="md:col-span-2 space-y-2">
+                                        <label
+                                            class="text-xs font-black uppercase tracking-widest text-slate-500">Street
+                                            Address</label>
+                                        <input type="text" [(ngModel)]="addressForm.street" name="street" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="text-xs font-black uppercase tracking-widest text-slate-500">City</label>
+                                        <input type="text" [(ngModel)]="addressForm.city" name="city" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="text-xs font-black uppercase tracking-widest text-slate-500">State</label>
+                                        <input type="text" [(ngModel)]="addressForm.state" name="state" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="text-xs font-black uppercase tracking-widest text-slate-500">Zip
+                                            Code</label>
+                                        <input type="text" [(ngModel)]="addressForm.zipCode" name="zipCode" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="text-xs font-black uppercase tracking-widest text-slate-500">Country</label>
+                                        <input type="text" [(ngModel)]="addressForm.country" name="country" required
+                                            class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+                                    </div>
+                                    <div class="md:col-span-2 pt-4">
+                                        <button type="submit"
+                                            class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-red-700 transition-all shadow-lg hover:shadow-primary/30 cursor-pointer">
+                                            Save Address
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div *ngIf="addresses.length === 0 && !showAddressForm" class="py-12 text-center">
+                                <span
+                                    class="material-symbols-outlined text-6xl text-slate-300 mb-4 font-light">location_off</span>
+                                <p class="text-slate-500 font-medium">No saved addresses found.</p>
+                            </div>
+
+                            <div *ngIf="addresses.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div *ngFor="let address of addresses"
+                                    class="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 hover:border-primary/20 transition-all group relative">
+                                    <div class="flex items-start gap-4">
+                                        <div
+                                            class="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0 border border-primary/10 group-hover:bg-primary/10 transition-colors">
+                                            <span class="material-symbols-outlined text-primary">home</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-start justify-between">
+                                                <h4 class="font-bold text-slate-900 dark:text-white mb-1">{{
+                                                    address.fullName }}</h4>
+                                                <button (click)="onDeleteAddress(address._id)"
+                                                    class="p-1.5 text-slate-400 hover:text-red-500 transition-colors cursor-pointer">
+                                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                                </button>
+                                            </div>
+                                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-0.5">{{
+                                                address.street }}</p>
+                                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-0.5">{{ address.city
+                                                }}, {{ address.state }}</p>
+                                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">{{
+                                                address.zipCode
+                                                }}</p>
+                                            <div class="flex items-center gap-2 text-slate-500 text-xs font-semibold">
+                                                <span class="material-symbols-outlined text-sm">phone</span>
+                                                {{ address.phone }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="address.isDefault"
+                                        class="absolute top-4 right-12 px-2 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-md border border-primary/20">
+                                        Default
                                     </div>
                                 </div>
                             </div>
@@ -340,7 +470,7 @@
                         </div>
                         <div class="flex justify-between text-lg font-black text-slate-900 dark:text-white pt-1">
                             <span>Total Amount</span>
-                            <span class="text-primary text-xl">${{ selectedOrder?.totalAmount | number }}</span>
+                            <span class="text-primary text-xl">₹{{ selectedOrder?.totalAmount | number }}</span>
                         </div>
                     </div>
                 </div>
@@ -363,15 +493,16 @@
                         </h5>
                         <p class="text-xs font-bold text-primary uppercase tracking-widest">SKU: {{ item.product?.sku ||
                             item.product?._id?.slice(-8).toUpperCase() }}</p>
-                        <p class="text-sm font-bold text-slate-500 mt-2">Qty: {{ item.quantity }} | Price: ${{
-                            item.product?.price | number }}</p>
+                        <p class="text-sm font-bold text-slate-500 mt-2">Qty: {{ item.quantity }} | Price: ₹{{
+                            (item.price || item.product?.price) | number }}</p>
                         <p class="text-sm font-bold text-slate-500 uppercase tracking-widest mt-1">Quantity: {{
                             item.quantity }}</p>
                         <p class="text-[10px] font-black uppercase tracking-widest mt-1"
                             [class]="getStatusColor(item.status)">Item Status: {{ item.status }}</p>
                     </div>
                     <div class="text-right">
-                        <p class="font-black text-slate-900 dark:text-white text-xl">${{ (item.product?.price *
+                        <p class="font-black text-slate-900 dark:text-white text-xl">₹{{ ((item.price ||
+                            item.product?.price) *
                             item.quantity) |
                             number }}</p>
                     </div>

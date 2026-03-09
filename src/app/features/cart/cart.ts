@@ -34,7 +34,7 @@ export class Cart implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return '$' + price.toLocaleString('en-US');
+        return '₹' + Math.round(price).toLocaleString('en-IN');
     }
 
     get subtotal(): number {

@@ -63,8 +63,19 @@
                         <p class="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 mb-4 leading-relaxed">
                             {{ product.description }}
                         </p>
-                        <div class="flex items-center gap-2 mb-6 text-2xl font-black text-slate-900 dark:text-white">
-                            {{ formatPrice(product.price) }}
+                        <div class="mb-6 min-h-[50px]">
+                            <div *ngIf="product.offer">
+                                <div class="flex items-center gap-2 text-2xl font-black text-slate-900 dark:text-white">
+                                    {{ formatPrice(cartService.getDiscountedPrice(product)) }}
+                                    <span class="text-sm font-bold text-slate-400 line-through">{{
+                                        formatPrice(product.price) }}</span>
+                                </div>
+                                <span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">{{
+                                    product.offer.title }}</span>
+                            </div>
+                            <div *ngIf="!product.offer" class="text-2xl font-black text-slate-900 dark:text-white">
+                                {{ formatPrice(product.price) }}
+                            </div>
                         </div>
                     </div>
 

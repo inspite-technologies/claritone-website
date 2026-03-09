@@ -4,6 +4,16 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PRODUCT_METADATA } from '../data/product-metadata';
 
+export interface Offer {
+    _id: string;
+    title: string;
+    discount: number;
+    discountType: 'percentage' | 'fixed';
+    startDate: string;
+    endDate: string;
+    status: string;
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -27,6 +37,7 @@ export interface Product {
         style: string;
     };
     specifications: { label: string; value: string }[];
+    offer?: Offer;
 }
 
 @Injectable({
@@ -81,7 +92,8 @@ export class ProductService {
             images: p.images || (p.image ? [p.image] : ['https://via.placeholder.com/300x300.png?text=No+Image+Available']),
             features: p.features || metadata.features,
             featuresObject: p.featuresObject || metadata.featuresObject || {},
-            specifications: p.specifications || metadata.specifications
+            specifications: p.specifications || metadata.specifications,
+            offer: p.offer
         };
     }
 }

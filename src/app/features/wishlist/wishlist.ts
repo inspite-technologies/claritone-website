@@ -18,7 +18,7 @@ export class Wishlist implements OnInit {
 
     constructor(
         private wishlistService: WishlistService,
-        private cartService: CartService,
+        public cartService: CartService,
         private toastr: ToastrService
     ) { }
 
@@ -39,6 +39,6 @@ export class Wishlist implements OnInit {
     }
 
     formatPrice(price: number): string {
-        return '$' + price.toLocaleString('en-US');
+        return '₹' + Math.round(price).toLocaleString('en-IN');
     }
 }

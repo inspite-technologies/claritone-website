@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class ApiService {
-    private baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    private baseUrl = typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? '/api'
         : 'https://claritone-api.onrender.com/api';
 

@@ -75,7 +75,23 @@
                     <h1
                         class="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight uppercase leading-[1.1]">
                         {{ product.name }}</h1>
-                    <p class="text-3xl font-black text-primary mb-6">${{ product.price | number:'1.2-2' }}</p>
+                    <div class="mb-6">
+                        <div class="flex flex-col gap-2" *ngIf="product.offer">
+                            <div class="flex items-center gap-3">
+                                <span class="text-4xl font-black text-primary">₹{{
+                                    cartService.getDiscountedPrice(product) | number:'1.0-0' }}</span>
+                                <span class="text-xl font-bold text-slate-400 line-through">₹{{ product.price |
+                                    number:'1.0-0' }}</span>
+                            </div>
+                            <div
+                                class="bg-green-600 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-full w-fit flex items-center gap-1 shadow-md mb-2">
+                                <span class="material-symbols-outlined text-[14px]">local_offer</span>
+                                {{ product.offer.title }}
+                            </div>
+                        </div>
+                        <p class="text-4xl font-black text-primary mb-6" *ngIf="!product.offer">₹{{ product.price |
+                            number:'1.0-0' }}</p>
+                    </div>
                     <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-lg font-light">{{
                         product.description
                         }}</p>

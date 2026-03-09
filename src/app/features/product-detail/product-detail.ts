@@ -23,7 +23,7 @@ export class ProductDetail implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private productService: ProductService,
-        private cartService: CartService,
+        public cartService: CartService,
         public wishlistService: WishlistService,
         private toastr: ToastrService,
         private cdr: ChangeDetectorRef,

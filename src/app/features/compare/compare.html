@@ -73,7 +73,19 @@
                                             product.category }}</span>
                                         <span class="text-[#111318] dark:text-white text-lg font-bold mt-1">{{
                                             product.name }}</span>
-                                        <span class="text-primary text-xl font-bold mt-2">{{
+
+                                        <div class="mt-2" *ngIf="product.offer">
+                                            <span class="text-primary text-xl font-bold">{{
+                                                formatPrice(cartService.getDiscountedPrice(product)) }}</span>
+                                            <div class="flex items-center justify-center gap-2 mt-1">
+                                                <span class="text-xs text-slate-400 line-through">₹{{ product.price |
+                                                    number:'1.0-0' }}</span>
+                                                <span
+                                                    class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">{{
+                                                    product.offer.title }}</span>
+                                            </div>
+                                        </div>
+                                        <span class="text-primary text-xl font-bold mt-2" *ngIf="!product.offer">{{
                                             formatPrice(product.price) }}</span>
                                     </div>
                                 </div>
