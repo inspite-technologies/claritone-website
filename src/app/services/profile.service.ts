@@ -56,4 +56,8 @@ export class ProfileService {
     deleteAddress(id: string): Observable<any> {
         return this.api.delete<any>(`addresses/${id}`);
     }
+
+    changePassword(data: any): Observable<any> {
+        return this.api.put<any>('user/change-password', data);
+    }
 }

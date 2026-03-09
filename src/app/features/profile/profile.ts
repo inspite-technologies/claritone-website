@@ -13,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
     styleUrl: './profile.css'
 })
 export class Profile implements OnInit {
-    activeTab: 'info' | 'bookings' | 'orders' | 'addresses' = 'info';
+    activeTab: 'info' | 'bookings' | 'orders' | 'addresses' | 'security' = 'info';
 
     user: any = null;
     bookings: any[] = [];
@@ -25,7 +25,8 @@ export class Profile implements OnInit {
     isLoading = {
         user: false,
         bookings: false,
-        orders: false
+        orders: false,
+        password: false
     };
 
     updateForm = {
@@ -43,6 +44,12 @@ export class Profile implements OnInit {
         state: '',
         zipCode: '',
         country: 'India'
+    };
+
+    passwordForm = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
     };
 
     constructor(
@@ -127,7 +134,7 @@ export class Profile implements OnInit {
         });
     }
 
-    setTab(tab: 'info' | 'bookings' | 'orders' | 'addresses') {
+    setTab(tab: 'info' | 'bookings' | 'orders' | 'addresses' | 'security') {
         this.activeTab = tab;
         this.closeOrderDetails();
     }
@@ -216,6 +223,46 @@ export class Profile implements OnInit {
             },
             error: (err) => {
                 this.toastr.error(err.error?.message || 'Failed to add address');
+            }
+        });
+    }
+
+    onChangePassword() {
+        if (!this.passwordForm.currentPassword || !this.passwordForm.newPassword || !this.passwordForm.confirmPassword) {
+            this.toastr.warning('Please fill in all fields', 'Warning');
+            return;
+        }
+
+        if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+            this.toastr.error('New passwords do not match', 'Error');
+            return;
+        }
+
+        if (this.passwordForm.newPassword.length < 6) {
+            this.toastr.warning('Password must be at least 6 characters', 'Warning');
+            return;
+        }
+
+        this.isLoading.password = true;
+        this.profileService.changePassword(this.passwordForm).subscribe({
+            next: (res) => {
+                if (res.success) {
+                    this.toastr.success('Password changed successfully');
+                    this.passwordForm = {
+                        currentPassword: '',
+                        newPassword: '',
+                        confirmPassword: ''
+                    };
+                } else {
+                    this.toastr.error(res.message || 'Failed to change password');
+                }
+                this.isLoading.password = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                this.toastr.error(err.error?.message || 'Failed to change password');
+                this.isLoading.password = false;
+                this.cdr.detectChanges();
             }
         });
     }
