@@ -25,21 +25,24 @@
             <div class="lg:col-span-2 space-y-4">
                 <div *ngFor="let item of cartItems"
                     class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-                    <div class="flex gap-6">
+                    <div class="flex gap-4 sm:gap-6">
                         <!-- Product Image -->
                         <div class="flex-shrink-0">
-                            <div class="w-24 h-24 bg-slate-100 dark:bg-slate-700 rounded-xl bg-center bg-no-repeat bg-contain"
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 bg-slate-100 dark:bg-slate-700 rounded-xl bg-center bg-no-repeat bg-contain"
                                 [style.background-image]="'url(' + (item.product.images?.[0] || 'assets/product-placeholder.png') + ')'">
                             </div>
                         </div>
 
                         <!-- Product Details -->
                         <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-start mb-2">
+                            <div class="flex justify-between items-start mb-1 sm:mb-2">
                                 <div>
-                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ item.product.name }}
+                                    <h3
+                                        class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight">
+                                        {{ item.product.name }}
                                     </h3>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ item.product.category }}
+                                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{{
+                                        item.product.category }}
                                     </p>
                                 </div>
                                 <button (click)="removeItem(item.product.id)"
@@ -50,7 +53,7 @@
                                 </button>
                             </div>
 
-                            <div class="flex items-center justify-between mt-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-4">
                                 <!-- Quantity Controls -->
                                 <div class="flex items-center gap-3">
                                     <span class="text-sm text-slate-600 dark:text-slate-400">Quantity:</span>
@@ -69,16 +72,16 @@
                                 </div>
 
                                 <!-- Price -->
-                                <div class="text-right">
+                                <div class="text-left sm:text-right">
                                     <div *ngIf="item.product.offer" class="mb-1">
                                         <span
                                             class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full inline-block mb-1">
                                             {{ item.product.offer.title }}
                                         </span>
-                                        <div class="flex items-center justify-end gap-2">
+                                        <div class="flex items-center sm:justify-end gap-2">
                                             <span class="text-sm text-slate-400 line-through">{{
                                                 formatPrice(item.product.price * item.quantity) }}</span>
-                                            <p class="text-2xl font-bold text-primary">{{
+                                            <p class="text-xl sm:text-2xl font-bold text-primary">{{
                                                 formatPrice(cartService.getDiscountedPrice(item.product) *
                                                 item.quantity) }}</p>
                                         </div>
@@ -86,7 +89,8 @@
                                             formatPrice(cartService.getDiscountedPrice(item.product)) }} each</p>
                                     </div>
                                     <div *ngIf="!item.product.offer">
-                                        <p class="text-2xl font-bold text-primary">{{ formatPrice(item.product.price *
+                                        <p class="text-xl sm:text-2xl font-bold text-primary">{{
+                                            formatPrice(item.product.price *
                                             item.quantity) }}</p>
                                         <p class="text-xs text-slate-500 dark:text-slate-400">{{
                                             formatPrice(item.product.price) }} each</p>
