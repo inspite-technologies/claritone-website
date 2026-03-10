@@ -13,7 +13,8 @@ module.exports = {
                 "background-dark": "#111827",
             },
             fontFamily: {
-                display: ["Lexend", "sans-serif"],
+                sans: ["Outfit", "sans-serif"],
+                display: ["Outfit", "sans-serif"],
             },
             borderRadius: {
                 DEFAULT: "0.25rem",

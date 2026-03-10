@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Home } from './features/home/home';
+import { About } from './features/about/about';
 import { Outlets } from './features/outlets/outlets';
 import { HearingTest } from './features/hearing-test/hearing-test';
 import { Products } from './features/products/products';
@@ -20,10 +21,12 @@ import { PaymentFailure } from './features/payment/payment-failure';
 import { Login } from './features/login/login';
 import { Profile } from './features/profile/profile';
 import { ForgotPassword } from './features/login/forgot-password';
-
+import { Gallery } from './features/gallery/gallery';
 
 export const routes: Routes = [
     { path: '', component: Home },
+    { path: 'about', component: About },
+    { path: 'gallery', component: Gallery },
     { path: 'login', component: Login },
     { path: 'forgot-password', component: ForgotPassword },
     { path: 'profile', component: Profile },

@@ -1,4 +1,4 @@
-<section class="relative h-[500px] md:h-[600px] lg:h-[680px] overflow-hidden bg-slate-100 dark:bg-slate-900">
+<section class="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden bg-slate-100 dark:bg-slate-900">
     <!-- Slides Container -->
     <div class="relative h-full w-full">
         <div *ngFor="let banner of banners; let i = index"
@@ -6,7 +6,7 @@
             [ngClass]="i === currentIndex ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-105 z-0'">
 
             <!-- Background Image with Overlay -->
-            <div class="absolute inset-0 bg-cover bg-center lg:bg-top transition-opacity duration-1000"
+            <div class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000"
                 [style.backgroundImage]="'url(' + banner.image + ')'">
                 <div *ngIf="banner.title || banner.description || banner.subtitle"
                     class="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/20 to-transparent border-none">
@@ -45,6 +45,8 @@
     </div>
 
 </section>
+
+<!-- removed top level iso section -->
 
 <!-- Quick Service Cards Section -->
 <section class="relative z-40 pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,6 +132,111 @@
 
 </section>
 
+<!-- ISO Certificate Section -->
+<section
+    class="py-12 md:py-16 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div
+        class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white to-transparent dark:from-slate-800 dark:to-transparent opacity-60 pointer-events-none">
+    </div>
+    <div class="absolute -top-32 -left-32 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div
+            class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16 bg-white dark:bg-slate-800 p-6 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700">
+
+            <!-- Content Left (Small Image) -->
+            <div class="lg:w-2/5 shrink-0 flex justify-center">
+                <div
+                    class="relative w-full max-w-[400px] rounded-3xl overflow-hidden shadow-lg ring-1 ring-slate-900/5 dark:ring-white/10 group">
+                    <img src="certificate 1.jpg" alt="ISO 9001 2015 Certification"
+                        class="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105" />
+                    <!-- Inner glow -->
+                    <div
+                        class="absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-3xl pointer-events-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Right (Text) -->
+            <div class="lg:w-3/5 space-y-6">
+                <div>
+                    <div class="inline-block px-5 py-2 bg-primary/10 rounded-full mb-5">
+                        <p class="text-primary font-bold text-xs tracking-wider uppercase flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">verified</span>
+                            India's first ISO 9001:2015 certified
+                        </p>
+                    </div>
+                    <h2
+                        class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+                        Claritone Hearing Aid <span class="text-primary">Centre</span>,<br /> Speech Therapy Clinic
+                    </h2>
+                    <p class="text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                        We are a team of hearing and hearing aid Experts with highly experienced professionals providing
+                        personalized Service.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <!-- Feature 1 -->
+                    <div
+                        class="flex flex-col gap-2 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/30 group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-[10px] bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">school</span>
+                            </div>
+                            <h4 class="text-[15px] font-bold text-slate-900 dark:text-white">Well Trained Professionals
+                            </h4>
+                        </div>
+                        <p class="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed mt-1">Dedicated team of
+                            speech and hearing professionals with expertise.</p>
+                        <a routerLink="/about"
+                            class="text-primary font-bold text-[11px] uppercase tracking-wider hover:underline mt-2">Know
+                            More</a>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div
+                        class="flex flex-col gap-2 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all hover:border-secondary/30 group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-[10px] bg-secondary/10 flex items-center justify-center text-secondary group-hover:bg-secondary/20 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite</span>
+                            </div>
+                            <h4 class="text-[15px] font-bold text-slate-900 dark:text-white">Best care taking</h4>
+                        </div>
+                        <p class="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed mt-1">Visit our
+                            audiologist to investigate the cause of hearing loss.</p>
+                        <a routerLink="/services"
+                            class="text-secondary font-bold text-[11px] uppercase tracking-wider hover:underline mt-2">Know
+                            More</a>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div
+                        class="flex flex-col gap-2 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all hover:border-emerald-500/30 sm:col-span-2 group">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 rounded-[10px] bg-emerald-500/10 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-500/20 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">memory</span>
+                            </div>
+                            <h4 class="text-[15px] font-bold text-slate-900 dark:text-white">Advanced Technology</h4>
+                        </div>
+                        <p class="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed mt-1">World’s most
+                            innovative technology advanced Hearing aids and accessories suited for modern invisible
+                            style.</p>
+                        <a routerLink="/products"
+                            class="text-emerald-600 font-bold text-[11px] uppercase tracking-wider hover:underline mt-2">Know
+                            More</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <section class="pb-16 bg-slate-50 dark:bg-slate-900/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
@@ -151,84 +258,92 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- BTE -->
             <div
-                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
-                <div
-                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full overflow-hidden">
                     <img alt="BTE Hearing Aid"
-                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPVo_g-5yjglFkgSAtGZKMaYcgq5CvOb-8ByG5poQl66J_YMcF4jT6z4meRfYdA421LzFofsHPFSW7RLD6MN3SBpwKHmKTUATD5en88bJHmi4XeIx-nwDtuJuSdKzThMBnffCNCx3xeg1p5LhRQQVzFC0CbdjCd7ZtGgGd86fBgSR7UF682CtT5i1abPY1u8BH2fr1CM9szthm3c5ZM3srnASQy3pSkr_QqL3wGH6_XlDxgP2QGFL46_aGLdBhkoan6wOzyiIy81Y" />
+                    <!-- Minimal overlay for professional contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
                 </div>
-                <div class="flex-grow">
+                <div class="p-8 flex flex-col flex-grow">
                     <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Behind-the-Ear (BTE)</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Powerful
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">
+                        Powerful
                         amplification for all degrees of hearing loss, offering maximum control and durability.</p>
+                    <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-1.5 transition-transform cursor-pointer w-fit"
+                        routerLink="/products">
+                        Learn More <span class="material-symbols-outlined text-[18px] ml-1.5">arrow_forward</span>
+                    </a>
                 </div>
-                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
-                    routerLink="/products">
-                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
-                </a>
             </div>
 
             <!-- ITE -->
             <div
-                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
-                <div
-                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full overflow-hidden">
                     <img alt="ITE Hearing Aid"
-                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                         src="in%20the%20ear.jpg" />
+                    <!-- Minimal overlay for professional contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
                 </div>
-                <div class="flex-grow">
+                <div class="p-8 flex flex-col flex-grow">
                     <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">In-the-Ear (ITE)</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Custom-molded
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">
+                        Custom-molded
                         for a perfect and secure fit, providing comfort and clarity in any environment.</p>
+                    <a class="text-secondary font-bold flex items-center text-sm group-hover:translate-x-1.5 transition-transform cursor-pointer w-fit"
+                        routerLink="/products">
+                        Learn More <span class="material-symbols-outlined text-[18px] ml-1.5">arrow_forward</span>
+                    </a>
                 </div>
-                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
-                    routerLink="/products">
-                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
-                </a>
             </div>
 
             <!-- RIC -->
             <div
-                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
-                <div
-                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full overflow-hidden">
                     <img alt="RIC Hearing Aid"
-                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2M0CKDcltaWd8dw8PK84pM3bFofRAq6PmrISAlAgjNg-5F1nCbZZRBWgX5TyCCQ3oniZl_Drn90u9_kMiLgEFGrYeT4VpJXq-mXryZLLr4y6n5X2S2dbxDhjrqhBmwRDqSYIBjTGixA4S5-3ZFkpZDPwwTH_qeibI9APTPvzHSSw9VhM-3gXQR7rCJSMGAHObnE-yZygyK-UQF574jq9Z2pd5sFaT6Rm_EIYOBcW4M_rfAZjD5Xbz6nVw9wRCN-WFDNXGAYsNlYk" />
+                    <!-- Minimal overlay for professional contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
                 </div>
-                <div class="flex-grow">
+                <div class="p-8 flex flex-col flex-grow">
                     <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Receiver-in-Canal (RIC)</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Discreet
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">
+                        Discreet
                         design with natural sound quality, perfect for those who prioritize aesthetics and sound
                         fidelity.</p>
+                    <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-1.5 transition-transform cursor-pointer w-fit"
+                        routerLink="/products">
+                        Learn More <span class="material-symbols-outlined text-[18px] ml-1.5">arrow_forward</span>
+                    </a>
                 </div>
-                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
-                    routerLink="/products">
-                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
-                </a>
             </div>
 
             <!-- IIC -->
             <div
-                class="bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:scale-[1.02]">
-                <div
-                    class="h-48 flex items-center justify-center mb-8 bg-slate-50 dark:bg-slate-950 rounded-2xl p-6 shadow-inner overflow-hidden">
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full overflow-hidden">
                     <img alt="Invisible Hearing Aid"
-                        class="h-40 w-auto object-contain group-hover:scale-110 transition-transform duration-700"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                         src="invisible.jpg" />
+                    <!-- Minimal overlay for professional contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
                 </div>
-                <div class="flex-grow">
+                <div class="p-8 flex flex-col flex-grow">
                     <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white">Invisible (IIC)</h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light">Fully
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-light flex-grow">
+                        Fully
                         invisible in the ear canal, providing the ultimate in discretion without compromising
                         performance.</p>
+                    <a class="text-secondary font-bold flex items-center text-sm group-hover:translate-x-1.5 transition-transform cursor-pointer w-fit"
+                        routerLink="/products">
+                        Learn More <span class="material-symbols-outlined text-[18px] ml-1.5">arrow_forward</span>
+                    </a>
                 </div>
-                <a class="text-primary font-bold flex items-center text-sm group-hover:translate-x-2 transition-transform cursor-pointer"
-                    routerLink="/products">
-                    Learn More <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
-                </a>
             </div>
         </div>
     </div>
@@ -291,6 +406,130 @@
         </div>
     </div>
 </section>
+
+<!-- Our Speciality Section -->
+<section class="py-20 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white tracking-tight">
+                Our <span class="text-primary">Speciality</span>
+            </h2>
+            <div class="w-20 h-1.5 bg-primary mx-auto mb-8 rounded-full"></div>
+            <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                Our clinic in a comfortable air-conditioned ambience along with state-of-the-art gadgets, our dedicated
+                team offers a whole range of services, making them a one-stop solutions for hearing assistance. Our
+                centre has specialized acoustically designed sound treated room equipped with high quality audiometers,
+                impedance meters, oae and bera with ansi standards calibration.
+            </p>
+        </div>
+
+        <!-- Grid Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Card 1: Hearing Assessments -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full cursor-pointer overflow-hidden text-center" routerLink="/services">
+                    <img src="imag1.png" alt="Hearing assessments"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110" />
+                    <!-- Minimal overlay for professional contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+                    <div
+                        class="absolute bottom-4 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-primary uppercase tracking-widest shadow-lg">
+                            Read More <span class="material-symbols-outlined text-[14px]">visibility</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer"
+                        routerLink="/services">Hearing assessments</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-[14px] leading-relaxed font-light flex-grow">
+                        Our qualified audiologists also assist the hearing impaired with a diligent, unbiased and
+                        friendly advice. After a through consultation, we recommend...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 2: Patient Education -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full cursor-pointer overflow-hidden text-center" routerLink="/services">
+                    <img src="imag2.png" alt="Patient education and counseling"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+                    <div
+                        class="absolute bottom-4 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-primary uppercase tracking-widest shadow-lg">
+                            Read More <span class="material-symbols-outlined text-[14px]">visibility</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer"
+                        routerLink="/services">Patient education</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-[14px] leading-relaxed font-light flex-grow">
+                        Our audiologists are hearing care experts who provide patient education and effective counseling
+                        on hearing-related topics to improve self confidence and..
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 3: Servicing -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full cursor-pointer overflow-hidden text-center" routerLink="/services">
+                    <img src="imag3.png" alt="Servicing of Hearing devices"
+                        class="h-full w-full object-cover transform transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+                    <div
+                        class="absolute bottom-4 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-primary uppercase tracking-widest shadow-lg">
+                            Read More <span class="material-symbols-outlined text-[14px]">visibility</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer"
+                        routerLink="/services">Servicing devices</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-[14px] leading-relaxed font-light flex-grow">
+                        Hearing aids are programmed and adjusted to the satisfaction of patients, with the help of the
+                        most modern computerized equipment.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card 4: Cochlear Implant -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col h-full transform hover:-translate-y-1">
+                <div class="relative h-56 w-full cursor-pointer overflow-hidden text-center" routerLink="/services">
+                    <img src="imag4.png" alt="Cochlear Implant"
+                        class="h-full w-full object-cover object-top transform transition-transform duration-700 group-hover:scale-110" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-black/5 to-transparent"></div>
+                    <div
+                        class="absolute bottom-4 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span
+                            class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-full text-[11px] font-bold text-primary uppercase tracking-widest shadow-lg">
+                            Read More <span class="material-symbols-outlined text-[14px]">visibility</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-primary transition-colors cursor-pointer"
+                        routerLink="/services">Cochlear Implant</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-[14px] leading-relaxed font-light flex-grow">
+                        A cochlear implant is an electronic medical device that replaces the function of the damaged
+                        inner ear. Unlike hearing aids...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="relative py-12 md:py-16 text-white text-center overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[20000ms] hover:scale-105"

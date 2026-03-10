@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 /* Custom Global Styles */
+html {
+  font-size: 15px;
+}
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .font-cursive {

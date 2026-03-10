@@ -1,11 +1,11 @@
 <header
-    class="sticky top-0 z-[100] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    class="sticky top-0 z-[100] bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm">
     <div class="max-w-[1400px] mx-auto">
         <div class="flex items-center justify-between px-4 sm:px-6 lg:px-10 h-16 sm:h-20">
             <!-- Logo -->
-            <div class="flex items-center space-x-3">
+            <a routerLink="/" class="flex items-center space-x-3 cursor-pointer">
                 <img src="assets/logo.png" alt="Claritone Logo" class="h-10 sm:h-14 w-auto" />
-            </div>
+            </a>
 
             <!-- Desktop Navigation -->
             <nav class="hidden lg:flex items-center gap-4 xl:gap-8">
@@ -13,9 +13,17 @@
                     class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Home
                 </a>
+                <a routerLink="/about" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    About Us
+                </a>
                 <a routerLink="/products" routerLinkActive="text-primary"
                     class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Products
+                </a>
+                <a routerLink="/gallery" routerLinkActive="text-primary"
+                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
+                    Gallery
                 </a>
                 <a routerLink="/services" routerLinkActive="text-primary"
                     class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
@@ -24,10 +32,6 @@
                 <a routerLink="/outlets" routerLinkActive="text-primary"
                     class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
                     Locations
-                </a>
-                <a routerLink="/blog" routerLinkActive="text-primary"
-                    class="text-slate-700 dark:text-slate-200 text-[14px] xl:text-[15px] font-bold hover:text-primary transition-colors cursor-pointer whitespace-nowrap">
-                    Blog
                 </a>
             </nav>
 
@@ -109,9 +113,19 @@
             <span>Home</span>
             <span class="material-symbols-outlined text-slate-400">chevron_right</span>
         </a>
+        <a routerLink="/about" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>About Us</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
         <a routerLink="/products" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
             class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
             <span>Products</span>
+            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
+        </a>
+        <a routerLink="/gallery" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
+            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
+            <span>Gallery</span>
             <span class="material-symbols-outlined text-slate-400">chevron_right</span>
         </a>
         <a routerLink="/services" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
@@ -122,11 +136,6 @@
         <a routerLink="/outlets" (click)="closeMobileMenu()"
             class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
             <span>Locations</span>
-            <span class="material-symbols-outlined text-slate-400">chevron_right</span>
-        </a>
-        <a routerLink="/blog" (click)="closeMobileMenu()" routerLinkActive="bg-primary/10 text-primary"
-            class="flex items-center justify-between w-full py-4 px-4 text-lg font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer">
-            <span>Blog</span>
             <span class="material-symbols-outlined text-slate-400">chevron_right</span>
         </a>
 

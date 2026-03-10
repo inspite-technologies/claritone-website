@@ -149,14 +149,16 @@
 
             <!-- Product Grid -->
             <div *ngIf="!isLoading && !errorMessage && products.length > 0"
-                class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <!-- Dynamic Product Cards -->
                 <div *ngFor="let product of products"
-                    class="bg-white dark:bg-[#1a202c] rounded-xl border border-[#e5e7eb] dark:border-gray-800 overflow-hidden group flex flex-col">
-                    <div class="relative h-64 bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-8 cursor-pointer overflow-hidden"
+                    class="bg-white dark:bg-[#1a202c] rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden group border border-slate-100 dark:border-slate-800 flex flex-col transform hover:-translate-y-1">
+                    <div class="relative w-full aspect-square cursor-pointer overflow-hidden bg-white dark:bg-slate-900"
                         (click)="viewProductDetail(product.id)">
                         <img [src]="product.images?.[0] || 'assets/product-placeholder.png'" [alt]="product.name"
-                            class="max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transform transition-transform duration-500 group-hover:scale-110" />
+                            class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110" />
+                        <!-- Minimal overlay for professional contrast -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent"></div>
 
                         <!-- Badges -->
                         <div class="absolute top-4 left-4" *ngIf="product.id === '1'">
@@ -190,13 +192,13 @@
                         </button>
                     </div>
 
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-4 flex-1 flex flex-col">
                         <p class="text-[10px] font-bold text-primary uppercase mb-1">{{ product.brand }}</p>
-                        <h3 class="text-lg font-bold mb-2 text-[#111318] dark:text-white group-hover:text-primary transition-colors cursor-pointer"
+                        <h3 class="text-base font-bold mb-2 text-[#111318] dark:text-white group-hover:text-primary transition-colors cursor-pointer"
                             (click)="viewProductDetail(product.id)">
                             {{ product.name }}
                         </h3>
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <div class="flex items-center gap-2" *ngIf="product.offer">
                                 <span class="text-2xl font-black text-[#111318] dark:text-white">₹{{
                                     cartService.getDiscountedPrice(product) | number:'1.0-0' }}</span>
@@ -259,9 +261,9 @@
         </button>
 
         <!-- Product Image -->
-        <div class="md:w-1/2 bg-slate-50 dark:bg-slate-950 p-12 flex items-center justify-center">
+        <div class="md:w-1/2 bg-slate-50 dark:bg-slate-950 overflow-hidden">
             <img [src]="selectedProduct?.images?.[0] || 'assets/product-placeholder.png'" [alt]="selectedProduct?.name"
-                class="max-h-[300px] object-contain mix-blend-multiply dark:mix-blend-normal">
+                class="w-full h-full object-cover transform transition-transform duration-500 hover:scale-110">
         </div>
 
         <!-- Product Summary -->
