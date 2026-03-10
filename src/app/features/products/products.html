@@ -56,21 +56,18 @@
                             <h3 class="text-sm font-bold uppercase tracking-wider">Category</h3>
                         </div>
                         <div class="space-y-1">
-                            <label class="flex items-center gap-3 py-2 cursor-pointer group">
-                                <input (change)="toggleFilter('category', 'Hearing Aids')"
+                            <label *ngFor="let cat of availableCategories"
+                                class="flex items-center gap-3 py-2 cursor-pointer group">
+                                <input (change)="toggleFilter('category', cat)"
+                                    [checked]="activeFilters['category'].includes(cat)"
                                     class="h-5 w-5 rounded border-[#dbdfe6] dark:border-gray-600 bg-transparent text-primary focus:ring-0 checked:bg-[image:--checkbox-tick-svg]"
                                     type="checkbox" />
                                 <span
-                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">Hearing
-                                    Aids</span>
+                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">{{
+                                    cat }}</span>
                             </label>
-                            <label class="flex items-center gap-3 py-2 cursor-pointer group">
-                                <input (change)="toggleFilter('category', 'Accessories')"
-                                    class="h-5 w-5 rounded border-[#dbdfe6] dark:border-gray-600 bg-transparent text-primary focus:ring-0 checked:bg-[image:--checkbox-tick-svg]"
-                                    type="checkbox" />
-                                <span
-                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">Accessories</span>
-                            </label>
+                            <div *ngIf="availableCategories.length === 0" class="text-xs text-slate-400 italic py-2">No
+                                categories found</div>
                         </div>
                     </div>
                     <!-- Brand Filter -->
@@ -80,27 +77,18 @@
                             <h3 class="text-sm font-bold uppercase tracking-wider">Brand</h3>
                         </div>
                         <div class="space-y-1">
-                            <label class="flex items-center gap-3 py-2 cursor-pointer group">
-                                <input (change)="toggleFilter('brand', 'Phonak')"
+                            <label *ngFor="let brand of availableBrands"
+                                class="flex items-center gap-3 py-2 cursor-pointer group">
+                                <input (change)="toggleFilter('brand', brand)"
+                                    [checked]="activeFilters['brand'].includes(brand)"
                                     class="h-5 w-5 rounded border-[#dbdfe6] dark:border-gray-600 bg-transparent text-primary focus:ring-0 checked:bg-[image:--checkbox-tick-svg]"
                                     type="checkbox" />
                                 <span
-                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">Phonak</span>
+                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">{{
+                                    brand }}</span>
                             </label>
-                            <label class="flex items-center gap-3 py-2 cursor-pointer group">
-                                <input (change)="toggleFilter('brand', 'Oticon')"
-                                    class="h-5 w-5 rounded border-[#dbdfe6] dark:border-gray-600 bg-transparent text-primary focus:ring-0 checked:bg-[image:--checkbox-tick-svg]"
-                                    type="checkbox" />
-                                <span
-                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">Oticon</span>
-                            </label>
-                            <label class="flex items-center gap-3 py-2 cursor-pointer group">
-                                <input (change)="toggleFilter('brand', 'Signia')"
-                                    class="h-5 w-5 rounded border-[#dbdfe6] dark:border-gray-600 bg-transparent text-primary focus:ring-0 checked:bg-[image:--checkbox-tick-svg]"
-                                    type="checkbox" />
-                                <span
-                                    class="text-sm font-medium text-[#111318] dark:text-gray-300 group-hover:text-primary">Signia</span>
-                            </label>
+                            <div *ngIf="availableBrands.length === 0" class="text-xs text-slate-400 italic py-2">No
+                                brands found</div>
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,9 @@ export class Products implements OnInit {
     brand: []
   };
 
+  availableCategories: string[] = [];
+  availableBrands: string[] = [];
+
   constructor(
     public cartService: CartService,
     private productService: ProductService,
@@ -85,8 +88,12 @@ export class Products implements OnInit {
         this.isLoading = false;
 
         this.allProducts = products || [];
+
+        // Extract unique categories and brands
+        this.availableCategories = [...new Set(this.allProducts.map(p => p.category))].filter(Boolean).sort();
+        this.availableBrands = [...new Set(this.allProducts.map(p => p.brand))].filter(Boolean).sort();
+
         this.applyFilters();
-        this.totalPages = Math.ceil(this.allProducts.length / this.pageSize);
 
         console.log('ProductsComponent: Final state - isLoading:', this.isLoading, 'productsToShow:', this.products.length);
         this.cdr.detectChanges(); // Force DOM update
@@ -109,6 +116,7 @@ export class Products implements OnInit {
     } else {
       filters.push(value);
     }
+    this.applyFilters(); // Apply immediately when toggled
   }
 
   applyFilters() {
@@ -152,10 +160,11 @@ export class Products implements OnInit {
       category: [],
       brand: []
     };
+    // Uncheck all checkboxes visually
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((cb: any) => cb.checked = false);
+
     this.applyFilters();
-    // Re-fetch to clear checkbox states in UI if they were manual
-    // Alternatively, using a form group would be better, but this works for now.
-    window.location.reload(); // Quick way to reset all checkbox states
   }
 
   quickView(productId: string) {
