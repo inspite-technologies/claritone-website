@@ -24,6 +24,8 @@ interface HomeBanner {
 })
 export class Home implements OnInit, OnDestroy {
   banners: HomeBanner[] = [];
+  displayBanners: HomeBanner[] = [];
+  disableTransition = false;
 
   currentIndex = 0;
   private interval: any;
@@ -58,6 +60,7 @@ export class Home implements OnInit, OnDestroy {
             };
           });
           this.banners = apiBanners;
+          this.displayBanners = [...this.banners, this.banners[0]];
           this.cdr.detectChanges();
         }
       },
@@ -83,15 +86,46 @@ export class Home implements OnInit, OnDestroy {
   }
 
   nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.banners.length;
+    if (this.banners.length > 1) {
+      if (this.currentIndex === this.banners.length) {
+        // We are already at the clone (index mapping logic fix below)
+        // This case should ideally be handled by the reset logic
+      }
+
+      this.currentIndex++;
+      this.cdr.detectChanges();
+
+      if (this.currentIndex === this.banners.length) {
+        // We just slid into the clone, now snap back to real first slide
+        setTimeout(() => {
+          this.disableTransition = true;
+          this.currentIndex = 0;
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.disableTransition = false;
+            this.cdr.detectChanges();
+          }, 50);
+        }, 1200); // Wait for transition duration
+      }
+    }
   }
 
   prevSlide() {
-    this.currentIndex = (this.currentIndex - 1 + this.banners.length) % this.banners.length;
+    if (this.banners.length > 1) {
+      if (this.currentIndex === 0) {
+        // Move to clone and then snap (optional, focusing on nextSlide as requested)
+        this.currentIndex = this.banners.length - 1;
+      } else {
+        this.currentIndex--;
+      }
+      this.cdr.detectChanges();
+    }
   }
 
   goToSlide(index: number) {
     this.currentIndex = index;
+    this.cdr.detectChanges();
     this.stopAutoplay();
     this.startAutoplay();
   }

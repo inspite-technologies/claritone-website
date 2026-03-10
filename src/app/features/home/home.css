@@ -11,7 +11,8 @@
 }
 
 .animate-slide-up {
-    animation: slideUp 0.8s ease-out forwards;
+    animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    backface-visibility: hidden;
 }
 
 /* Service Card Pastel Backgrounds with Gradients */
