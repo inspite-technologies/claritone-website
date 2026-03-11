@@ -18,6 +18,9 @@ export interface Store {
     }[];
     status: string;
     mapLocation?: string;
+    image?: string;
+    imageUrl?: string;
+    images?: string[];
 }
 
 @Injectable({
@@ -52,7 +55,20 @@ export class StoreService {
         this.apiService.get<any>('stores').subscribe({
             next: (res) => {
                 if (res.success && res.data) {
-                    this.storesSubject.next(res.data);
+                    const baseUrl = typeof window !== 'undefined' &&
+                        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                        ? 'http://localhost:5050/'
+                        : 'https://apiclaritone.jankidesign.com/';
+
+                    const formattedStores = res.data.map((store: any) => {
+                        const imgSource = (store.images && store.images.length > 0) ? store.images[0] : (store.imageUrl || store.image);
+                        if (imgSource) {
+                            const formattedUrl = imgSource.replace(/\\/g, '/');
+                            store.image = formattedUrl.startsWith('http') ? formattedUrl : `${baseUrl}${formattedUrl}`;
+                        }
+                        return store;
+                    });
+                    this.storesSubject.next(formattedStores);
                 }
                 this.isLoadingStoresSubject.next(false);
                 this.isLoaded = true;

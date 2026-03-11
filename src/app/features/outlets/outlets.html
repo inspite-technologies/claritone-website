@@ -46,61 +46,108 @@
                 <p class="text-lg">No centers found matching your search.</p>
             </div>
 
-            <div *ngIf="!isLoadingStores && stores.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div *ngIf="!isLoadingStores && stores.length > 0"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div *ngFor="let store of stores"
-                    class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
-                    <div class="flex flex-col gap-6">
+                    class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 group flex flex-col h-full overflow-hidden">
+
+                    <!-- Store Image with Status Overlay -->
+                    <div class="relative h-48 w-full overflow-hidden shrink-0">
+                        <img [src]="store.image || 'visit center.jpg'" [alt]="store.name"
+                            class="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110" />
+
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent">
+                        </div>
+
+                        <!-- Status Badge Overlay -->
+                        <div class="absolute top-3 right-3 z-20">
+                            <span *ngIf="store.status === 'Active'"
+                                class="bg-emerald-500/90 text-white text-[9px] uppercase tracking-[0.2em] font-black px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+                                Open Now
+                            </span>
+                            <span *ngIf="store.status !== 'Active'"
+                                class="bg-rose-500/90 text-white text-[9px] uppercase tracking-[0.2em] font-black px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md">
+                                {{ store.status || 'Closed' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-6 flex flex-col flex-grow">
                         <div class="flex-grow">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xl font-bold dark:text-white">{{ store.name }}</h3>
-                                <span *ngIf="store.status === 'Active'"
-                                    class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">Open
-                                    Now</span>
-                                <span *ngIf="store.status !== 'Active'"
-                                    class="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded">{{
-                                    store.status || 'Closed' }}</span>
-                            </div>
-                            <div class="space-y-3 text-slate-600 dark:text-slate-400 text-sm">
-                                <div class="flex items-start gap-2">
-                                    <span class="material-symbols-outlined text-primary text-lg">location_on</span>
-                                    <span>{{ store.address }}, {{ store.city }}, {{ store.state }} {{ store.zipCode
-                                        }}</span>
+                            <h3
+                                class="text-lg font-bold text-slate-900 dark:text-white mb-4 group-hover:text-primary transition-colors tracking-tight line-clamp-1">
+                                {{ store.name }}
+                            </h3>
+
+                            <div class="space-y-4 text-slate-600 dark:text-slate-400">
+                                <!-- Address -->
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary shrink-0">
+                                        <span class="material-symbols-outlined text-[18px]">location_on</span>
+                                    </div>
+                                    <p class="text-[13px] leading-relaxed font-medium pt-0.5">
+                                        {{ store.address }}<br />
+                                        <span class="text-slate-400 text-[12px]">{{ store.city }}, {{ store.state }} {{
+                                            store.zipCode }}</span>
+                                    </p>
                                 </div>
-                                <div class="flex items-start gap-2">
-                                    <span class="material-symbols-outlined text-primary text-lg">phone</span>
-                                    <span>{{ store.contact }}</span>
+
+                                <!-- Phone -->
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-secondary/5 flex items-center justify-center text-secondary shrink-0">
+                                        <span class="material-symbols-outlined text-[18px]">call</span>
+                                    </div>
+                                    <a [href]="'tel:' + store.contact"
+                                        class="text-[13px] font-bold hover:text-primary transition-colors">
+                                        {{ store.contact }}
+                                    </a>
                                 </div>
-                                <div class="flex flex-col gap-3 py-2 border-y border-slate-100 dark:border-slate-800"
+
+                                <!-- Timings Reveal -->
+                                <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50"
                                     *ngIf="store.hours && store.hours.length > 0">
                                     <button (click)="toggleTimings(store._id)"
-                                        class="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:text-red-700 transition-colors cursor-pointer w-fit">
-                                        <span class="material-symbols-outlined text-lg">{{ visibleTimings[store._id] ?
-                                            'expand_less' : 'schedule' }}</span>
-                                        {{ visibleTimings[store._id] ? 'Hide Store Timings' : 'Show Store Timings' }}
+                                        class="flex items-center gap-2 text-primary font-black text-[9px] uppercase tracking-[0.2em] hover:text-red-700 transition-all cursor-pointer group/btn">
+                                        <span class="material-symbols-outlined text-[16px] transition-transform"
+                                            [class.rotate-180]="visibleTimings[store._id]">
+                                            {{ visibleTimings[store._id] ? 'expand_less' : 'schedule' }}
+                                        </span>
+                                        {{ visibleTimings[store._id] ? 'Timings' : 'View Timings' }}
                                     </button>
 
-                                    <div class="flex flex-col gap-2 mt-2" *ngIf="visibleTimings[store._id]">
+                                    <div class="grid grid-cols-1 gap-1.5 mt-3 animate-slide-down"
+                                        *ngIf="visibleTimings[store._id]">
                                         <div *ngFor="let h of store.hours"
-                                            class="flex justify-between items-center text-xs py-1 px-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                                            class="flex justify-between items-center text-[11px] py-1.5 px-3 bg-slate-50 dark:bg-slate-900/40 rounded-lg border border-slate-100 dark:border-slate-800">
                                             <span
-                                                class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{{
-                                                h.day }}</span>
-                                            <span class="text-slate-500 dark:text-slate-400">{{ h.time }}</span>
+                                                class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest text-[9px]">
+                                                {{ h.day }}
+                                            </span>
+                                            <span class="text-slate-500 dark:text-slate-400 font-medium">{{ h.time
+                                                }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Action Button -->
+                            <div class="mt-8">
+                                <button (click)="openBookingModal(store._id)"
+                                    class="w-full bg-primary text-white py-3 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-red-700 hover:shadow-xl hover:shadow-primary/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]">
+                                    <span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                                    Book Appointment
+                                </button>
+                            </div>
                         </div>
-                        <div class="mt-auto pt-4">
-                            <button (click)="openBookingModal(store._id)"
-                                class="w-full bg-primary text-white py-2.5 rounded-xl font-bold uppercase tracking-widest text-[11px] hover:bg-red-700 transition-all shadow-md hover:shadow-primary/20 cursor-pointer flex items-center justify-center gap-2">
-                                <span class="material-symbols-outlined text-sm">calendar_month</span>
-                                Book Appointment
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
+
             <div class="pt-6 flex justify-center">
                 <button *ngIf="stores.length > 6 && !isLoadingStores" (click)="toggleAllLocations()"
                     class="text-primary font-bold flex items-center gap-2 hover:underline cursor-pointer">
