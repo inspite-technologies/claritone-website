@@ -35,6 +35,15 @@ export class Outlets implements OnInit {
     consultation: 'Offline'
   };
 
+  contactForm = {
+    name: '',
+    mobileNumber: '',
+    state: '',
+    authorization: false
+  };
+
+  isSubmittingContact = false;
+
   stores: Store[] = [];
   isLoadingStores = true;
   visibleTimings: { [key: string]: boolean } = {};
@@ -207,5 +216,33 @@ export class Outlets implements OnInit {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  submitContactForm() {
+    if (!this.contactForm.name || !this.contactForm.mobileNumber) {
+      this.toastr.warning('Please fill in your name and mobile number', 'Warning');
+      return;
+    }
+
+    this.isSubmittingContact = true;
+    this.apiService.post('form/submit', this.contactForm).subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.message || 'Thank you for contacting us! We will get back to you soon.', 'Success');
+        this.contactForm = {
+          name: '',
+          mobileNumber: '',
+          state: '',
+          authorization: false
+        };
+        this.isSubmittingContact = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Contact form submission failed', err);
+        this.toastr.error('Failed to send message. Please try again later.', 'Error');
+        this.isSubmittingContact = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

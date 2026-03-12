@@ -157,6 +157,100 @@
         </div>
     </div>
 </main>
+<section id="contact-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-100 dark:border-slate-800">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <!-- Left Column: Content -->
+        <div>
+            <span class="text-primary font-bold uppercase tracking-widest text-[9px] bg-primary/5 px-4 py-2 rounded-full">Contact Us</span>
+            <h2 class="text-4xl font-extrabold text-slate-900 dark:text-white mt-6 mb-4 leading-tight">Can't Find a Location Near You?</h2>
+            <p class="text-[15px] text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-lg">
+                Reach out to our main headquarters or fill out the form, and our specialists will help you find the closest hearing care center or arrange a home visit.
+            </p>
+
+            <div class="space-y-8">
+                <!-- Address -->
+                <div class="flex items-start gap-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-110">
+                        <span class="material-symbols-outlined">location_on</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] mb-1">Main Headquarters</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            Claritone Hearing Aid Centre,<br />
+                            Speech Therapy Clinic, Sebastian Road,<br />
+                            Kaloor, Cochin - 682017, Kerala
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="flex items-start gap-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-secondary/5 flex items-center justify-center text-secondary shrink-0 transition-transform group-hover:scale-110">
+                        <span class="material-symbols-outlined">call</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] mb-1">Call Us</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors cursor-pointer">+91 98 9511 1911</p>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="flex items-start gap-4 group">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/5 flex items-center justify-center text-emerald-500 shrink-0 transition-transform group-hover:scale-110">
+                        <span class="material-symbols-outlined">mail</span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] mb-1">Email Support</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors cursor-pointer">info@claritonehearing.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Form -->
+        <div class="bg-white dark:bg-slate-900/50 rounded-[40px] p-8 lg:p-10 shadow-3xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+            
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">Direct Inquiry</h3>
+            <form (ngSubmit)="submitContactForm()" class="space-y-5 relative z-10">
+                <div>
+                    <label class="block text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2">Full Name</label>
+                    <input type="text" [(ngModel)]="contactForm.name" name="name" required
+                        class="w-full px-6 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium"
+                        placeholder="e.g. Rahul Sharma" />
+                </div>
+                <div>
+                    <label class="block text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2">Mobile Number</label>
+                    <div class="relative">
+                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">+91</span>
+                        <input type="tel" [(ngModel)]="contactForm.mobileNumber" name="mobileNumber" required
+                            class="w-full pl-14 pr-6 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium"
+                            placeholder="00000 00000" />
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-2">State</label>
+                    <input type="text" [(ngModel)]="contactForm.state" name="state"
+                        class="w-full px-6 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm font-medium"
+                        placeholder="e.g. Kerala" />
+                </div>
+                <div class="flex items-start gap-3 py-2">
+                    <input type="checkbox" [(ngModel)]="contactForm.authorization" name="authorization" id="auth"
+                        class="mt-1 rounded border-slate-300 text-primary focus:ring-primary h-4 w-4" />
+                    <label for="auth" class="text-[11px] text-slate-400 dark:text-slate-500 leading-relaxed">
+                        I authorize Claritone to contact me via phone or email regarding my hearing care needs and clinical updates.
+                    </label>
+                </div>
+                <button type="submit" [disabled]="isSubmittingContact"
+                    class="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-rose-700 hover:shadow-xl hover:shadow-primary/30 transition-all cursor-pointer flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70 group/btn">
+                    <span *ngIf="!isSubmittingContact" class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">send</span>
+                    <span *ngIf="isSubmittingContact" class="material-symbols-outlined animate-spin text-[18px]">refresh</span>
+                    {{ isSubmittingContact ? 'Processing...' : 'Send Inquiry' }}
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
 
 
 <!-- Booking Modal -->
